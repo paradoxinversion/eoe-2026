@@ -21,7 +21,7 @@
 
 - [x] T010 [US1] Implement seeded RNG utility `frontend/src/lib/rng.ts` supporting deterministic seeds (frontend/src/lib/rng.ts)
 - [x] T011 [US1] Implement core turn resolution service `frontend/src/services/turn.ts` with deterministic execution hooks (frontend/src/services/turn.ts)
-- [ ] T012 [US1] Implement Dashboard UI skeleton `frontend/src/pages/Dashboard.tsx` showing resources and plots (frontend/src/pages/Dashboard.tsx)
+- [x] T012 [US1] Implement Dashboard UI skeleton `frontend/src/pages/Dashboard.tsx` showing resources and plots (frontend/src/pages/Dashboard.tsx)
 - [x] T013 [P] [US1] Implement `End Day` control `frontend/src/components/EndDayButton.tsx` that calls turn resolution (frontend/src/components/EndDayButton.tsx)
 - [x] T014 [US1] Add unit tests for turn resolution and seeded runs `tests/unit/turn.test.ts` (tests/unit/turn.test.ts)
 
