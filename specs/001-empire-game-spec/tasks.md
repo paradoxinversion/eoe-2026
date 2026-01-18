@@ -9,7 +9,7 @@
 
 ## Phase 2 — Foundational
 
-- [ ] T005 Implement typed config schema and types in `frontend/src/config/schema.ts` (frontend/src/config/schema.ts)
+- [x] T005 Implement typed config schema and types in `frontend/src/config/schema.ts` (frontend/src/config/schema.ts)
 - [ ] T006 Implement persistence service `frontend/src/services/persistence.ts` (IndexedDB wrapper using `idb`) with methods: `saveConfig`, `loadConfig`, `listConfigs`, `deleteConfig` (frontend/src/services/persistence.ts)
 - [x] T005 Implement typed config schema and types in `frontend/src/config/schema.ts` (frontend/src/config/schema.ts)
 - [x] T006 Implement persistence service `frontend/src/services/persistence.ts` (IndexedDB wrapper using `idb`) with methods: `saveConfig`, `loadConfig`, `listConfigs`, `deleteConfig` (frontend/src/services/persistence.ts)
