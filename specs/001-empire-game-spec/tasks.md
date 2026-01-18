@@ -55,7 +55,19 @@
 - [x] T033 Run full integration suite (including `persistence.e2e.test.ts`) in CI and verify results
 - [x] T034 Investigate and fix CI artifact upload/download (404 on artifact retrieval)
 - [x] T035 Add CI debug step to print artifacts directory contents and upload logs
-- [ ] T036 Open PR for `001-empire-game-spec` with summary and tests attached
+- [x] T036 Open PR for `001-empire-game-spec` with summary and tests attached
+
+## Post-merge Notes
+
+- **Merged:** The `001-empire-game-spec` feature branch has been merged into `main` on 2026-01-18.
+- **Artifacts & CI:** CI runs for the branch completed; test artifacts were uploaded and verified. A temporary CI debug step was added to help diagnose artifact uploads — consider removing it after monitoring one more successful run.
+- **Next steps (suggested):**
+    - Create a short developer quickstart in `specs/001-empire-game-spec/README.md`.
+    - Run an ESLint/Prettier pass and open a follow-up PR with formatting fixes if needed.
+    - Triage and address accessibility issues for `OptionsPage` and `LoadModal` (audit results and fixes).
+    - Remove the temporary CI debug step from `.github/workflows/ci.yml` once artifacts are stable.
+
+Marking this tasks file as reflecting the current project state; opening a branch with this update for review.
 
 ## Final Phase — Polish & Cross-Cutting Concerns
 
