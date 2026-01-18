@@ -1,0 +1,12 @@
+{
+  "seed": 2026,
+  "days": 1000,
+  "durationMs": 3.5275,
+  "resultSummary": {
+    "day": 1000,
+    "resources": {
+      "gold": 3100,
+      "science": 1166
+    }
+  }
+}

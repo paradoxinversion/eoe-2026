@@ -1,0 +1,21 @@
+{
+  "seed": 12345,
+  "days": 7,
+  "result": {
+    "day": 7,
+    "resources": {
+      "gold": 27,
+      "science": 9
+    },
+    "agents": [],
+    "log": [
+      "Day 1: +5 gold, +0 science",
+      "Day 2: +5 gold, +1 science",
+      "Day 3: +1 gold, +2 science",
+      "Day 4: +5 gold, +1 science",
+      "Day 5: +5 gold, +2 science",
+      "Day 6: +2 gold, +1 science",
+      "Day 7: +4 gold, +2 science"
+    ]
+  }
+}

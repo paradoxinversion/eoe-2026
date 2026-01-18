@@ -18,9 +18,8 @@ import {
     loadConfig,
     saveConfig,
     deleteConfig,
-    exportConfig,
-    importConfig,
 } from "../services/persistence";
+import importExport from "../services/importExport";
 import type { Config } from "../config/schema";
 import { defaultConfig } from "../config/schema";
 import validateConfig from "../config/validator";
@@ -85,22 +84,11 @@ export default function OptionsPage() {
     }
 
     async function handleExport(name: string) {
-        const txt = await exportConfig(name);
-        if (!txt) return;
-        const blob = new Blob([txt], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${name}.json`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
+        await importExport.downloadConfig(name);
     }
 
     async function handleImport(file: File) {
-        const text = await file.text();
-        await importConfig(text);
+        await importExport.importFromFile(file);
         await refreshList();
         setStatusMessage("Imported configuration.");
     }

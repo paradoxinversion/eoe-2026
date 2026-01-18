@@ -10,12 +10,8 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import {
-    listConfigs,
-    loadConfig,
-    deleteConfig,
-    importConfig,
-} from "../services/persistence";
+import { listConfigs, loadConfig, deleteConfig } from "../services/persistence";
+import importExport from "../services/importExport";
 
 type Props = {
     open: boolean;
@@ -50,8 +46,7 @@ export default function LoadModal({ open, onClose, onLoad }: Props) {
 
     async function handleImport(file: File | null) {
         if (!file) return;
-        const text = await file.text();
-        await importConfig(text);
+        await importExport.importFromFile(file);
         await refresh();
     }
 

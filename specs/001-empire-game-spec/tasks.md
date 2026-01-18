@@ -45,14 +45,20 @@
 - [x] T022 Implement Title Page `frontend/src/pages/TitlePage.tsx` with `New Game`, `Load Game`, and `Options` buttons (frontend/src/pages/TitlePage.tsx)
 - [x] T023 Implement Load Modal component `frontend/src/components/LoadModal.tsx` with `Saved` and `Import` tabs and keyboard accessibility (frontend/src/components/LoadModal.tsx)
 - [ ] T024 Implement Export/Import handlers `frontend/src/services/importExport.ts` and wire to UI (frontend/src/services/importExport.ts)
+- [x] T024 Implement Export/Import handlers `frontend/src/services/importExport.ts` and wire to UI (frontend/src/services/importExport.ts)
 - [x] T025 Add integration tests for persistence flows `tests/integration/persistence.test.ts` (tests/integration/persistence.test.ts)
 
 ## Phase 5 — Deterministic Integration, Performance & CI
 
 - [ ] T026 Implement integration test harness `tests/integration/seeded-harness.ts` to run deterministic scenarios (tests/integration/seeded-harness.ts)
-- [ ] T027 Add performance smoke tests `tests/perf/turn-latency.test.ts` and recording (tests/perf/turn-latency.test.ts)
+- [x] T026 Implement integration test harness `tests/integration/seeded-harness.ts` to run deterministic scenarios (tests/integration/seeded-harness.ts)
+- [x] T027 Add performance smoke tests `tests/perf/turn-latency.test.ts` and recording (tests/perf/turn-latency.test.ts)
 - [ ] T028 Create CI workflow `.github/workflows/ci.yml` implementing jobs: `lint`, `unit-tests`, `integration-deterministic`, `export-import`, `performance-smoke`, `build` (.github/workflows/ci.yml)
 - [ ] T029 Add npm scripts in `frontend/package.json` for `dev`, `build`, `test:unit`, `test:integration`, `test:perf`, and `lint` (frontend/package.json)
+- [ ] T026 Implement integration test harness `tests/integration/seeded-harness.ts` to run deterministic scenarios (tests/integration/seeded-harness.ts)
+- [ ] T027 Add performance smoke tests `tests/perf/turn-latency.test.ts` and recording (tests/perf/turn-latency.test.ts)
+- [x] T028 Create CI workflow `.github/workflows/ci.yml` implementing jobs: `lint`, `unit-tests`, `integration-deterministic`, `export-import`, `performance-smoke`, `build` (.github/workflows/ci.yml)
+- [x] T029 Add npm scripts in `frontend/package.json` for `dev`, `build`, `test:unit`, `test:integration`, `test:perf`, and `lint` (frontend/package.json)
 
 ## Final Phase — Polish & Cross-Cutting Concerns
 
