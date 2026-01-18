@@ -59,3 +59,10 @@ jobs:
               with:
                   name: test-artifacts
                   path: frontend/tests_output/**
+
+            - name: Upload CI marker explicitly
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ci-marker
+                  path: frontend/tests_output/ci-marker.txt
