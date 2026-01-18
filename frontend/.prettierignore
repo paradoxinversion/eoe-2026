@@ -1,4 +1,13 @@
 node_modules/
+dist/
+build/
+.vite/
+.git/
+.idea/
+.DS_Store
+coverage/
+*.log
+node_modules/
 build/
 dist/
 frontend/tests_output/

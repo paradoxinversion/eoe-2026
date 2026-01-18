@@ -5,76 +5,76 @@ import generateWorld from "../../src/services/generation";
 import { createScienceProject } from "../../src/models/scienceProject";
 
 describe("turn + science integration", () => {
-    it("reserves science for queued project on resolveTurn when player has enough", () => {
-        const rng = createRng(42);
-        const world = generateWorld("int-1");
-        // give player enough science
-        (world as any).player = world.player;
-        world.player.resources.science = 30;
-        const proj = createScienceProject("ip1", "Integration Reserve", 15, 3);
-        (world as any).projects = [proj];
+  it("reserves science for queued project on resolveTurn when player has enough", () => {
+    const rng = createRng(42);
+    const world = generateWorld("int-1");
+    // give player enough science
+    (world as any).player = world.player;
+    world.player.resources.science = 30;
+    const proj = createScienceProject("ip1", "Integration Reserve", 15, 3);
+    (world as any).projects = [proj];
 
-        const state = {
-            day: 0,
-            resources: { gold: 0, science: world.player.resources.science },
-            player: world.player,
-            projects: [proj],
-        } as any;
+    const state = {
+      day: 0,
+      resources: { gold: 0, science: world.player.resources.science },
+      player: world.player,
+      projects: [proj],
+    } as any;
 
-        const next = resolveTurn(state, rng);
+    const next = resolveTurn(state, rng);
 
-        // project should be active and reserved
-        expect(next.projects[0].status).toBe("active");
-        expect(next.projects[0].reserved_science).toBeGreaterThanOrEqual(15);
-        // player's science in attached player object should be reduced by reserved amount
-        expect(next.player.resources.science).toBeLessThan(30);
-    });
+    // project should be active and reserved
+    expect(next.projects[0].status).toBe("active");
+    expect(next.projects[0].reserved_science).toBeGreaterThanOrEqual(15);
+    // player's science in attached player object should be reduced by reserved amount
+    expect(next.player.resources.science).toBeLessThan(30);
+  });
 
-    it("advances and completes project across multiple turns and consumes reserved science", () => {
-        const rng = createRng(123);
-        const world = generateWorld("int-2");
-        (world as any).player = world.player;
-        world.player.resources.science = 50;
-        const proj = createScienceProject("ip2", "Integration Progress", 10, 2);
-        (world as any).projects = [proj];
+  it("advances and completes project across multiple turns and consumes reserved science", () => {
+    const rng = createRng(123);
+    const world = generateWorld("int-2");
+    (world as any).player = world.player;
+    world.player.resources.science = 50;
+    const proj = createScienceProject("ip2", "Integration Progress", 10, 2);
+    (world as any).projects = [proj];
 
-        const state = {
-            day: 0,
-            resources: { gold: 0, science: world.player.resources.science },
-            player: world.player,
-            projects: [proj],
-        } as any;
-        // add a scientist agent and assign to the project so it can progress
-        state.agents = [{ id: "s1", name: "Dr S", role: "scientist" }];
-        proj.assigned_scientists = ["s1"];
+    const state = {
+      day: 0,
+      resources: { gold: 0, science: world.player.resources.science },
+      player: world.player,
+      projects: [proj],
+    } as any;
+    // add a scientist agent and assign to the project so it can progress
+    state.agents = [{ id: "s1", name: "Dr S", role: "scientist" }];
+    proj.assigned_scientists = ["s1"];
 
-        const afterTwo = resolveTurns(state, rng, 3);
+    const afterTwo = resolveTurns(state, rng, 3);
 
-        const updatedProj = afterTwo.projects[0];
-        expect(updatedProj.status).toBe("completed");
-        // reserved_science should be 0 after completion
-        expect(updatedProj.reserved_science || 0).toBe(0);
-        // player's science should have decreased or stayed consumed (not returned)
-        expect(afterTwo.player.resources.science).toBeLessThanOrEqual(50);
-    });
+    const updatedProj = afterTwo.projects[0];
+    expect(updatedProj.status).toBe("completed");
+    // reserved_science should be 0 after completion
+    expect(updatedProj.reserved_science || 0).toBe(0);
+    // player's science should have decreased or stayed consumed (not returned)
+    expect(afterTwo.player.resources.science).toBeLessThanOrEqual(50);
+  });
 
-    it("does not reserve when player lacks science", () => {
-        const rng = createRng("lowseed");
-        const world = generateWorld("int-3");
-        (world as any).player = world.player;
-        world.player.resources.science = 1; // insufficient
-        const proj = createScienceProject("ip3", "Integration Fail", 10, 4);
-        (world as any).projects = [proj];
+  it("does not reserve when player lacks science", () => {
+    const rng = createRng("lowseed");
+    const world = generateWorld("int-3");
+    (world as any).player = world.player;
+    world.player.resources.science = 1; // insufficient
+    const proj = createScienceProject("ip3", "Integration Fail", 10, 4);
+    (world as any).projects = [proj];
 
-        const state = {
-            day: 0,
-            resources: { gold: 0, science: world.player.resources.science },
-            player: world.player,
-            projects: [proj],
-        } as any;
+    const state = {
+      day: 0,
+      resources: { gold: 0, science: world.player.resources.science },
+      player: world.player,
+      projects: [proj],
+    } as any;
 
-        const next = resolveTurn(state, rng);
-        expect(next.projects[0].status).toBe("queued");
-        expect(next.projects[0].reserved_science || 0).toBe(0);
-    });
+    const next = resolveTurn(state, rng);
+    expect(next.projects[0].status).toBe("queued");
+    expect(next.projects[0].reserved_science || 0).toBe(0);
+  });
 });
