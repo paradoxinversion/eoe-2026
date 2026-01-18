@@ -29,13 +29,13 @@
 
 - [x] T015 [US2] Implement world generation service `frontend/src/services/generation.ts` accepting a `seed` and returning deterministic world JSON (frontend/src/services/generation.ts)
 - [x] T016 [US2] Add generation unit tests `tests/unit/generation.test.ts` to validate seed determinism (tests/unit/generation.test.ts)
-- [ ] T017 [P] [US2] Create simple Zone and Person model files `frontend/src/models/zone.ts` and `frontend/src/models/person.ts` (frontend/src/models/zone.ts, frontend/src/models/person.ts)
+- [x] T017 [P] [US2] Create simple Zone and Person model files `frontend/src/models/zone.ts` and `frontend/src/models/person.ts` (frontend/src/models/zone.ts, frontend/src/models/person.ts)
 
-### User Story 3 - Agents, Roles, and Technologies (Priority: P3)
+- ### User Story 3 - Agents, Roles, and Technologies (Priority: P3)
 
-- [ ] T018 [US3] Implement `Agent` model and `ScienceProject` model in `frontend/src/models/agent.ts` and `frontend/src/models/scienceProject.ts` (frontend/src/models/agent.ts, frontend/src/models/scienceProject.ts)
-- [ ] T019 [US3] Implement science accumulation service `frontend/src/services/science.ts` and ensure up-front reservation behavior (frontend/src/services/science.ts)
-- [ ] T020 [US3] Add unit tests for Science Project reservation `tests/unit/science.test.ts` (tests/unit/science.test.ts)
+- [x] T018 [US3] Implement `Agent` model and `ScienceProject` model in `frontend/src/models/agent.ts` and `frontend/src/models/scienceProject.ts` (frontend/src/models/agent.ts, frontend/src/models/scienceProject.ts)
+- [x] T019 [US3] Implement science accumulation service `frontend/src/services/science.ts` and ensure up-front reservation behavior (frontend/src/services/science.ts)
+- [x] T020 [US3] Add unit/integration tests for Science Project reservation and integration (`tests/unit/science.test.ts` and `tests/integration/turn.science.integration.test.ts`)
 
 ## Phase 4 — Options Page, Load Modal & Persistence UX
 
