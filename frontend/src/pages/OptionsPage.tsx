@@ -10,6 +10,8 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import DownloadIcon from "@mui/icons-material/Download";
+import FormHelperText from '@mui/material/FormHelperText';
+import Alert from '@mui/material/Alert';
 
 import {
     listConfigs,
@@ -27,6 +29,8 @@ export default function OptionsPage() {
         Array<{ name: string; updatedAt: number }>
     >([]);
     const [saveName, setSaveName] = useState("default");
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
     useEffect(() => {
         refreshList();
@@ -43,8 +47,14 @@ export default function OptionsPage() {
     }
 
     async function handleSave() {
+        const valid = validateForm();
+        if (!valid) {
+            setStatusMessage('Please fix validation errors before saving.');
+            return;
+        }
         await saveConfig(saveName || `save-${Date.now()}`, form);
         await refreshList();
+        setStatusMessage('Saved configuration.');
     }
 
     async function handleDelete(name: string) {
@@ -72,6 +82,24 @@ export default function OptionsPage() {
         await refreshList();
     }
 
+    function validateForm() {
+        const e: Record<string, string> = {};
+        if (!form.playerName || form.playerName.trim().length === 0) {
+            e.playerName = 'Player name is required.';
+        }
+        if (!Number.isFinite(form.startingSeed) || form.startingSeed < 0) {
+            e.startingSeed = 'Starting seed must be a non-negative number.';
+        }
+        if (!Number.isFinite(form.autosaveIntervalSeconds) || form.autosaveIntervalSeconds < 5) {
+            e.autosaveIntervalSeconds = 'Autosave interval must be at least 5 seconds.';
+        }
+        if (!Number.isFinite(form.gracePeriodDays) || form.gracePeriodDays < 0) {
+            e.gracePeriodDays = 'Grace period must be zero or a positive integer.';
+        }
+        setErrors(e);
+        return Object.keys(e).length === 0;
+    }
+
     return (
         <Box sx={{ p: 2 }}>
             <Typography variant="h5" gutterBottom>
@@ -84,8 +112,9 @@ export default function OptionsPage() {
                     value={saveName}
                     onChange={(e) => setSaveName(e.target.value)}
                     size="small"
+                    inputProps={{ 'aria-label': 'save-name' }}
                 />
-                <Button variant="contained" onClick={handleSave}>
+                <Button variant="contained" onClick={handleSave} aria-disabled={Object.keys(errors).length>0} disabled={Object.keys(errors).length>0}>
                     Save
                 </Button>
             </Box>
@@ -100,6 +129,9 @@ export default function OptionsPage() {
                     onChange={(e) =>
                         setForm({ ...form, playerName: e.target.value })
                     }
+                    error={!!errors.playerName}
+                    helperText={errors.playerName}
+                    inputProps={{ 'aria-describedby': 'playerName-help' }}
                 />
                 <TextField
                     label="Starting Seed"
@@ -111,6 +143,8 @@ export default function OptionsPage() {
                             startingSeed: Number(e.target.value),
                         })
                     }
+                    error={!!errors.startingSeed}
+                    helperText={errors.startingSeed}
                 />
                 <TextField
                     label="Autosave Interval Seconds"
@@ -122,6 +156,8 @@ export default function OptionsPage() {
                             autosaveIntervalSeconds: Number(e.target.value),
                         })
                     }
+                    error={!!errors.autosaveIntervalSeconds}
+                    helperText={errors.autosaveIntervalSeconds}
                 />
                 <TextField
                     label="Grace Period Days"
@@ -133,8 +169,18 @@ export default function OptionsPage() {
                             gracePeriodDays: Number(e.target.value),
                         })
                     }
+                    error={!!errors.gracePeriodDays}
+                    helperText={errors.gracePeriodDays}
                 />
             </Box>
+
+            {statusMessage && (
+                <Box sx={{ mt: 2 }} role="status" aria-live="polite">
+                    <Alert severity={Object.keys(errors).length ? 'warning' : 'success'}>
+                        {statusMessage}
+                    </Alert>
+                </Box>
+            )}
 
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h6">Saved Configurations</Typography>
