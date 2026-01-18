@@ -13,6 +13,8 @@ export type ScienceProject = {
     lab_modifiers?: Record<string, number>;
     progress_days: number;
     base_duration_days: number;
+    // reserved_science stores how much science has been reserved up-front for this project
+    reserved_science?: number;
 };
 
 export function createScienceProject(
