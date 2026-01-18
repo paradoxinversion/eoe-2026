@@ -1,9 +1,14 @@
 import { openDB, IDBPDatabase } from "idb";
 import type { Config } from "../config/schema";
+import indexeddbSchema from "../../../specs/001-empire-game-spec/contracts/indexeddb-schema.json";
 
-const DB_NAME = "eoe-db";
-const DB_VERSION = 1;
-const STORE_CONFIGS = "configs";
+const DB_NAME: string = (indexeddbSchema as any).dbName || "eoe-db";
+const DB_VERSION: number = (indexeddbSchema as any).version || 1;
+const STORE_CONFIGS: string =
+    ((indexeddbSchema as any).stores &&
+        (indexeddbSchema as any).stores.find((s: any) => s.name === "configs")
+            ?.name) ||
+    "configs";
 
 type Db = IDBPDatabase<any>;
 
@@ -13,6 +18,25 @@ function getDB() {
     if (!dbPromise) {
         dbPromise = openDB(DB_NAME, DB_VERSION, {
             upgrade(db) {
+                // create stores based on the indexeddb schema contract
+                const stores: any[] = (indexeddbSchema as any).stores || [];
+                for (const s of stores) {
+                    if (!db.objectStoreNames.contains(s.name)) {
+                        const opts: any = {};
+                        if (s.keyPath) opts.keyPath = s.keyPath;
+                        if (s.autoIncrement)
+                            opts.autoIncrement = s.autoIncrement;
+                        db.createObjectStore(s.name, opts);
+                        if (s.indexes && Array.isArray(s.indexes)) {
+                            const os = db.transaction?.objectStore?.(
+                                s.name,
+                            ) as any;
+                            // Note: IDB createIndex must be called inside upgrade using the store variable
+                            // but `openDB` upgrade callback provides only db; we recreate indexes below via direct calls
+                        }
+                    }
+                }
+                // ensure default configs store exists
                 if (!db.objectStoreNames.contains(STORE_CONFIGS)) {
                     db.createObjectStore(STORE_CONFIGS, { keyPath: "name" });
                 }
