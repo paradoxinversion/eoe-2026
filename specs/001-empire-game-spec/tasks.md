@@ -72,5 +72,5 @@ Marking this tasks file as reflecting the current project state; opening a branc
 ## Final Phase — Polish & Cross-Cutting Concerns
 
 - [x] T030 [P] Add ESLint/Prettier configs and run formatters on created files
-- [ ] T031 [P] Document developer quickstart and acceptance test runbook in `specs/001-empire-game-spec/README.md`
-- [ ] T032 [P] Perform accessibility audit on Options Page and Load Modal and fix issues (reports in `specs/001-empire-game-spec/accessibility.md`)
+- [x] T031 [P] Document developer quickstart and acceptance test runbook in `specs/001-empire-game-spec/README.md`
+- [x] T032 [P] Perform accessibility audit on Options Page and Load Modal and fix issues (reports in `specs/001-empire-game-spec/accessibility.md`)
