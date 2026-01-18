@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { defaultConfig } from "../config/schema";
 import createRng from "../lib/rng";
 import { resolveTurn, GameState } from "../services/turn";
 import EndDayButton from "../components/EndDayButton";
+import { createAgent, assignAgentToProject, Agent } from "../models/agent";
+import {
+  createScienceProject,
+  assignScientist,
+  ScienceProject,
+} from "../models/scienceProject";
 
 export default function Dashboard() {
   const cfg = defaultConfig;
@@ -15,12 +22,42 @@ export default function Dashboard() {
     day: 0,
     resources: { gold: 0, science: 0 },
     agents: [],
+    projects: [],
     log: [],
   });
 
   function handleEndDay() {
     const next = resolveTurn(state, rng);
     setState(next);
+  }
+
+  function handleHireScientist() {
+    const id = `ag-${Date.now()}`;
+    const ag = createAgent(id, `Scientist ${id.slice(-4)}`, 50, {
+      role: "scientist",
+    });
+    setState((s) => ({ ...s, agents: [...(s.agents || []), ag] }));
+  }
+
+  function handleAddProject() {
+    const id = `pr-${Date.now()}`;
+    const p = createScienceProject(id, `Project ${id.slice(-4)}`, 10, 3);
+    setState((s) => ({ ...s, projects: [...(s.projects || []), p] }));
+  }
+
+  function handleAssign(agentId: string, projectId: string) {
+    setState((s) => {
+      const agents = (s.agents || []).map((a) =>
+        a.id === agentId ? assignAgentToProject({ ...a }, projectId) : a,
+      );
+      const projects = (s.projects || []).map((p) => {
+        if (p.id !== projectId) return p;
+        const copy = { ...p } as ScienceProject;
+        assignScientist(copy, agentId);
+        return copy;
+      });
+      return { ...s, agents, projects };
+    });
   }
 
   return (
@@ -45,6 +82,70 @@ export default function Dashboard() {
       </Box>
 
       <EndDayButton onEndDay={handleEndDay} />
+
+      <Box sx={{ mt: 3, display: "flex", gap: 2 }}>
+        <Button variant="outlined" onClick={handleHireScientist}>
+          Hire Scientist
+        </Button>
+        <Button variant="outlined" onClick={handleAddProject}>
+          Add Project
+        </Button>
+      </Box>
+
+      <Box sx={{ mt: 3, display: "flex", gap: 2 }}>
+        <Paper sx={{ p: 2, minWidth: 240 }}>
+          <Typography variant="subtitle1">Agents</Typography>
+          {state.agents && state.agents.length ? (
+            state.agents.map((a: Agent) => (
+              <Box
+                key={a.id}
+                sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}
+              >
+                <Typography variant="body2">
+                  {a.name} ({a.role})
+                </Typography>
+              </Box>
+            ))
+          ) : (
+            <Typography variant="body2">No agents hired.</Typography>
+          )}
+        </Paper>
+        <Paper sx={{ p: 2, minWidth: 360 }}>
+          <Typography variant="subtitle1">Projects</Typography>
+          {state.projects && state.projects.length ? (
+            state.projects.map((p: ScienceProject) => (
+              <Box
+                key={p.id}
+                sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}
+              >
+                <Box sx={{ flex: 1 }}>
+                  <Typography variant="body2">
+                    {p.name} — {p.status}
+                  </Typography>
+                  <Typography variant="caption">
+                    Progress: {p.progress_days}/{p.base_duration_days} —
+                    Reserved: {p.reserved_science || 0}
+                  </Typography>
+                </Box>
+                <Box>
+                  {(state.agents || []).map((a: Agent) => (
+                    <Button
+                      key={a.id}
+                      size="small"
+                      onClick={() => handleAssign(a.id, p.id)}
+                      sx={{ ml: 0.5 }}
+                    >
+                      Assign {a.name}
+                    </Button>
+                  ))}
+                </Box>
+              </Box>
+            ))
+          ) : (
+            <Typography variant="body2">No projects.</Typography>
+          )}
+        </Paper>
+      </Box>
 
       <Box sx={{ mt: 3 }}>
         <Typography variant="subtitle1">Log</Typography>
