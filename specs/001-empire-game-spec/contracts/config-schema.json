@@ -1,24 +1,33 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Empire of Evil - Config",
-  "type": "object",
-  "properties": {
-    "playerName": { "type": "string", "minLength": 1 },
-    "startingSeed": { "type": "integer", "minimum": 0 },
-    "autosaveIntervalSeconds": { "type": "integer", "minimum": 5 },
-    "gracePeriodDays": { "type": "integer", "minimum": 0 },
-    "named_configs": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "created_at": { "type": "string", "format": "date-time" }
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Empire of Evil - Config",
+    "type": "object",
+    "properties": {
+        "playerName": { "type": "string", "minLength": 1 },
+        "startingSeed": { "type": "integer", "minimum": 0 },
+        "autosaveIntervalSeconds": { "type": "integer", "minimum": 5 },
+        "gracePeriodDays": { "type": "integer", "minimum": 0 },
+        "eventProbabilities": {
+            "type": "object",
+            "properties": {
+                "raid": { "type": "number", "minimum": 0, "maximum": 1 },
+                "blessing": { "type": "number", "minimum": 0, "maximum": 1 },
+                "discovery": { "type": "number", "minimum": 0, "maximum": 1 }
+            },
+            "additionalProperties": false
         },
-        "required": ["name"]
-      }
-    }
-  },
-  "required": ["playerName", "startingSeed", "autosaveIntervalSeconds"],
-  "additionalProperties": false
+        "named_configs": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "created_at": { "type": "string", "format": "date-time" }
+                },
+                "required": ["name"]
+            }
+        }
+    },
+    "required": ["playerName", "startingSeed", "autosaveIntervalSeconds"],
+    "additionalProperties": false
 }

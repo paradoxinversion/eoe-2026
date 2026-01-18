@@ -53,9 +53,23 @@ function processAgents(
     return { resources: r, log: logs };
 }
 
-function rollEvent(rng: RNG): Event | null {
+function rollEvent(
+    rng: RNG,
+    probs?: { raid?: number; blessing?: number; discovery?: number },
+): Event | null {
+    const p = {
+        raid: 0.08,
+        blessing: 0.08,
+        discovery: 0.08,
+        ...(probs || {}),
+    };
+    // ensure non-negative and clamp
+    const raidP = Math.max(0, Math.min(1, p.raid || 0));
+    const blessP = Math.max(0, Math.min(1, p.blessing || 0));
+    const discP = Math.max(0, Math.min(1, p.discovery || 0));
+    const total = raidP + blessP + discP;
     const roll = rng.float();
-    if (roll < 0.08) {
+    if (roll < raidP) {
         return {
             id: "raid",
             name: "Raid",
@@ -69,7 +83,7 @@ function rollEvent(rng: RNG): Event | null {
             }),
         };
     }
-    if (roll < 0.16) {
+    if (roll < raidP + blessP) {
         return {
             id: "blessing",
             name: "Blessing",
@@ -80,7 +94,7 @@ function rollEvent(rng: RNG): Event | null {
             }),
         };
     }
-    if (roll < 0.24) {
+    if (roll < raidP + blessP + discP) {
         return {
             id: "discovery",
             name: "Discovery",
@@ -118,8 +132,11 @@ export function resolveTurn(state: GameState, rng: RNG): GameState {
         `Day ${state.day + 1}: +${goldGain} gold, +${scienceGain} science`,
     );
 
-    // roll for a random event
-    const ev = rollEvent(rng);
+    // roll for a random event using provided event probabilities in state
+    const ev = rollEvent(
+        rng,
+        (state as any).eventConfig || (state as any).eventProbabilities,
+    );
     if (ev) {
         resources = ev.apply(resources);
         logs.push(`Event: ${ev.name} - ${ev.description || ""}`);

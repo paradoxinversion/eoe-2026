@@ -21,6 +21,7 @@ import {
     exportConfig,
     importConfig,
 } from "../services/persistence";
+import type { Config } from "../config/schema";
 import { defaultConfig } from "../config/schema";
 import validateConfig from "../config/validator";
 
@@ -29,6 +30,7 @@ export default function OptionsPage() {
     const [configs, setConfigs] = useState<
         Array<{ name: string; updatedAt: number }>
     >([]);
+    const [configMap, setConfigMap] = useState<Record<string, Config>>({});
     const [saveName, setSaveName] = useState("default");
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
@@ -38,9 +40,27 @@ export default function OptionsPage() {
         refreshList();
     }, []);
 
+    useEffect(() => {
+        // validate live when form changes to surface errors before save
+        validateForm();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [form]);
+
     async function refreshList() {
         const list = await listConfigs();
         setConfigs(list);
+        // load each config for display
+        const entries = await Promise.all(
+            list.map(async (c) => {
+                const cfg = await loadConfig(c.name);
+                return [c.name, cfg] as const;
+            }),
+        );
+        const map: Record<string, Config> = {};
+        for (const [name, cfg] of entries) {
+            if (cfg) map[name] = cfg;
+        }
+        setConfigMap(map);
     }
 
     async function handleLoad(name: string) {
@@ -186,6 +206,60 @@ export default function OptionsPage() {
                     error={!!errors.gracePeriodDays}
                     helperText={errors.gracePeriodDays}
                 />
+                <Typography variant="subtitle1" sx={{ mt: 1 }}>
+                    Event Probabilities (0.0 - 1.0)
+                </Typography>
+                <TextField
+                    label="Raid Probability"
+                    type="number"
+                    inputProps={{ step: 0.01, min: 0, max: 1 }}
+                    value={form.eventProbabilities?.raid ?? 0}
+                    onChange={(e) =>
+                        setForm({
+                            ...form,
+                            eventProbabilities: {
+                                ...(form.eventProbabilities || {}),
+                                raid: Number(e.target.value),
+                            },
+                        })
+                    }
+                    error={!!errors["eventProbabilities/raid"]}
+                    helperText={errors["eventProbabilities/raid"]}
+                />
+                <TextField
+                    label="Blessing Probability"
+                    type="number"
+                    inputProps={{ step: 0.01, min: 0, max: 1 }}
+                    value={form.eventProbabilities?.blessing ?? 0}
+                    onChange={(e) =>
+                        setForm({
+                            ...form,
+                            eventProbabilities: {
+                                ...(form.eventProbabilities || {}),
+                                blessing: Number(e.target.value),
+                            },
+                        })
+                    }
+                    error={!!errors["eventProbabilities/blessing"]}
+                    helperText={errors["eventProbabilities/blessing"]}
+                />
+                <TextField
+                    label="Discovery Probability"
+                    type="number"
+                    inputProps={{ step: 0.01, min: 0, max: 1 }}
+                    value={form.eventProbabilities?.discovery ?? 0}
+                    onChange={(e) =>
+                        setForm({
+                            ...form,
+                            eventProbabilities: {
+                                ...(form.eventProbabilities || {}),
+                                discovery: Number(e.target.value),
+                            },
+                        })
+                    }
+                    error={!!errors["eventProbabilities/discovery"]}
+                    helperText={errors["eventProbabilities/discovery"]}
+                />
             </Box>
 
             {statusMessage && (
@@ -227,9 +301,18 @@ export default function OptionsPage() {
                         >
                             <ListItemText
                                 primary={c.name}
-                                secondary={new Date(
-                                    c.updatedAt,
-                                ).toLocaleString()}
+                                secondary={(() => {
+                                    const cfg = configMap[c.name];
+                                    if (!cfg)
+                                        return new Date(
+                                            c.updatedAt,
+                                        ).toLocaleString();
+                                    const probs = cfg.eventProbabilities;
+                                    const probsStr = probs
+                                        ? `raid:${probs.raid ?? 0}, bless:${probs.blessing ?? 0}, disc:${probs.discovery ?? 0}`
+                                        : "";
+                                    return `${cfg.playerName} — seed ${cfg.startingSeed} ${probsStr ? ` — ${probsStr}` : ""}`;
+                                })()}
                             />
                             <Button
                                 size="small"
