@@ -1,4 +1,9 @@
 import type { RNG } from "../lib/rng";
+import {
+    ScienceProject,
+    progressProjectOneDay,
+} from "../models/scienceProject";
+import scienceService from "./science";
 
 export type Resources = {
     gold: number;
@@ -25,6 +30,10 @@ export type GameState = {
     resources: Resources;
     agents?: Agent[];
     log?: string[];
+    // optional player object for richer state (used by science integration)
+    player?: any;
+    // optional science projects tracked in game state
+    projects?: ScienceProject[];
 };
 
 function processAgents(
@@ -148,6 +157,56 @@ export function resolveTurn(state: GameState, rng: RNG): GameState {
         agents: agents.map((a) => ({ ...a })),
         log: (state.log || []).concat(logs),
     };
+
+    // Integrate science projects lifecycle if present in state and a player object exists
+    const player = (state as any).player;
+    const projects = (state as any).projects as ScienceProject[] | undefined;
+    if (player && projects && projects.length > 0) {
+        for (const proj of projects) {
+            // if queued, try to reserve required science up-front
+            if (proj.status === "queued") {
+                const ok = scienceService.reserveForProject(player, proj);
+                if (ok) {
+                    next.log = (next.log || []).concat(
+                        `Reserved ${proj.required_science} science for project ${proj.name}`,
+                    );
+                    proj.status = "active";
+                } else {
+                    next.log = (next.log || []).concat(
+                        `Insufficient science to reserve for project ${proj.name}`,
+                    );
+                }
+            }
+
+            // if active, advance progress
+            if (proj.status === "active") {
+                const before = proj.progress_days;
+                progressProjectOneDay(proj);
+                const gained = proj.progress_days - before;
+                next.log = (next.log || []).concat(
+                    `Project ${proj.name} progressed by ${gained} (total ${proj.progress_days}/${proj.base_duration_days})`,
+                );
+                if (proj.status === "completed") {
+                    // reserved science is consumed on completion
+                    proj.reserved_science = 0;
+                    next.log = (next.log || []).concat(
+                        `Project ${proj.name} completed`,
+                    );
+                }
+            }
+
+            // if cancelled, release reservation
+            if (proj.status === "cancelled") {
+                scienceService.releaseReservation(player, proj);
+                next.log = (next.log || []).concat(
+                    `Project ${proj.name} cancelled; reserved science released`,
+                );
+            }
+        }
+        // attach updated projects and player back into next state
+        (next as any).projects = projects;
+        (next as any).player = player;
+    }
 
     return next;
 }
