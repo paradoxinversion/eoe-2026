@@ -66,23 +66,3 @@ jobs:
               with:
                   name: ci-marker
                   path: frontend/tests_output/ci-marker.txt
-
-            - name: "Debug: list artifact directories and upload logs"
-              if: always()
-              run: |
-                  echo "--- workspace files ---"
-                  ls -la
-                  echo "--- frontend top-level ---"
-                  ls -la frontend || true
-                  echo "--- frontend/tests_output ---"
-                  ls -la frontend/tests_output || true
-                  echo "--- actions runner env info ---"
-                  env | sort | sed -n '1,200p'
-                  echo "--- upload-artifact step summary placeholder ---"
-                  # Print any runner system logs available for upload artifact action
-                  if [ -d /runner/work/_temp ]; then
-                    echo "_temp dir contents:"; ls -la /runner/work/_temp || true
-                  fi
-                  if [ -d /home/runner/work/_temp ]; then
-                    echo "home runner _temp contents:"; ls -la /home/runner/work/_temp || true
-                  fi
