@@ -41,7 +41,7 @@ function processAgents(
     agents: Agent[],
     rng: RNG,
 ): { resources: Resources; log: string[] } {
-    let r = { ...resources };
+    const r = { ...resources };
     const logs: string[] = [];
     for (const a of agents) {
         const prod = a.productivity || 1;
