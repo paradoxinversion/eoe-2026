@@ -2,15 +2,17 @@
 
 ## Phase 1 — Setup
 
-- [ ] T001 [P] Create `frontend/package.json` and bootstrap Vite + React + TypeScript project in `frontend/` (frontend/package.json)
-- [ ] T002 [P] Add dependencies to `frontend/package.json`: `react`, `react-dom`, `typescript`, `vite`, `@mui/material`, `@emotion/react`, `@emotion/styled`, `idb`, `vitest`, `@testing-library/react` (frontend/package.json)
-- [ ] T003 [P] Create entry files `frontend/src/main.tsx` and `frontend/src/App.tsx` with React root and router placeholder (frontend/src/main.tsx, frontend/src/App.tsx)
-- [ ] T004 Create `frontend/tsconfig.json` and `frontend/vite.config.ts` (frontend/tsconfig.json, frontend/vite.config.ts)
+- [x] T001 [P] Create `frontend/package.json` and bootstrap Vite + React + TypeScript project in `frontend/` (frontend/package.json)
+- [x] T002 [P] Add dependencies to `frontend/package.json`: `react`, `react-dom`, `typescript`, `vite`, `@mui/material`, `@emotion/react`, `@emotion/styled`, `idb`, `vitest`, `@testing-library/react` (frontend/package.json)
+- [x] T003 [P] Create entry files `frontend/src/main.tsx` and `frontend/src/App.tsx` with React root and router placeholder (frontend/src/main.tsx, frontend/src/App.tsx)
+- [x] T004 Create `frontend/tsconfig.json` and `frontend/vite.config.ts` (frontend/tsconfig.json, frontend/vite.config.ts)
 
 ## Phase 2 — Foundational
 
-- [ ] T005 Implement typed config schema and types in `frontend/src/config/schema.ts` (frontend/src/config/schema.ts)
+- [x] T005 Implement typed config schema and types in `frontend/src/config/schema.ts` (frontend/src/config/schema.ts)
 - [ ] T006 Implement persistence service `frontend/src/services/persistence.ts` (IndexedDB wrapper using `idb`) with methods: `saveConfig`, `loadConfig`, `listConfigs`, `deleteConfig` (frontend/src/services/persistence.ts)
+- [x] T005 Implement typed config schema and types in `frontend/src/config/schema.ts` (frontend/src/config/schema.ts)
+- [x] T006 Implement persistence service `frontend/src/services/persistence.ts` (IndexedDB wrapper using `idb`) with methods: `saveConfig`, `loadConfig`, `listConfigs`, `deleteConfig` (frontend/src/services/persistence.ts)
 - [ ] T007 Add autosave hook `frontend/src/hooks/useAutosave.ts` implementing `autosave_interval_seconds` (frontend/src/hooks/useAutosave.ts)
 - [ ] T008 Create `specs/001-empire-game-spec/contracts/indexeddb-schema.json` (verify existing) and reference it from `frontend/src/services/persistence.ts` (specs/001-empire-game-spec/contracts/indexeddb-schema.json)
 - [ ] T009 Create typed config examples under `specs/001-empire-game-spec/configs/default.json` (specs/001-empire-game-spec/configs/default.json)
@@ -40,6 +42,7 @@
 ## Phase 4 — Options Page, Load Modal & Persistence UX
 
 - [ ] T021 Implement MUI-based Options Page `frontend/src/pages/OptionsPage.tsx` bound to the config schema and `save as` behavior (frontend/src/pages/OptionsPage.tsx)
+- [x] T021 Implement MUI-based Options Page `frontend/src/pages/OptionsPage.tsx` bound to the config schema and `save as` behavior (frontend/src/pages/OptionsPage.tsx)
 - [ ] T022 Implement Title Page `frontend/src/pages/TitlePage.tsx` with `New Game`, `Load Game`, and `Options` buttons (frontend/src/pages/TitlePage.tsx)
 - [ ] T023 Implement Load Modal component `frontend/src/components/LoadModal.tsx` with `Saved` and `Import` tabs and keyboard accessibility (frontend/src/components/LoadModal.tsx)
 - [ ] T024 Implement Export/Import handlers `frontend/src/services/importExport.ts` and wire to UI (frontend/src/services/importExport.ts)

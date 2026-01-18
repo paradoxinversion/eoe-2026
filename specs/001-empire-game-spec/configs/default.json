@@ -1,0 +1,6 @@
+{
+    "playerName": "Player 1",
+    "startingSeed": 42,
+    "autosaveIntervalSeconds": 30,
+    "gracePeriodDays": 7
+}
