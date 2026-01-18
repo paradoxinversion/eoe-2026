@@ -1,0 +1,7 @@
+node_modules/
+build/
+dist/
+frontend/tests_output/
+*.log
+.vscode/
+.idea/
