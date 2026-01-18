@@ -1,0 +1,25 @@
+{
+  "seed": 2026,
+  "days": 7,
+  "result": {
+    "day": 7,
+    "resources": {
+      "gold": 26,
+      "science": 8
+    },
+    "agents": [],
+    "log": [
+      "Day 1: +3 gold, +0 science",
+      "Day 2: +4 gold, +0 science",
+      "Event: Discovery - A small scientific discovery increases science.",
+      "Day 3: +5 gold, +0 science",
+      "Event: Raid - A band of raiders steals some gold.",
+      "Day 4: +4 gold, +1 science",
+      "Event: Blessing - A fortunate event grants extra gold.",
+      "Day 5: +2 gold, +1 science",
+      "Day 6: +3 gold, +0 science",
+      "Event: Discovery - A small scientific discovery increases science.",
+      "Day 7: +4 gold, +2 science"
+    ]
+  }
+}

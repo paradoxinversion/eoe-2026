@@ -1,17 +1,54 @@
 {
-    "dbName": "eoe-2026",
-    "version": 1,
-    "stores": {
-        "configs": {
-            "keyPath": "id",
-            "indexes": ["name", "created_at"]
-        },
-        "saves": {
-            "keyPath": "id",
-            "indexes": ["timestamp", "config_id"]
-        },
-        "metadata": {
-            "keyPath": "key"
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Empire of Evil - IndexedDB Schema",
+    "type": "object",
+    "properties": {
+        "dbName": { "type": "string" },
+        "version": { "type": "integer" },
+        "stores": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "keyPath": {
+                        "oneOf": [{ "type": "string" }, { "type": "array" }]
+                    },
+                    "autoIncrement": { "type": "boolean" },
+                    "indexes": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": { "type": "string" },
+                                "keyPath": {
+                                    "oneOf": [
+                                        { "type": "string" },
+                                        { "type": "array" }
+                                    ]
+                                },
+                                "options": { "type": "object" }
+                            },
+                            "required": ["name", "keyPath"]
+                        }
+                    }
+                },
+                "required": ["name"]
+            }
         }
-    }
+    },
+    "required": ["dbName", "version", "stores"],
+    "additionalProperties": false,
+    "examples": [
+        {
+            "dbName": "eoe-db",
+            "version": 1,
+            "stores": [
+                {
+                    "name": "configs",
+                    "keyPath": "name"
+                }
+            ]
+        }
+    ]
 }

@@ -1,36 +1,59 @@
 {
-    "name": "eoe-frontend",
-    "version": "0.1.0",
-    "type": "module",
-    "private": true,
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "preview": "vite preview",
-        "test:unit": "vitest",
-        "lint": "echo \"Add linter command\" && exit 0"
-    },
-    "dependencies": {
-        "ajv": "^8.12.0",
-        "ajv-formats": "^2.1.1",
-        "@emotion/react": "^11.11.0",
-        "@emotion/styled": "^11.11.0",
-        "@mui/icons-material": "^5.18.0",
-        "@mui/material": "^5.14.0",
-        "idb": "^7.1.1",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "fake-indexeddb": "^3.1.7",
-        "axe-core": "^4.9.3",
-        "jsdom": "^21.1.0"
-    },
-    "devDependencies": {
-        "@testing-library/react": "^14.0.0",
-        "@types/react": "^18.2.0",
-        "@types/react-dom": "^18.2.0",
-        "@vitejs/plugin-react": "^5.0.2",
-        "typescript": "^5.2.0",
-        "vite": "^5.0.0",
-        "vitest": "^1.4.0"
-    }
+  "name": "eoe-frontend",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test:unit": "vitest tests/unit --run",
+    "test:integration": "vitest tests/integration --run",
+    "test:a11y": "vitest tests/accessibility --run",
+    "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.18.0",
+    "@mui/material": "^5.14.0",
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "axe-core": "^4.9.3",
+    "fake-indexeddb": "^3.1.7",
+    "idb": "^7.1.1",
+    "jsdom": "^21.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^14.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vitejs/plugin-react": "^5.0.2",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-prettier": "^4.2.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "prettier": "^3.8.0",
+    "typescript": "^5.2.0",
+    "vite": "^5.0.0",
+    "vitest": "^1.4.0"
+  },
+  "eslintConfig": {},
+  "prettier": {},
+  "devDependenciesExtra": {
+    "eslint": "^8.49.0",
+    "prettier": "^3.8.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "@typescript-eslint/parser": "^6.8.0",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  }
 }

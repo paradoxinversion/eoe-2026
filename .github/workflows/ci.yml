@@ -1,6 +1,9 @@
 name: CI
 
-on: [push, pull_request]
+on:
+    push:
+    pull_request:
+    workflow_dispatch:
 
 jobs:
     test:
@@ -13,24 +16,73 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: "22"
-                  cache: "npm"
 
             - name: Install frontend dependencies
               working-directory: frontend
               run: |
-                  npm ci
+                  if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ] || [ -f yarn.lock ]; then
+                    npm ci
+                  else
+                    npm install
+                  fi
 
             - name: Run unit tests
               working-directory: frontend
               run: |
-                  npm run test:unit -- --run
+                  npm run test:unit
 
             - name: Run integration tests
               working-directory: frontend
               run: |
-                  npm run test:unit -- tests/integration --run
+                  npm run test:integration
 
             - name: Run accessibility tests
               working-directory: frontend
               run: |
-                  npm run test:unit -- tests/accessibility --run
+                  npm run test:a11y
+
+            - name: Ensure artifact directory exists
+              if: always()
+              run: |
+                  mkdir -p frontend/tests_output
+
+            - name: Create CI marker artifact
+              if: always()
+              working-directory: frontend
+              run: |
+                  mkdir -p tests_output
+                  echo "ci: $(date -u)" > tests_output/ci-marker.txt
+
+            - name: Upload test artifacts
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: test-artifacts
+                  path: frontend/tests_output/**
+
+            - name: Upload CI marker explicitly
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ci-marker
+                  path: frontend/tests_output/ci-marker.txt
+
+            - name: "Debug: list artifact directories and upload logs"
+              if: always()
+              run: |
+                  echo "--- workspace files ---"
+                  ls -la
+                  echo "--- frontend top-level ---"
+                  ls -la frontend || true
+                  echo "--- frontend/tests_output ---"
+                  ls -la frontend/tests_output || true
+                  echo "--- actions runner env info ---"
+                  env | sort | sed -n '1,200p'
+                  echo "--- upload-artifact step summary placeholder ---"
+                  # Print any runner system logs available for upload artifact action
+                  if [ -d /runner/work/_temp ]; then
+                    echo "_temp dir contents:"; ls -la /runner/work/_temp || true
+                  fi
+                  if [ -d /home/runner/work/_temp ]; then
+                    echo "home runner _temp contents:"; ls -la /home/runner/work/_temp || true
+                  fi

@@ -1,0 +1,7 @@
+{
+    "playerName": "DebugPlayer",
+    "startingSeed": 1337,
+    "autosaveIntervalSeconds": 5,
+    "gracePeriodDays": 0,
+    "notes": "Short autosave for debugging and fast iterations"
+}
