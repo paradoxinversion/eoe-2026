@@ -1,0 +1,36 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "npm"
+
+            - name: Install frontend dependencies
+              working-directory: frontend
+              run: |
+                  npm ci
+
+            - name: Run unit tests
+              working-directory: frontend
+              run: |
+                  npm run test:unit -- --run
+
+            - name: Run integration tests
+              working-directory: frontend
+              run: |
+                  npm run test:unit -- tests/integration --run
+
+            - name: Run accessibility tests
+              working-directory: frontend
+              run: |
+                  npm run test:unit -- tests/accessibility --run
