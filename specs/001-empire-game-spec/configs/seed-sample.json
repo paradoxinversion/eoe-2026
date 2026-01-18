@@ -1,0 +1,7 @@
+{
+    "playerName": "SeededHero",
+    "startingSeed": 123456789,
+    "autosaveIntervalSeconds": 60,
+    "gracePeriodDays": 3,
+    "description": "Sample deterministic-seed config for reproducible runs"
+}

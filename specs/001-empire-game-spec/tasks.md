@@ -15,7 +15,7 @@
 - [x] T006 Implement persistence service `frontend/src/services/persistence.ts` (IndexedDB wrapper using `idb`) with methods: `saveConfig`, `loadConfig`, `listConfigs`, `deleteConfig` (frontend/src/services/persistence.ts)
 - [ ] T007 Add autosave hook `frontend/src/hooks/useAutosave.ts` implementing `autosave_interval_seconds` (frontend/src/hooks/useAutosave.ts)
 - [ ] T008 Create `specs/001-empire-game-spec/contracts/indexeddb-schema.json` (verify existing) and reference it from `frontend/src/services/persistence.ts` (specs/001-empire-game-spec/contracts/indexeddb-schema.json)
-- [ ] T009 Create typed config examples under `specs/001-empire-game-spec/configs/default.json` (specs/001-empire-game-spec/configs/default.json)
+- [x] T009 Create typed config examples under `specs/001-empire-game-spec/configs/default.json` (specs/001-empire-game-spec/configs/default.json)
 
 ## Phase 3 — User Story Phases
 
