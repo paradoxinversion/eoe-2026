@@ -1,0 +1,17 @@
+{
+    "dbName": "eoe-2026",
+    "version": 1,
+    "stores": {
+        "configs": {
+            "keyPath": "id",
+            "indexes": ["name", "created_at"]
+        },
+        "saves": {
+            "keyPath": "id",
+            "indexes": ["timestamp", "config_id"]
+        },
+        "metadata": {
+            "keyPath": "key"
+        }
+    }
+}
