@@ -102,3 +102,31 @@ export async function clearAllConfigs() {
   await tx.objectStore(STORE_CONFIGS).clear();
   await tx.done;
 }
+
+// --- Game state helpers (stored in the same configs store under a `game:` prefix)
+export async function saveGameState(name: string, state: unknown) {
+  const db = await getDB();
+  const key = `game:${name}`;
+  await db.put(STORE_CONFIGS, { name: key, state, updatedAt: Date.now() });
+}
+
+export async function loadGameState(name: string): Promise<unknown | null> {
+  const db = await getDB();
+  const key = `game:${name}`;
+  const rec = (await db.get(STORE_CONFIGS, key)) as unknown;
+  if (!rec) return null;
+  const r = rec as { state?: unknown };
+  return r.state === undefined ? null : r.state;
+}
+
+export async function listGameStates(): Promise<
+  Array<{ name: string; updatedAt: number }>
+> {
+  const all = await listConfigs();
+  return all
+    .filter((r) => r.name.startsWith("game:"))
+    .map((r) => ({
+      name: r.name.replace(/^game:/, ""),
+      updatedAt: r.updatedAt,
+    }));
+}

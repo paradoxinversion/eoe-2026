@@ -13,6 +13,7 @@ import {
   assignScientist,
   ScienceProject,
 } from "../models/scienceProject";
+import { saveGameState, loadGameState } from "../services/persistence";
 
 export default function Dashboard() {
   const cfg = defaultConfig;
@@ -36,13 +37,21 @@ export default function Dashboard() {
     const ag = createAgent(id, `Scientist ${id.slice(-4)}`, 50, {
       role: "scientist",
     });
-    setState((s) => ({ ...s, agents: [...(s.agents || []), ag] }));
+    setState((s) => {
+      const next = { ...s, agents: [...(s.agents || []), ag] };
+      void saveGameState("autosave", next).catch(() => {});
+      return next;
+    });
   }
 
   function handleAddProject() {
     const id = `pr-${Date.now()}`;
     const p = createScienceProject(id, `Project ${id.slice(-4)}`, 10, 3);
-    setState((s) => ({ ...s, projects: [...(s.projects || []), p] }));
+    setState((s) => {
+      const next = { ...s, projects: [...(s.projects || []), p] };
+      void saveGameState("autosave", next).catch(() => {});
+      return next;
+    });
   }
 
   function handleAssign(agentId: string, projectId: string) {
@@ -56,9 +65,29 @@ export default function Dashboard() {
         assignScientist(copy, agentId);
         return copy;
       });
-      return { ...s, agents, projects };
+      const next = { ...s, agents, projects };
+      void saveGameState("autosave", next).catch(() => {});
+      return next;
     });
   }
+
+  // Load autosave on mount
+  React.useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const loaded = await loadGameState("autosave");
+      if (!mounted || !loaded) return;
+      try {
+        const g = loaded as Partial<GameState>;
+        setState((s) => ({ ...s, ...(g || {}) }) as GameState);
+      } catch (e) {
+        // ignore malformed autosave
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <Box sx={{ p: 2 }}>
