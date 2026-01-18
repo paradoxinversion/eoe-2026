@@ -6,15 +6,11 @@ declare global {
   }
 }
 
-if (
-  typeof globalThis.HTMLCanvasElement !== "undefined" &&
-  !HTMLCanvasElement.prototype.getContext
-) {
-  // Provide a minimal 2D context stub expected by some a11y checks
+if (typeof globalThis.HTMLCanvasElement !== "undefined") {
+  // Override jsdom's getContext implementation (which throws) with a safe stub
   HTMLCanvasElement.prototype.getContext = function (ctx?: string) {
     if (ctx === "2d") {
       return {
-        // minimal methods used by libs (measureText may be inspected)
         measureText: (_text: string) => ({ width: 0 }),
         fillRect: () => {},
         clearRect: () => {},
