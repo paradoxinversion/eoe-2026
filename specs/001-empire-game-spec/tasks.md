@@ -10,22 +10,20 @@
 ## Phase 2 — Foundational
 
 - [x] T005 Implement typed config schema and types in `frontend/src/config/schema.ts` (frontend/src/config/schema.ts)
-- [ ] T006 Implement persistence service `frontend/src/services/persistence.ts` (IndexedDB wrapper using `idb`) with methods: `saveConfig`, `loadConfig`, `listConfigs`, `deleteConfig` (frontend/src/services/persistence.ts)
-- [x] T005 Implement typed config schema and types in `frontend/src/config/schema.ts` (frontend/src/config/schema.ts)
 - [x] T006 Implement persistence service `frontend/src/services/persistence.ts` (IndexedDB wrapper using `idb`) with methods: `saveConfig`, `loadConfig`, `listConfigs`, `deleteConfig` (frontend/src/services/persistence.ts)
-- [ ] T007 Add autosave hook `frontend/src/hooks/useAutosave.ts` implementing `autosave_interval_seconds` (frontend/src/hooks/useAutosave.ts)
-- [ ] T008 Create `specs/001-empire-game-spec/contracts/indexeddb-schema.json` (verify existing) and reference it from `frontend/src/services/persistence.ts` (specs/001-empire-game-spec/contracts/indexeddb-schema.json)
+- [x] T007 Add autosave hook `frontend/src/hooks/useAutosave.ts` implementing `autosave_interval_seconds` (frontend/src/hooks/useAutosave.ts)
+- [x] T008 Create `specs/001-empire-game-spec/contracts/indexeddb-schema.json` (verify existing) and reference it from `frontend/src/services/persistence.ts` (specs/001-empire-game-spec/contracts/indexeddb-schema.json)
 - [x] T009 Create typed config examples under `specs/001-empire-game-spec/configs/default.json` (specs/001-empire-game-spec/configs/default.json)
 
 ## Phase 3 — User Story Phases
 
 ### User Story 1 - Core Turn Loop (Priority: P1)
 
-- [ ] T010 [US1] Implement seeded RNG utility `frontend/src/lib/rng.ts` supporting deterministic seeds (frontend/src/lib/rng.ts)
-- [ ] T011 [US1] Implement core turn resolution service `frontend/src/services/turn.ts` with deterministic execution hooks (frontend/src/services/turn.ts)
+- [x] T010 [US1] Implement seeded RNG utility `frontend/src/lib/rng.ts` supporting deterministic seeds (frontend/src/lib/rng.ts)
+- [x] T011 [US1] Implement core turn resolution service `frontend/src/services/turn.ts` with deterministic execution hooks (frontend/src/services/turn.ts)
 - [ ] T012 [US1] Implement Dashboard UI skeleton `frontend/src/pages/Dashboard.tsx` showing resources and plots (frontend/src/pages/Dashboard.tsx)
-- [ ] T013 [P] [US1] Implement `End Day` control `frontend/src/components/EndDayButton.tsx` that calls turn resolution (frontend/src/components/EndDayButton.tsx)
-- [ ] T014 [US1] Add unit tests for turn resolution and seeded runs `tests/unit/turn.test.ts` (tests/unit/turn.test.ts)
+- [x] T013 [P] [US1] Implement `End Day` control `frontend/src/components/EndDayButton.tsx` that calls turn resolution (frontend/src/components/EndDayButton.tsx)
+- [x] T014 [US1] Add unit tests for turn resolution and seeded runs `tests/unit/turn.test.ts` (tests/unit/turn.test.ts)
 
 ### User Story 2 - Procedural World Creation (Priority: P2)
 
@@ -41,12 +39,13 @@
 
 ## Phase 4 — Options Page, Load Modal & Persistence UX
 
-- [ ] T021 Implement MUI-based Options Page `frontend/src/pages/OptionsPage.tsx` bound to the config schema and `save as` behavior (frontend/src/pages/OptionsPage.tsx)
 - [x] T021 Implement MUI-based Options Page `frontend/src/pages/OptionsPage.tsx` bound to the config schema and `save as` behavior (frontend/src/pages/OptionsPage.tsx)
 - [ ] T022 Implement Title Page `frontend/src/pages/TitlePage.tsx` with `New Game`, `Load Game`, and `Options` buttons (frontend/src/pages/TitlePage.tsx)
 - [ ] T023 Implement Load Modal component `frontend/src/components/LoadModal.tsx` with `Saved` and `Import` tabs and keyboard accessibility (frontend/src/components/LoadModal.tsx)
+- [x] T022 Implement Title Page `frontend/src/pages/TitlePage.tsx` with `New Game`, `Load Game`, and `Options` buttons (frontend/src/pages/TitlePage.tsx)
+- [x] T023 Implement Load Modal component `frontend/src/components/LoadModal.tsx` with `Saved` and `Import` tabs and keyboard accessibility (frontend/src/components/LoadModal.tsx)
 - [ ] T024 Implement Export/Import handlers `frontend/src/services/importExport.ts` and wire to UI (frontend/src/services/importExport.ts)
-- [ ] T025 Add integration tests for persistence flows `tests/integration/persistence.test.ts` (tests/integration/persistence.test.ts)
+- [x] T025 Add integration tests for persistence flows `tests/integration/persistence.test.ts` (tests/integration/persistence.test.ts)
 
 ## Phase 5 — Deterministic Integration, Performance & CI
 
