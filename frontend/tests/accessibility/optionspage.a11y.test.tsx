@@ -8,30 +8,30 @@ import { describe, it, expect } from "vitest";
 /* @vitest-environment jsdom */
 
 describe("a11y: OptionsPage", () => {
-    it("has no detectable accessibility violations", async () => {
-        // jsdom does not implement canvas; stub getContext used by axe internals
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (
-            typeof HTMLCanvasElement !== "undefined" &&
-            HTMLCanvasElement.prototype &&
-            !HTMLCanvasElement.prototype.getContext
-        ) {
-            // @ts-ignore
-            HTMLCanvasElement.prototype.getContext = () => null;
-        }
+  it("has no detectable accessibility violations", async () => {
+    // jsdom does not implement canvas; stub getContext used by axe internals
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (
+      typeof HTMLCanvasElement !== "undefined" &&
+      HTMLCanvasElement.prototype &&
+      !HTMLCanvasElement.prototype.getContext
+    ) {
+      // @ts-ignore
+      HTMLCanvasElement.prototype.getContext = () => null;
+    }
 
-        const { container } = render(<OptionsPage />);
-        // axe-core expects a document or element
-        const results = await (axe as any).run(container);
-        // If there are violations, print details for debugging
-        if (results.violations.length) {
-            // eslint-disable-next-line no-console
-            console.error(
-                "A11Y violations:",
-                JSON.stringify(results.violations, null, 2),
-            );
-        }
-        expect(results.violations).toHaveLength(0);
-    });
+    const { container } = render(<OptionsPage />);
+    // axe-core expects a document or element
+    const results = await (axe as any).run(container);
+    // If there are violations, print details for debugging
+    if (results.violations.length) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "A11Y violations:",
+        JSON.stringify(results.violations, null, 2),
+      );
+    }
+    expect(results.violations).toHaveLength(0);
+  });
 });

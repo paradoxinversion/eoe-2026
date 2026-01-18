@@ -7,13 +7,13 @@ addFormats(ajv);
 const validate = ajv.compile(schema as object);
 
 export type ValidationResult = {
-    valid: boolean;
-    errors?: Ajv.ErrorObject[] | null;
+  valid: boolean;
+  errors?: Ajv.ErrorObject[] | null;
 };
 
 export function validateConfig(data: unknown): ValidationResult {
-    const valid = validate(data);
-    return { valid: Boolean(valid), errors: validate.errors };
+  const valid = validate(data);
+  return { valid: Boolean(valid), errors: validate.errors };
 }
 
 export default validateConfig;
