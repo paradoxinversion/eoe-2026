@@ -1,28 +1,30 @@
-# [PROJECT NAME] Development Guidelines
+# eoe-2026 Development Guidelines
 
-Auto-generated from all feature plans. Last updated: [DATE]
+Auto-generated from all feature plans. Last updated: 2026-01-17
 
 ## Active Technologies
 
-[EXTRACTED FROM ALL PLAN.MD FILES]
+- (001-empire-game-spec)
 
 ## Project Structure
 
 ```text
-[ACTUAL STRUCTURE FROM PLANS]
+backend/
+frontend/
+tests/
 ```
 
 ## Commands
 
-[ONLY COMMANDS FOR ACTIVE TECHNOLOGIES]
+# Add commands for 
 
 ## Code Style
 
-[LANGUAGE-SPECIFIC, ONLY FOR LANGUAGES IN USE]
+: Follow standard conventions
 
 ## Recent Changes
 
-[LAST 3 FEATURES AND WHAT THEY ADDED]
+- 001-empire-game-spec: Added
 
 <!-- MANUAL ADDITIONS START -->
 
