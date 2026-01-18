@@ -5,28 +5,131 @@ export type Resources = {
     science: number;
 };
 
+export type Agent = {
+    id: string;
+    name?: string;
+    role: "worker" | "scientist" | "merchant";
+    // productivity is a small modifier used in production calculations
+    productivity?: number;
+};
+
+export type Event = {
+    id: string;
+    name: string;
+    description?: string;
+    apply: (resources: Resources) => Resources;
+};
+
 export type GameState = {
     day: number;
     resources: Resources;
+    agents?: Agent[];
     log?: string[];
 };
 
+function processAgents(
+    resources: Resources,
+    agents: Agent[],
+    rng: RNG,
+): { resources: Resources; log: string[] } {
+    let r = { ...resources };
+    const logs: string[] = [];
+    for (const a of agents) {
+        const prod = a.productivity || 1;
+        if (a.role === "worker") {
+            const gain = Math.max(0, Math.floor(rng.float() * 3) + 1) * prod; // 1..3 * prod
+            r.gold += gain;
+            logs.push(`${a.name || a.id} (worker): +${gain} gold`);
+        } else if (a.role === "scientist") {
+            const gain = Math.max(0, Math.floor(rng.float() * 2)) * prod; // 0..1 * prod
+            r.science += gain;
+            logs.push(`${a.name || a.id} (scientist): +${gain} science`);
+        } else if (a.role === "merchant") {
+            const gain = Math.max(0, Math.floor(rng.float() * 4) + 1) * prod; // 1..4 * prod
+            r.gold += gain;
+            logs.push(`${a.name || a.id} (merchant): +${gain} gold`);
+        }
+    }
+    return { resources: r, log: logs };
+}
+
+function rollEvent(rng: RNG): Event | null {
+    const roll = rng.float();
+    if (roll < 0.08) {
+        return {
+            id: "raid",
+            name: "Raid",
+            description: "A band of raiders steals some gold.",
+            apply: (resources) => ({
+                ...resources,
+                gold: Math.max(
+                    0,
+                    resources.gold - (Math.floor(rng.float() * 11) + 5),
+                ),
+            }),
+        };
+    }
+    if (roll < 0.16) {
+        return {
+            id: "blessing",
+            name: "Blessing",
+            description: "A fortunate event grants extra gold.",
+            apply: (resources) => ({
+                ...resources,
+                gold: resources.gold + (Math.floor(rng.float() * 11) + 5),
+            }),
+        };
+    }
+    if (roll < 0.24) {
+        return {
+            id: "discovery",
+            name: "Discovery",
+            description: "A small scientific discovery increases science.",
+            apply: (resources) => ({
+                ...resources,
+                science: resources.science + (Math.floor(rng.float() * 3) + 1),
+            }),
+        };
+    }
+    return null;
+}
+
 export function resolveTurn(state: GameState, rng: RNG): GameState {
-    // deterministic simple rules for turn resolution:
-    // - gold increases by 1..5
-    // - science increases by 0..2
-    const goldGain = rng.int(1, 5);
-    const scienceGain = rng.int(0, 2);
+    // process agents first
+    const agents = state.agents || [];
+    const { resources: afterAgents, log: agentLogs } = processAgents(
+        state.resources,
+        agents,
+        rng,
+    );
+
+    // baseline per-turn passive gains
+    const goldGain = Math.floor(rng.float() * 5) + 1; // 1..5
+    const scienceGain = Math.floor(rng.float() * 3); // 0..2
+
+    let resources: Resources = {
+        gold: afterAgents.gold + goldGain,
+        science: afterAgents.science + scienceGain,
+    };
+
+    const logs: string[] = [];
+    logs.push(...agentLogs);
+    logs.push(
+        `Day ${state.day + 1}: +${goldGain} gold, +${scienceGain} science`,
+    );
+
+    // roll for a random event
+    const ev = rollEvent(rng);
+    if (ev) {
+        resources = ev.apply(resources);
+        logs.push(`Event: ${ev.name} - ${ev.description || ""}`);
+    }
 
     const next: GameState = {
         day: state.day + 1,
-        resources: {
-            gold: state.resources.gold + goldGain,
-            science: state.resources.science + scienceGain,
-        },
-        log: (state.log || []).concat([
-            `Day ${state.day + 1}: +${goldGain} gold, +${scienceGain} science`,
-        ]),
+        resources,
+        agents: agents.map((a) => ({ ...a })),
+        log: (state.log || []).concat(logs),
     };
 
     return next;
@@ -37,11 +140,12 @@ export function resolveTurns(
     rng: RNG,
     days: number,
 ): GameState {
-    let s = {
+    let s: GameState = {
         ...state,
         resources: { ...state.resources },
+        agents: state.agents ? [...state.agents] : [],
         log: state.log ? [...state.log] : [],
-    } as GameState;
+    };
     for (let i = 0; i < days; i++) {
         s = resolveTurn(s, rng);
     }
