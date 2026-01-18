@@ -2,10 +2,10 @@
 
 ## Phase 1 — Setup
 
-- [x] T001 [P] Create `frontend/package.json` and bootstrap Vite + React + TypeScript project in `frontend/` (frontend/package.json)
-- [x] T002 [P] Add dependencies to `frontend/package.json`: `react`, `react-dom`, `typescript`, `vite`, `@mui/material`, `@emotion/react`, `@emotion/styled`, `idb`, `vitest`, `@testing-library/react` (frontend/package.json)
-- [x] T003 [P] Create entry files `frontend/src/main.tsx` and `frontend/src/App.tsx` with React root and router placeholder (frontend/src/main.tsx, frontend/src/App.tsx)
-- [x] T004 Create `frontend/tsconfig.json` and `frontend/vite.config.ts` (frontend/tsconfig.json, frontend/vite.config.ts)
+- [x] T001 [P] Create frontend package and bootstrap Vite + React + TypeScript (frontend/package.json)
+- [x] T002 [P] Add core dependencies to `frontend/package.json` (react, vite, typescript, MUI, idb, vitest, testing libs)
+- [x] T003 [P] Create entry files `frontend/src/main.tsx` and `frontend/src/App.tsx` with React root and router placeholder
+- [x] T004 [P] Create `frontend/tsconfig.json` and `frontend/vite.config.ts`
 
 ## Phase 2 — Foundational
 
@@ -39,29 +39,26 @@
 
 ## Phase 4 — Options Page, Load Modal & Persistence UX
 
-- [x] T021 Implement MUI-based Options Page `frontend/src/pages/OptionsPage.tsx` bound to the config schema and `save as` behavior (frontend/src/pages/OptionsPage.tsx)
-- [ ] T022 Implement Title Page `frontend/src/pages/TitlePage.tsx` with `New Game`, `Load Game`, and `Options` buttons (frontend/src/pages/TitlePage.tsx)
-- [ ] T023 Implement Load Modal component `frontend/src/components/LoadModal.tsx` with `Saved` and `Import` tabs and keyboard accessibility (frontend/src/components/LoadModal.tsx)
-- [x] T022 Implement Title Page `frontend/src/pages/TitlePage.tsx` with `New Game`, `Load Game`, and `Options` buttons (frontend/src/pages/TitlePage.tsx)
-- [x] T023 Implement Load Modal component `frontend/src/components/LoadModal.tsx` with `Saved` and `Import` tabs and keyboard accessibility (frontend/src/components/LoadModal.tsx)
-- [ ] T024 Implement Export/Import handlers `frontend/src/services/importExport.ts` and wire to UI (frontend/src/services/importExport.ts)
-- [x] T024 Implement Export/Import handlers `frontend/src/services/importExport.ts` and wire to UI (frontend/src/services/importExport.ts)
-- [x] T025 Add integration tests for persistence flows `tests/integration/persistence.test.ts` (tests/integration/persistence.test.ts)
+- [x] T021 Implement MUI-based Options Page `frontend/src/pages/OptionsPage.tsx` bound to the config schema and `save as` behavior
+- [x] T022 Implement Title Page `frontend/src/pages/TitlePage.tsx` with `New Game`, `Load Game`, and `Options` buttons
+- [x] T023 Implement Load Modal component `frontend/src/components/LoadModal.tsx` with `Saved` and `Import` tabs and keyboard accessibility
+- [x] T024 Implement Export/Import handlers `frontend/src/services/importExport.ts` and wire to UI
+- [x] T025 Add integration tests for persistence flows (`tests/integration/persistence.test.ts` and `tests/integration/persistence.e2e.test.ts`)
 
 ## Phase 5 — Deterministic Integration, Performance & CI
 
-- [ ] T026 Implement integration test harness `tests/integration/seeded-harness.ts` to run deterministic scenarios (tests/integration/seeded-harness.ts)
-- [x] T026 Implement integration test harness `tests/integration/seeded-harness.ts` to run deterministic scenarios (tests/integration/seeded-harness.ts)
-- [x] T027 Add performance smoke tests `tests/perf/turn-latency.test.ts` and recording (tests/perf/turn-latency.test.ts)
-- [ ] T028 Create CI workflow `.github/workflows/ci.yml` implementing jobs: `lint`, `unit-tests`, `integration-deterministic`, `export-import`, `performance-smoke`, `build` (.github/workflows/ci.yml)
-- [ ] T029 Add npm scripts in `frontend/package.json` for `dev`, `build`, `test:unit`, `test:integration`, `test:perf`, and `lint` (frontend/package.json)
-- [ ] T026 Implement integration test harness `tests/integration/seeded-harness.ts` to run deterministic scenarios (tests/integration/seeded-harness.ts)
-- [ ] T027 Add performance smoke tests `tests/perf/turn-latency.test.ts` and recording (tests/perf/turn-latency.test.ts)
-- [x] T028 Create CI workflow `.github/workflows/ci.yml` implementing jobs: `lint`, `unit-tests`, `integration-deterministic`, `export-import`, `performance-smoke`, `build` (.github/workflows/ci.yml)
-- [x] T029 Add npm scripts in `frontend/package.json` for `dev`, `build`, `test:unit`, `test:integration`, `test:perf`, and `lint` (frontend/package.json)
+- [x] T026 Implement integration test harness `tests/integration/seeded-harness.ts` to run deterministic scenarios
+- [x] T027 Add performance smoke tests `tests/perf/turn-latency.test.ts` and recording
+- [x] T028 Create CI workflow `.github/workflows/ci.yml` implementing jobs: `lint`, `unit-tests`, `integration-deterministic`, `export-import`, `performance-smoke`, `build`
+- [x] T029 Add npm scripts in `frontend/package.json` for `dev`, `build`, `test:unit`, `test:integration`, `test:perf`, and `lint`
+
+- [x] T033 Run full integration suite (including `persistence.e2e.test.ts`) in CI and verify results
+- [x] T034 Investigate and fix CI artifact upload/download (404 on artifact retrieval)
+- [x] T035 Add CI debug step to print artifacts directory contents and upload logs
+- [ ] T036 Open PR for `001-empire-game-spec` with summary and tests attached
 
 ## Final Phase — Polish & Cross-Cutting Concerns
 
-- [ ] T030 [P] Add ESLint/Prettier configs and run formatters on created files (frontend/.eslintrc.cjs, frontend/.prettierrc)
-- [ ] T031 [P] Document developer quickstart and acceptance test runbook in `specs/001-empire-game-spec/README.md` (specs/001-empire-game-spec/README.md)
-- [ ] T032 [P] Perform accessibility audit on Options Page and Load Modal and fix issues (reports in specs/001-empire-game-spec/accessibility.md)
+- [ ] T030 [P] Add ESLint/Prettier configs and run formatters on created files
+- [ ] T031 [P] Document developer quickstart and acceptance test runbook in `specs/001-empire-game-spec/README.md`
+- [ ] T032 [P] Perform accessibility audit on Options Page and Load Modal and fix issues (reports in `specs/001-empire-game-spec/accessibility.md`)
