@@ -18,7 +18,11 @@ jobs:
             - name: Install frontend dependencies
               working-directory: frontend
               run: |
-                  npm ci
+                  if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ] || [ -f yarn.lock ]; then
+                    npm ci
+                  else
+                    npm install
+                  fi
 
             - name: Run unit tests
               working-directory: frontend
