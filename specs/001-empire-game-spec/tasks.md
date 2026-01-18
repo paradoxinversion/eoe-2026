@@ -27,8 +27,8 @@
 
 ### User Story 2 - Procedural World Creation (Priority: P2)
 
-- [ ] T015 [US2] Implement world generation service `frontend/src/services/generation.ts` accepting a `seed` and returning deterministic world JSON (frontend/src/services/generation.ts)
-- [ ] T016 [US2] Add generation unit tests `tests/unit/generation.test.ts` to validate seed determinism (tests/unit/generation.test.ts)
+- [x] T015 [US2] Implement world generation service `frontend/src/services/generation.ts` accepting a `seed` and returning deterministic world JSON (frontend/src/services/generation.ts)
+- [x] T016 [US2] Add generation unit tests `tests/unit/generation.test.ts` to validate seed determinism (tests/unit/generation.test.ts)
 - [ ] T017 [P] [US2] Create simple Zone and Person model files `frontend/src/models/zone.ts` and `frontend/src/models/person.ts` (frontend/src/models/zone.ts, frontend/src/models/person.ts)
 
 ### User Story 3 - Agents, Roles, and Technologies (Priority: P3)
