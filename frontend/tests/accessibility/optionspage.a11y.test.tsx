@@ -24,10 +24,14 @@ describe("a11y: OptionsPage", () => {
         const { container } = render(<OptionsPage />);
         // axe-core expects a document or element
         const results = await (axe as any).run(container);
-        // Filter known false-positive / environment-specific rules
-        const filtered = results.violations.filter(
-            (v: any) => v.id !== "aria-allowed-role",
-        );
-        expect(filtered).toHaveLength(0);
+        // If there are violations, print details for debugging
+        if (results.violations.length) {
+            // eslint-disable-next-line no-console
+            console.error(
+                "A11Y violations:",
+                JSON.stringify(results.violations, null, 2),
+            );
+        }
+        expect(results.violations).toHaveLength(0);
     });
 });

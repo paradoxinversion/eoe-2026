@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -31,6 +32,7 @@ export default function OptionsPage() {
     const [saveName, setSaveName] = useState("default");
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
         refreshList();
@@ -80,6 +82,7 @@ export default function OptionsPage() {
         const text = await file.text();
         await importConfig(text);
         await refreshList();
+        setStatusMessage("Imported configuration.");
     }
 
     function validateForm() {
@@ -242,17 +245,25 @@ export default function OptionsPage() {
             </Box>
 
             <Box sx={{ mt: 2 }}>
-                <Button component="label" startIcon={<FileUploadIcon />}>
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="application/json"
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                        const f = e.target.files && e.target.files[0];
+                        if (f) handleImport(f);
+                        // reset value so same file can be re-imported if needed
+                        if (e.target) e.target.value = "";
+                    }}
+                />
+                <Button
+                    startIcon={<FileUploadIcon />}
+                    onClick={() =>
+                        fileInputRef.current && fileInputRef.current.click()
+                    }
+                >
                     Import JSON
-                    <input
-                        type="file"
-                        accept="application/json"
-                        hidden
-                        onChange={(e) => {
-                            const f = e.target.files && e.target.files[0];
-                            if (f) handleImport(f);
-                        }}
-                    />
                 </Button>
             </Box>
         </Box>
