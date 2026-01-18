@@ -3,6 +3,12 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { defaultConfig } from "../config/schema";
 import createRng from "../lib/rng";
 import { resolveTurn, GameState } from "../services/turn";
@@ -13,7 +19,12 @@ import {
   assignScientist,
   ScienceProject,
 } from "../models/scienceProject";
-import { saveGameState, loadGameState } from "../services/persistence";
+import {
+  saveGameState,
+  loadGameState,
+  listGameStates,
+} from "../services/persistence";
+import { deleteConfig } from "../services/persistence";
 
 export default function Dashboard() {
   const cfg = defaultConfig;
@@ -26,6 +37,10 @@ export default function Dashboard() {
     projects: [],
     log: [],
   });
+  const [saveName, setSaveName] = useState("autosave");
+  const [savedGames, setSavedGames] = useState<
+    Array<{ name: string; updatedAt: number }>
+  >([]);
 
   function handleEndDay() {
     const next = resolveTurn(state, rng);
@@ -84,10 +99,43 @@ export default function Dashboard() {
         // ignore malformed autosave
       }
     })();
+    (async () => {
+      const list = await listGameStates();
+      if (mounted) setSavedGames(list);
+    })();
     return () => {
       mounted = false;
     };
   }, []);
+
+  async function refreshSavedGames() {
+    const list = await listGameStates();
+    setSavedGames(list);
+  }
+
+  async function handleManualSave() {
+    const name = saveName || `save-${Date.now()}`;
+    await saveGameState(name, state);
+    await refreshSavedGames();
+  }
+
+  async function handleLoadSaved(name: string) {
+    const loaded = await loadGameState(name);
+    if (!loaded) return;
+    try {
+      const g = loaded as Partial<GameState>;
+      setState((s) => ({ ...s, ...(g || {}) }) as GameState);
+    } catch (e) {
+      // log and ignore malformed save
+      // eslint-disable-next-line no-console
+      console.warn("failed to apply saved game", e);
+    }
+  }
+
+  async function handleDeleteSaved(name: string) {
+    await deleteConfig(`game:${name}`);
+    await refreshSavedGames();
+  }
 
   return (
     <Box sx={{ p: 2 }}>
@@ -119,6 +167,52 @@ export default function Dashboard() {
         <Button variant="outlined" onClick={handleAddProject}>
           Add Project
         </Button>
+      </Box>
+
+      <Box sx={{ mt: 3, display: "flex", gap: 2, alignItems: "center" }}>
+        <TextField
+          size="small"
+          label="Save name"
+          value={saveName}
+          onChange={(e) => setSaveName(e.target.value)}
+        />
+        <Button variant="contained" onClick={handleManualSave}>
+          Save
+        </Button>
+      </Box>
+
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="h6">Saved Games</Typography>
+        <List>
+          {savedGames.map((g) => (
+            <ListItem
+              key={g.name}
+              secondaryAction={
+                <div>
+                  <Button size="small" onClick={() => handleLoadSaved(g.name)}>
+                    Load
+                  </Button>
+                  <IconButton
+                    onClick={() => handleDeleteSaved(g.name)}
+                    aria-label={`delete-${g.name}`}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </div>
+              }
+            >
+              <ListItemText
+                primary={g.name}
+                secondary={new Date(g.updatedAt).toLocaleString()}
+              />
+            </ListItem>
+          ))}
+          {savedGames.length === 0 && (
+            <ListItem>
+              <ListItemText primary="No saved games" />
+            </ListItem>
+          )}
+        </List>
       </Box>
 
       <Box sx={{ mt: 3, display: "flex", gap: 2 }}>
