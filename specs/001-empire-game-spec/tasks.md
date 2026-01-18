@@ -42,6 +42,7 @@
 ## Phase 4 — Options Page, Load Modal & Persistence UX
 
 - [ ] T021 Implement MUI-based Options Page `frontend/src/pages/OptionsPage.tsx` bound to the config schema and `save as` behavior (frontend/src/pages/OptionsPage.tsx)
+ - [X] T021 Implement MUI-based Options Page `frontend/src/pages/OptionsPage.tsx` bound to the config schema and `save as` behavior (frontend/src/pages/OptionsPage.tsx)
 - [ ] T022 Implement Title Page `frontend/src/pages/TitlePage.tsx` with `New Game`, `Load Game`, and `Options` buttons (frontend/src/pages/TitlePage.tsx)
 - [ ] T023 Implement Load Modal component `frontend/src/components/LoadModal.tsx` with `Saved` and `Import` tabs and keyboard accessibility (frontend/src/components/LoadModal.tsx)
 - [ ] T024 Implement Export/Import handlers `frontend/src/services/importExport.ts` and wire to UI (frontend/src/services/importExport.ts)
