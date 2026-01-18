@@ -29,9 +29,25 @@
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-[Gates determined based on constitution file]
+Plans MUST include a `Constitution Check` section that references
+`.specify/memory/constitution.md` and documents compliance or a justified
+exception for each applicable principle. At minimum verify and document:
+
+- Code Quality & Maintainability: design notes, modularity concerns,
+  and review/linters to be applied.
+- Test-First & Automated Testing: list of required tests (unit,
+  integration, acceptance) and how they will be automated.
+- User Experience Consistency: acceptance criteria and UX metrics.
+- Performance & Resource Constraints: measurable goals (p95/p99,
+  memory/disk budgets) or "no performance impact" rationale.
+- Local-First & Portability: how the feature operates on a local machine
+  and any hosted opt-in behavior with privacy/security notes.
+
+The `Constitution Check` should be a short table or bullets in the plan
+and included in the plan's top-level summary.
 
 ## Project Structure
 
@@ -48,6 +64,7 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
+
 <!--
   ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
   for this feature. Delete unused options and expand the chosen structure with
@@ -98,7 +115,7 @@ directories captured above]
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+| Violation                  | Why Needed         | Simpler Alternative Rejected Because |
+| -------------------------- | ------------------ | ------------------------------------ |
+| [e.g., 4th project]        | [current need]     | [why 3 projects insufficient]        |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient]  |

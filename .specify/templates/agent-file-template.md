@@ -25,4 +25,13 @@ Auto-generated from all feature plans. Last updated: [DATE]
 [LAST 3 FEATURES AND WHAT THEY ADDED]
 
 <!-- MANUAL ADDITIONS START -->
+
+## Constitution
+
+This document is derived from feature plans and MUST surface how
+generated guidance aligns to the project's constitution at
+`.specify/memory/constitution.md`. Include a short mapping of active
+recommendations to constitution principles (Code Quality, Testing,
+UX Consistency, Performance, Local-First) in the top section.
+
 <!-- MANUAL ADDITIONS END -->
