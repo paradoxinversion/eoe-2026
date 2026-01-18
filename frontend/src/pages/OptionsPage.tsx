@@ -10,8 +10,8 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import DownloadIcon from "@mui/icons-material/Download";
-import FormHelperText from '@mui/material/FormHelperText';
-import Alert from '@mui/material/Alert';
+import FormHelperText from "@mui/material/FormHelperText";
+import Alert from "@mui/material/Alert";
 
 import {
     listConfigs,
@@ -49,12 +49,12 @@ export default function OptionsPage() {
     async function handleSave() {
         const valid = validateForm();
         if (!valid) {
-            setStatusMessage('Please fix validation errors before saving.');
+            setStatusMessage("Please fix validation errors before saving.");
             return;
         }
         await saveConfig(saveName || `save-${Date.now()}`, form);
         await refreshList();
-        setStatusMessage('Saved configuration.');
+        setStatusMessage("Saved configuration.");
     }
 
     async function handleDelete(name: string) {
@@ -85,16 +85,24 @@ export default function OptionsPage() {
     function validateForm() {
         const e: Record<string, string> = {};
         if (!form.playerName || form.playerName.trim().length === 0) {
-            e.playerName = 'Player name is required.';
+            e.playerName = "Player name is required.";
         }
         if (!Number.isFinite(form.startingSeed) || form.startingSeed < 0) {
-            e.startingSeed = 'Starting seed must be a non-negative number.';
+            e.startingSeed = "Starting seed must be a non-negative number.";
         }
-        if (!Number.isFinite(form.autosaveIntervalSeconds) || form.autosaveIntervalSeconds < 5) {
-            e.autosaveIntervalSeconds = 'Autosave interval must be at least 5 seconds.';
+        if (
+            !Number.isFinite(form.autosaveIntervalSeconds) ||
+            form.autosaveIntervalSeconds < 5
+        ) {
+            e.autosaveIntervalSeconds =
+                "Autosave interval must be at least 5 seconds.";
         }
-        if (!Number.isFinite(form.gracePeriodDays) || form.gracePeriodDays < 0) {
-            e.gracePeriodDays = 'Grace period must be zero or a positive integer.';
+        if (
+            !Number.isFinite(form.gracePeriodDays) ||
+            form.gracePeriodDays < 0
+        ) {
+            e.gracePeriodDays =
+                "Grace period must be zero or a positive integer.";
         }
         setErrors(e);
         return Object.keys(e).length === 0;
@@ -112,9 +120,14 @@ export default function OptionsPage() {
                     value={saveName}
                     onChange={(e) => setSaveName(e.target.value)}
                     size="small"
-                    inputProps={{ 'aria-label': 'save-name' }}
+                    inputProps={{ "aria-label": "save-name" }}
                 />
-                <Button variant="contained" onClick={handleSave} aria-disabled={Object.keys(errors).length>0} disabled={Object.keys(errors).length>0}>
+                <Button
+                    variant="contained"
+                    onClick={handleSave}
+                    aria-disabled={Object.keys(errors).length > 0}
+                    disabled={Object.keys(errors).length > 0}
+                >
                     Save
                 </Button>
             </Box>
@@ -131,7 +144,7 @@ export default function OptionsPage() {
                     }
                     error={!!errors.playerName}
                     helperText={errors.playerName}
-                    inputProps={{ 'aria-describedby': 'playerName-help' }}
+                    inputProps={{ "aria-describedby": "playerName-help" }}
                 />
                 <TextField
                     label="Starting Seed"
@@ -176,7 +189,11 @@ export default function OptionsPage() {
 
             {statusMessage && (
                 <Box sx={{ mt: 2 }} role="status" aria-live="polite">
-                    <Alert severity={Object.keys(errors).length ? 'warning' : 'success'}>
+                    <Alert
+                        severity={
+                            Object.keys(errors).length ? "warning" : "success"
+                        }
+                    >
                         {statusMessage}
                     </Alert>
                 </Box>
