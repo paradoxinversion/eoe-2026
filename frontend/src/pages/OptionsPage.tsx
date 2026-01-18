@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import React, { useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -23,6 +22,7 @@ import {
     importConfig,
 } from "../services/persistence";
 import { defaultConfig } from "../config/schema";
+import validateConfig from "../config/validator";
 
 export default function OptionsPage() {
     const [form, setForm] = useState(defaultConfig);
@@ -86,26 +86,24 @@ export default function OptionsPage() {
     }
 
     function validateForm() {
+        const res = validateConfig(form);
         const e: Record<string, string> = {};
-        if (!form.playerName || form.playerName.trim().length === 0) {
-            e.playerName = "Player name is required.";
-        }
-        if (!Number.isFinite(form.startingSeed) || form.startingSeed < 0) {
-            e.startingSeed = "Starting seed must be a non-negative number.";
-        }
-        if (
-            !Number.isFinite(form.autosaveIntervalSeconds) ||
-            form.autosaveIntervalSeconds < 5
-        ) {
-            e.autosaveIntervalSeconds =
-                "Autosave interval must be at least 5 seconds.";
-        }
-        if (
-            !Number.isFinite(form.gracePeriodDays) ||
-            form.gracePeriodDays < 0
-        ) {
-            e.gracePeriodDays =
-                "Grace period must be zero or a positive integer.";
+        if (!res.valid && res.errors && res.errors.length) {
+            for (const err of res.errors) {
+                try {
+                    const path = (err.instancePath || "").replace(/^\//, "");
+                    const key =
+                        path ||
+                        (err.params && (err.params as any).missingProperty) ||
+                        "__form";
+                    const msg = err.message || "Invalid value";
+                    e[key] = e[key] ? `${e[key]}; ${msg}` : msg;
+                } catch (ex) {
+                    e.__form =
+                        (e.__form ? e.__form + "; " : "") +
+                        (err.message || "validation error");
+                }
+            }
         }
         setErrors(e);
         return Object.keys(e).length === 0;
