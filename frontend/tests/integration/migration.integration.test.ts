@@ -23,7 +23,24 @@ describe("migration integration: run fixtures through migrateFixture", () => {
       const fixture = JSON.parse(stripComments(raw));
       const { transformed, report } = migrateFixture(fixture, { dryRun: true });
       expect(report).toBeTruthy();
+      // summary counts must be numbers
       expect(typeof report.summary.processed).toBe("number");
+      expect(typeof report.summary.migrated).toBe("number");
+      expect(typeof report.summary.quarantined).toBe("number");
+
+      // examples and quarantine arrays
+      expect(Array.isArray(report.examples)).toBe(true);
+      expect(Array.isArray(report.quarantine)).toBe(true);
+
+      // quarantine entries must include reason and payload when present
+      for (const q of report.quarantine) {
+        expect(typeof q.reason).toBe("string");
+        expect(q.payload !== undefined).toBe(true);
+      }
+
+      // summary.quarantined should reflect actual quarantine array length
+      expect(report.summary.quarantined).toBe(report.quarantine.length);
+
       // transformed should at minimum be an object containing arrays
       expect(transformed).toBeTruthy();
     }
