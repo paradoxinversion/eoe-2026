@@ -10,7 +10,6 @@ export interface Zone {
   currentOccupants: UUID[];
 }
 
-export default Zone;
 export type Zone = {
   id: string;
   name: string;

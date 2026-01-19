@@ -22,7 +22,6 @@ export interface Agent {
   health: number;
 }
 
-export default Agent;
 export type AgentStatus = "active" | "idle" | "unavailable" | "dead";
 
 export type Agent = {

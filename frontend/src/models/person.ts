@@ -33,7 +33,6 @@ export interface Person {
   skills: PersonSkills;
 }
 
-export default Person;
 export type Person = {
   id: string;
   name: string;
