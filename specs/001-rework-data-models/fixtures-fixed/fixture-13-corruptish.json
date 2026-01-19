@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "corrupt-unknown",
+  "note": "This fixture contains missing required top-level arrays to simulate malformed-but-JSON data.",
+  "people": [
+    {
+      "id": "person-broken-1",
+      "firstName": "X",
+      "lastName": "Y",
+      "attributes": {
+        "health": 50,
+        "intelligence": 50,
+        "strength": 50,
+        "agility": 50,
+        "endurance": 50,
+        "empathy": 50,
+        "charisma": 50
+      },
+      "skills": {
+        "fighting": 0,
+        "medicine": 0,
+        "business": 0,
+        "finance": 0,
+        "publicPlanning": 0,
+        "science": 0
+      },
+      "intelligenceLevel": 50,
+      "governingOrganizationSentiments": {}
+    }
+  ]
+}

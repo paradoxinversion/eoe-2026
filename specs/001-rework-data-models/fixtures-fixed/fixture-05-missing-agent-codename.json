@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "0.9.0",
+  "people": [
+    {
+      "id": "person-2001",
+      "firstName": "Sam",
+      "lastName": "Tao",
+      "homeZoneId": "zone-2001",
+      "governingOrganizationSentiments": {},
+      "intelligenceLevel": 55,
+      "attributes": {
+        "health": 85,
+        "intelligence": 60,
+        "strength": 50,
+        "agility": 55,
+        "endurance": 60,
+        "empathy": 45,
+        "charisma": 40
+      },
+      "skills": {
+        "fighting": 5,
+        "medicine": 20,
+        "business": 10,
+        "finance": 10,
+        "publicPlanning": 5,
+        "science": 30
+      }
+    }
+  ],
+  "agents": [
+    {
+      "id": "agent-2001",
+      "personId": "person-2001",
+      "role": "Recruit",
+      "health": 100,
+      "codeName": "agent-2001"
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone-2001",
+      "name": "Harbor",
+      "size": 24,
+      "wealth": 40,
+      "intelligenceLevel": 50,
+      "currentOccupants": [
+        "person-2001"
+      ]
+    }
+  ]
+}

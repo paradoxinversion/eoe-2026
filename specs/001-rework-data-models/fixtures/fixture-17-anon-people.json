@@ -1,0 +1,29 @@
+{
+    "schemaVersion": "1.0.0",
+    "people": [
+        {
+            "id": "person-anon-1",
+            "firstName": "",
+            "lastName": "",
+            "governingOrganizationSentiments": {},
+            "intelligenceLevel": 40
+        },
+        {
+            "id": "person-anon-2",
+            "firstName": "",
+            "lastName": "",
+            "governingOrganizationSentiments": {},
+            "intelligenceLevel": 35
+        }
+    ],
+    "zones": [
+        {
+            "id": "zone-anon",
+            "name": "Anonville",
+            "size": 8,
+            "wealth": 10,
+            "intelligenceLevel": 25,
+            "currentOccupants": ["person-anon-1", "person-anon-2"]
+        }
+    ]
+}

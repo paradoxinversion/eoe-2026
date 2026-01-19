@@ -145,11 +145,45 @@ export async function loadThemeMode(): Promise<"dark" | "light" | null> {
   }
 }
 
+// --- Schema/version for persisted game saves
+export const SCHEMA_VERSION = 1;
+
 // --- Game state helpers (stored in the same configs store under a `game:` prefix)
 export async function saveGameState(name: string, state: unknown) {
   const db = await getDB();
   const key = `game:${name}`;
-  await db.put(STORE_CONFIGS, { name: key, state, updatedAt: Date.now() });
+  // Normalize zones.currentOccupants before saving to ensure consistent shape
+  try {
+    const s = (state as any) || {};
+    if (Array.isArray(s.zones)) {
+      for (const z of s.zones) {
+        if (z && z.currentOccupants !== undefined) {
+          if (Array.isArray(z.currentOccupants)) {
+            z.currentOccupants = z.currentOccupants.map((id: any) =>
+              String(id),
+            );
+          } else if (typeof z.currentOccupants === "string") {
+            z.currentOccupants = z.currentOccupants
+              .split(/[\s,;]+/)
+              .map((s2: string) => s2.trim())
+              .filter(Boolean);
+          } else if (typeof z.currentOccupants === "number") {
+            z.currentOccupants = [String(z.currentOccupants)];
+          }
+        }
+      }
+    }
+  } catch (e) {
+    // don't block save on normalization failures
+    console.warn("saveGameState: zone normalization failed", e);
+  }
+
+  await db.put(STORE_CONFIGS, {
+    name: key,
+    state,
+    schemaVersion: SCHEMA_VERSION,
+    updatedAt: Date.now(),
+  });
 }
 
 export async function loadGameState(name: string): Promise<unknown | null> {
@@ -157,7 +191,32 @@ export async function loadGameState(name: string): Promise<unknown | null> {
   const key = `game:${name}`;
   const rec = (await db.get(STORE_CONFIGS, key)) as unknown;
   if (!rec) return null;
-  const r = rec as { state?: unknown };
+  const r = rec as { state?: unknown; schemaVersion?: number };
+  // Coerce legacy zone.currentOccupants on load to array of strings
+  try {
+    const s = r.state as any;
+    if (s && Array.isArray(s.zones)) {
+      for (const z of s.zones) {
+        if (
+          z &&
+          z.currentOccupants !== undefined &&
+          !Array.isArray(z.currentOccupants)
+        ) {
+          if (typeof z.currentOccupants === "string") {
+            z.currentOccupants = z.currentOccupants
+              .split(/[\s,;]+/)
+              .map((s2: string) => s2.trim())
+              .filter(Boolean);
+          } else if (typeof z.currentOccupants === "number") {
+            z.currentOccupants = [String(z.currentOccupants)];
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("loadGameState: zone normalization failed", e);
+  }
+
   return r.state === undefined ? null : r.state;
 }
 

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "0.9.5",
+  "governingOrganizations": [
+    {
+      "id": "gov-player",
+      "name": "PlayerEmpire"
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone-1000",
+      "name": "Outskirts",
+      "size": 80,
+      "wealth": 10,
+      "intelligenceLevel": 30,
+      "currentOccupants": [
+        "person-1000"
+      ]
+    }
+  ],
+  "people": [
+    {
+      "id": "person-1000",
+      "firstName": "Lian",
+      "lastName": "",
+      "homeZoneId": "zone-1000",
+      "governingOrganizationSentiments": {},
+      "intelligenceLevel": 40,
+      "attributes": {
+        "health": 75,
+        "intelligence": 35,
+        "strength": 55,
+        "agility": 45,
+        "endurance": 60,
+        "empathy": 30,
+        "charisma": 20
+      },
+      "skills": {
+        "fighting": 15,
+        "medicine": 5,
+        "business": 5,
+        "finance": 0,
+        "publicPlanning": 0,
+        "science": 0
+      }
+    }
+  ],
+  "agents": []
+}

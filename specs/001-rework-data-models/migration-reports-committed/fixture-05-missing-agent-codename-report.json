@@ -1,0 +1,27 @@
+{
+    "summary": {
+        "processed": 1,
+        "migrated": 4,
+        "quarantined": 0
+    },
+    "examples": [
+        {
+            "type": "generateCodeName",
+            "id": "agent-2001",
+            "codeName": "codename-9ieuhe00",
+            "seed": "person-2001"
+        },
+        {
+            "type": "generateBuildings",
+            "zoneId": "zone-2001",
+            "count": 2
+        },
+        {
+            "type": "normalizeZoneOccupants",
+            "zoneId": "zone-2001",
+            "count": 1
+        }
+    ],
+    "quarantine": [],
+    "actions": []
+}

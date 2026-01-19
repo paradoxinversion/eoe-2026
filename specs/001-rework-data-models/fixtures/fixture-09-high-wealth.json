@@ -1,0 +1,53 @@
+{
+    "schemaVersion": "1.0.0",
+    "governingOrganizations": [{ "id": "gov-rich", "name": "RichState" }],
+    "zones": [
+        {
+            "id": "zone-rich-1",
+            "name": "Financial District",
+            "size": 40,
+            "wealth": 95,
+            "intelligenceLevel": 80,
+            "currentOccupants": ["person-r1"]
+        }
+    ],
+    "people": [
+        {
+            "id": "person-r1",
+            "firstName": "Eloise",
+            "lastName": "Grant",
+            "homeZoneId": "zone-rich-1",
+            "governingOrganizationSentiments": { "gov-rich": 50 },
+            "intelligenceLevel": 85,
+            "attributes": {
+                "health": 95,
+                "intelligence": 88,
+                "strength": 35,
+                "agility": 50,
+                "endurance": 60,
+                "empathy": 55,
+                "charisma": 70
+            },
+            "skills": {
+                "fighting": 5,
+                "medicine": 30,
+                "business": 80,
+                "finance": 95,
+                "publicPlanning": 40,
+                "science": 60
+            }
+        }
+    ],
+    "buildings": [
+        {
+            "id": "building-rich-1",
+            "name": "First Bank",
+            "type": "Bank",
+            "size": 8,
+            "zoneId": "zone-rich-1",
+            "intelligenceLevel": 80,
+            "upkeepCost": 50,
+            "infrastructureLoad": 10
+        }
+    ]
+}

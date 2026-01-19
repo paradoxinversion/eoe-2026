@@ -1,0 +1,5 @@
+{
+    "schemaVersion": "corrupt-unknown",
+    "note": "This fixture contains missing required top-level arrays to simulate malformed-but-JSON data.",
+    "people": [{ "id": "person-broken-1", "firstName": "X", "lastName": "Y" }]
+}

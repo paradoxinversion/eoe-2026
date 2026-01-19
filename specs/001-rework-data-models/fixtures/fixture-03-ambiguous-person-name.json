@@ -1,0 +1,23 @@
+{
+    "schemaVersion": "0.8.0",
+    "zones": [
+        {
+            "id": "zone-ambig",
+            "name": "OldTown",
+            "size": 12,
+            "wealth": 40,
+            "intelligenceLevel": 50,
+            "currentOccupants": ["person-ambig-1"]
+        }
+    ],
+    "people": [
+        {
+            "id": "person-ambig-1",
+            "name": "Madonna",
+            "homeZoneId": "zone-ambig",
+            "governingOrganizationSentiments": {},
+            "intelligenceLevel": 50
+        }
+    ],
+    "agents": []
+}

@@ -1,0 +1,16 @@
+{
+    "summary": {
+        "processed": 2,
+        "migrated": 1,
+        "quarantined": 0
+    },
+    "examples": [
+        {
+            "type": "normalizeZoneOccupants",
+            "zoneId": "zone-0001",
+            "count": 2
+        }
+    ],
+    "quarantine": [],
+    "actions": []
+}

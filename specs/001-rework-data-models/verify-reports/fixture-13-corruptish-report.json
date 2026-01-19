@@ -1,0 +1,12 @@
+{
+  "fixture": "fixture-13-corruptish.json",
+  "ok": true,
+  "details": {
+    "people": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    }
+  }
+}

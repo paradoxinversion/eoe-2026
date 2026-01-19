@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "0.9.9",
+  "governingOrganizations": [
+    {
+      "id": "gov-loop",
+      "name": "LoopGov",
+      "leaderId": "person-loop-99"
+    }
+  ],
+  "people": [
+    {
+      "id": "person-loop-1",
+      "firstName": "Ike",
+      "lastName": "Loop",
+      "homeZoneId": "zone-loop",
+      "governingOrganizationSentiments": {
+        "gov-loop": 0
+      },
+      "intelligenceLevel": 40,
+      "attributes": {
+        "health": 50,
+        "intelligence": 50,
+        "strength": 50,
+        "agility": 50,
+        "endurance": 50,
+        "empathy": 50,
+        "charisma": 50
+      },
+      "skills": {
+        "fighting": 0,
+        "medicine": 0,
+        "business": 0,
+        "finance": 0,
+        "publicPlanning": 0,
+        "science": 0
+      }
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone-loop",
+      "name": "LoopTown",
+      "size": 10,
+      "wealth": 20,
+      "intelligenceLevel": 30,
+      "currentOccupants": [
+        "person-loop-1",
+        "person-missing-999"
+      ]
+    }
+  ],
+  "agents": [
+    {
+      "id": "agent-loop-1",
+      "personId": "person-loop-1",
+      "codeName": "loop-ops",
+      "role": "Administrator",
+      "affiliationId": "gov-missing-777",
+      "health": 80
+    }
+  ]
+}

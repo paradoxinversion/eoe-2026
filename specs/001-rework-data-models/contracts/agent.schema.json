@@ -1,0 +1,35 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Agent",
+    "type": "object",
+    "required": ["id", "personId", "codeName", "role", "health"],
+    "properties": {
+        "id": { "type": "string" },
+        "personId": { "type": "string" },
+        "codeName": { "type": "string" },
+        "role": {
+            "type": "string",
+            "enum": [
+                "Recruit",
+                "Administrator",
+                "Scientist",
+                "Doctor",
+                "Soldier"
+            ]
+        },
+        "affiliationId": { "type": ["string", "null"] },
+        "inventory": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["itemId", "qty"],
+                "properties": {
+                    "itemId": { "type": "string" },
+                    "qty": { "type": "number" }
+                }
+            }
+        },
+        "health": { "type": "number" }
+    },
+    "additionalProperties": false
+}

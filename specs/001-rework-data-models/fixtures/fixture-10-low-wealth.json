@@ -1,0 +1,67 @@
+{
+    "schemaVersion": "1.0.0",
+    "governingOrganizations": [{ "id": "gov-poor", "name": "RusticCouncil" }],
+    "zones": [
+        {
+            "id": "zone-poor-1",
+            "name": "Outback",
+            "size": 200,
+            "wealth": 5,
+            "intelligenceLevel": 20,
+            "currentOccupants": ["person-p1", "person-p2"]
+        }
+    ],
+    "people": [
+        {
+            "id": "person-p1",
+            "firstName": "Moe",
+            "lastName": "Low",
+            "homeZoneId": "zone-poor-1",
+            "governingOrganizationSentiments": { "gov-poor": 0 },
+            "intelligenceLevel": 35,
+            "attributes": {
+                "health": 70,
+                "intelligence": 30,
+                "strength": 65,
+                "agility": 45,
+                "endurance": 60,
+                "empathy": 20,
+                "charisma": 15
+            },
+            "skills": {
+                "fighting": 20,
+                "medicine": 1,
+                "business": 2,
+                "finance": 0,
+                "publicPlanning": 0,
+                "science": 0
+            }
+        },
+        {
+            "id": "person-p2",
+            "firstName": "Nia",
+            "lastName": "Croft",
+            "homeZoneId": "zone-poor-1",
+            "governingOrganizationSentiments": { "gov-poor": -5 },
+            "intelligenceLevel": 30,
+            "attributes": {
+                "health": 60,
+                "intelligence": 28,
+                "strength": 55,
+                "agility": 35,
+                "endurance": 50,
+                "empathy": 25,
+                "charisma": 20
+            },
+            "skills": {
+                "fighting": 15,
+                "medicine": 0,
+                "business": 1,
+                "finance": 0,
+                "publicPlanning": 0,
+                "science": 0
+            }
+        }
+    ],
+    "buildings": []
+}

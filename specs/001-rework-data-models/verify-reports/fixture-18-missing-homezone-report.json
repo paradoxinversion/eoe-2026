@@ -1,0 +1,18 @@
+{
+  "fixture": "fixture-18-missing-homezone.json",
+  "ok": true,
+  "details": {
+    "people": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    },
+    "zones": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    }
+  }
+}

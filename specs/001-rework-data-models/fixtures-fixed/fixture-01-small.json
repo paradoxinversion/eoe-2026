@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "1.0.0",
+  "governingOrganizations": [
+    {
+      "id": "gov-1a2b3c",
+      "name": "PlayerEmpire",
+      "type": "Empire",
+      "leaderId": "person-0001"
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone-0001",
+      "name": "Central",
+      "size": 30,
+      "wealth": 60,
+      "intelligenceLevel": 55,
+      "capacity": 100,
+      "currentOccupants": [
+        "person-0001",
+        "person-0002"
+      ]
+    }
+  ],
+  "people": [
+    {
+      "id": "person-0001",
+      "firstName": "Ava",
+      "lastName": "Stone",
+      "homeZoneId": "zone-0001",
+      "governingOrganizationSentiments": {
+        "gov-1a2b3c": 20
+      },
+      "intelligenceLevel": 60,
+      "occupation": "Engineer",
+      "attributes": {
+        "health": 90,
+        "intelligence": 70,
+        "strength": 50,
+        "agility": 60,
+        "endurance": 55,
+        "empathy": 40,
+        "charisma": 50
+      },
+      "skills": {
+        "fighting": 10,
+        "medicine": 20,
+        "business": 30,
+        "finance": 20,
+        "publicPlanning": 25,
+        "science": 45
+      }
+    },
+    {
+      "id": "person-0002",
+      "firstName": "Rafi",
+      "lastName": "Ng",
+      "homeZoneId": "zone-0001",
+      "governingOrganizationSentiments": {
+        "gov-1a2b3c": -10
+      },
+      "intelligenceLevel": 45,
+      "occupation": "Farmer",
+      "attributes": {
+        "health": 80,
+        "intelligence": 40,
+        "strength": 60,
+        "agility": 50,
+        "endurance": 70,
+        "empathy": 60,
+        "charisma": 30
+      },
+      "skills": {
+        "fighting": 20,
+        "medicine": 5,
+        "business": 10,
+        "finance": 5,
+        "publicPlanning": 10,
+        "science": 5
+      }
+    }
+  ],
+  "agents": [
+    {
+      "id": "agent-1001",
+      "personId": "person-0001",
+      "codeName": "hawk-1",
+      "role": "Scientist",
+      "affiliationId": "gov-1a2b3c",
+      "inventory": [
+        {
+          "itemId": "item-axe",
+          "qty": 1
+        }
+      ],
+      "health": 95
+    }
+  ],
+  "buildings": [
+    {
+      "id": "building-01",
+      "name": "Central Lab",
+      "type": "Lab",
+      "size": 5,
+      "zoneId": "zone-0001",
+      "intelligenceLevel": 60,
+      "upkeepCost": 10,
+      "infrastructureLoad": 2
+    }
+  ]
+}

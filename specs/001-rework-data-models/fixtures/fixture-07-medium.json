@@ -1,0 +1,327 @@
+{
+    "schemaVersion": "1.0.0",
+    "governingOrganizations": [{ "id": "gov-med", "name": "MedGov" }],
+    "zones": [
+        {
+            "id": "zone-med-1",
+            "name": "Midtown",
+            "size": 100,
+            "wealth": 70,
+            "intelligenceLevel": 65,
+            "currentOccupants": []
+        }
+    ],
+    "people": [
+        // 12 example people to simulate medium save
+        {
+            "id": "person-m-01",
+            "firstName": "P1",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": 10 },
+            "intelligenceLevel": 50,
+            "attributes": {
+                "health": 90,
+                "intelligence": 50,
+                "strength": 40,
+                "agility": 40,
+                "endurance": 50,
+                "empathy": 30,
+                "charisma": 25
+            },
+            "skills": {
+                "fighting": 10,
+                "medicine": 5,
+                "business": 15,
+                "finance": 10,
+                "publicPlanning": 5,
+                "science": 20
+            }
+        },
+        {
+            "id": "person-m-02",
+            "firstName": "P2",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": 0 },
+            "intelligenceLevel": 45,
+            "attributes": {
+                "health": 85,
+                "intelligence": 45,
+                "strength": 35,
+                "agility": 40,
+                "endurance": 45,
+                "empathy": 35,
+                "charisma": 30
+            },
+            "skills": {
+                "fighting": 12,
+                "medicine": 8,
+                "business": 12,
+                "finance": 8,
+                "publicPlanning": 6,
+                "science": 18
+            }
+        },
+        {
+            "id": "person-m-03",
+            "firstName": "P3",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": -5 },
+            "intelligenceLevel": 48,
+            "attributes": {
+                "health": 88,
+                "intelligence": 48,
+                "strength": 42,
+                "agility": 42,
+                "endurance": 48,
+                "empathy": 32,
+                "charisma": 28
+            },
+            "skills": {
+                "fighting": 11,
+                "medicine": 6,
+                "business": 14,
+                "finance": 9,
+                "publicPlanning": 7,
+                "science": 16
+            }
+        },
+        {
+            "id": "person-m-04",
+            "firstName": "P4",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": 5 },
+            "intelligenceLevel": 52,
+            "attributes": {
+                "health": 92,
+                "intelligence": 52,
+                "strength": 44,
+                "agility": 45,
+                "endurance": 50,
+                "empathy": 36,
+                "charisma": 30
+            },
+            "skills": {
+                "fighting": 13,
+                "medicine": 10,
+                "business": 16,
+                "finance": 11,
+                "publicPlanning": 8,
+                "science": 22
+            }
+        },
+        {
+            "id": "person-m-05",
+            "firstName": "P5",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": 15 },
+            "intelligenceLevel": 60,
+            "attributes": {
+                "health": 95,
+                "intelligence": 60,
+                "strength": 50,
+                "agility": 48,
+                "endurance": 55,
+                "empathy": 40,
+                "charisma": 35
+            },
+            "skills": {
+                "fighting": 8,
+                "medicine": 20,
+                "business": 10,
+                "finance": 14,
+                "publicPlanning": 12,
+                "science": 30
+            }
+        },
+        {
+            "id": "person-m-06",
+            "firstName": "P6",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": 0 },
+            "intelligenceLevel": 46,
+            "attributes": {
+                "health": 80,
+                "intelligence": 46,
+                "strength": 38,
+                "agility": 39,
+                "endurance": 44,
+                "empathy": 33,
+                "charisma": 20
+            },
+            "skills": {
+                "fighting": 9,
+                "medicine": 7,
+                "business": 11,
+                "finance": 6,
+                "publicPlanning": 4,
+                "science": 12
+            }
+        },
+        {
+            "id": "person-m-07",
+            "firstName": "P7",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": -10 },
+            "intelligenceLevel": 42,
+            "attributes": {
+                "health": 78,
+                "intelligence": 42,
+                "strength": 36,
+                "agility": 37,
+                "endurance": 40,
+                "empathy": 28,
+                "charisma": 18
+            },
+            "skills": {
+                "fighting": 14,
+                "medicine": 3,
+                "business": 6,
+                "finance": 2,
+                "publicPlanning": 3,
+                "science": 5
+            }
+        },
+        {
+            "id": "person-m-08",
+            "firstName": "P8",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": 20 },
+            "intelligenceLevel": 58,
+            "attributes": {
+                "health": 94,
+                "intelligence": 58,
+                "strength": 48,
+                "agility": 46,
+                "endurance": 52,
+                "empathy": 38,
+                "charisma": 32
+            },
+            "skills": {
+                "fighting": 6,
+                "medicine": 18,
+                "business": 14,
+                "finance": 12,
+                "publicPlanning": 10,
+                "science": 26
+            }
+        },
+        {
+            "id": "person-m-09",
+            "firstName": "P9",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": 5 },
+            "intelligenceLevel": 50,
+            "attributes": {
+                "health": 88,
+                "intelligence": 50,
+                "strength": 40,
+                "agility": 41,
+                "endurance": 48,
+                "empathy": 34,
+                "charisma": 27
+            },
+            "skills": {
+                "fighting": 10,
+                "medicine": 9,
+                "business": 12,
+                "finance": 10,
+                "publicPlanning": 6,
+                "science": 15
+            }
+        },
+        {
+            "id": "person-m-10",
+            "firstName": "P10",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": 0 },
+            "intelligenceLevel": 47,
+            "attributes": {
+                "health": 86,
+                "intelligence": 47,
+                "strength": 39,
+                "agility": 40,
+                "endurance": 46,
+                "empathy": 31,
+                "charisma": 24
+            },
+            "skills": {
+                "fighting": 11,
+                "medicine": 6,
+                "business": 13,
+                "finance": 7,
+                "publicPlanning": 5,
+                "science": 14
+            }
+        },
+        {
+            "id": "person-m-11",
+            "firstName": "P11",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": 3 },
+            "intelligenceLevel": 49,
+            "attributes": {
+                "health": 87,
+                "intelligence": 49,
+                "strength": 41,
+                "agility": 42,
+                "endurance": 47,
+                "empathy": 33,
+                "charisma": 26
+            },
+            "skills": {
+                "fighting": 9,
+                "medicine": 7,
+                "business": 12,
+                "finance": 8,
+                "publicPlanning": 6,
+                "science": 16
+            }
+        },
+        {
+            "id": "person-m-12",
+            "firstName": "P12",
+            "lastName": "M",
+            "homeZoneId": "zone-med-1",
+            "governingOrganizationSentiments": { "gov-med": 7 },
+            "intelligenceLevel": 51,
+            "attributes": {
+                "health": 89,
+                "intelligence": 51,
+                "strength": 43,
+                "agility": 43,
+                "endurance": 49,
+                "empathy": 35,
+                "charisma": 29
+            },
+            "skills": {
+                "fighting": 8,
+                "medicine": 11,
+                "business": 15,
+                "finance": 9,
+                "publicPlanning": 7,
+                "science": 18
+            }
+        }
+    ],
+    "agents": [
+        {
+            "id": "agent-m-01",
+            "personId": "person-m-05",
+            "codeName": "med-ops-5",
+            "role": "Scientist",
+            "health": 95
+        }
+    ],
+    "buildings": []
+}

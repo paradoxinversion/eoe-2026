@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "people": [
+    {
+      "id": "person-nozone-1",
+      "firstName": "Rex",
+      "lastName": "Nomad",
+      "governingOrganizationSentiments": {},
+      "intelligenceLevel": 42,
+      "attributes": {
+        "health": 50,
+        "intelligence": 50,
+        "strength": 50,
+        "agility": 50,
+        "endurance": 50,
+        "empathy": 50,
+        "charisma": 50
+      },
+      "skills": {
+        "fighting": 0,
+        "medicine": 0,
+        "business": 0,
+        "finance": 0,
+        "publicPlanning": 0,
+        "science": 0
+      }
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone-somewhere",
+      "name": "Somewhere",
+      "size": 12,
+      "wealth": 40,
+      "intelligenceLevel": 35,
+      "currentOccupants": []
+    }
+  ]
+}

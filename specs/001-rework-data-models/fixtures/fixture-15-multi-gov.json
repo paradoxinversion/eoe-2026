@@ -1,0 +1,44 @@
+{
+    "schemaVersion": "1.0.0",
+    "governingOrganizations": [
+        { "id": "gov-a", "name": "State A" },
+        { "id": "gov-b", "name": "State B" }
+    ],
+    "zones": [
+        {
+            "id": "zone-border",
+            "name": "Borderlands",
+            "size": 40,
+            "wealth": 30,
+            "intelligenceLevel": 45,
+            "currentOccupants": ["person-ab-1"]
+        }
+    ],
+    "people": [
+        {
+            "id": "person-ab-1",
+            "firstName": "Tao",
+            "lastName": "Chen",
+            "homeZoneId": "zone-border",
+            "governingOrganizationSentiments": { "gov-a": 10, "gov-b": -30 },
+            "intelligenceLevel": 50,
+            "attributes": {
+                "health": 85,
+                "intelligence": 50,
+                "strength": 45,
+                "agility": 48,
+                "endurance": 50,
+                "empathy": 30,
+                "charisma": 28
+            },
+            "skills": {
+                "fighting": 12,
+                "medicine": 10,
+                "business": 8,
+                "finance": 5,
+                "publicPlanning": 7,
+                "science": 10
+            }
+        }
+    ]
+}

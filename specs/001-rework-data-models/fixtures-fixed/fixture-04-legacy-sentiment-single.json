@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "0.7.2",
+  "governingOrganizations": [
+    {
+      "id": "gov-old",
+      "name": "OldGov"
+    }
+  ],
+  "people": [
+    {
+      "id": "person-legacy-1",
+      "firstName": "Jon",
+      "lastName": "Doe",
+      "homeZoneId": "zone-legacy",
+      "attributes": {
+        "health": 50,
+        "intelligence": 50,
+        "strength": 50,
+        "agility": 50,
+        "endurance": 50,
+        "empathy": 50,
+        "charisma": 50
+      },
+      "skills": {
+        "fighting": 0,
+        "medicine": 0,
+        "business": 0,
+        "finance": 0,
+        "publicPlanning": 0,
+        "science": 0
+      },
+      "intelligenceLevel": 50,
+      "governingOrganizationSentiments": {
+        "gov-old": 30
+      }
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone-legacy",
+      "name": "LegacyVille",
+      "size": 20,
+      "wealth": 50,
+      "intelligenceLevel": 45,
+      "currentOccupants": [
+        "person-legacy-1"
+      ]
+    }
+  ]
+}

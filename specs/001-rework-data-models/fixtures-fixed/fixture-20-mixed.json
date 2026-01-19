@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "1.0.0",
+  "governingOrganizations": [
+    {
+      "id": "gov-mixed",
+      "name": "MixedGov"
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone-mx-1",
+      "name": "AlphaZone",
+      "size": 15,
+      "wealth": 45,
+      "intelligenceLevel": 50,
+      "currentOccupants": [
+        "person-mx-1",
+        "person-mx-2"
+      ]
+    },
+    {
+      "id": "zone-mx-2",
+      "name": "BetaZone",
+      "size": 35,
+      "wealth": 80,
+      "intelligenceLevel": 70,
+      "currentOccupants": []
+    }
+  ],
+  "people": [
+    {
+      "id": "person-mx-1",
+      "firstName": "Galen",
+      "lastName": "Reeves",
+      "homeZoneId": "zone-mx-1",
+      "governingOrganizationSentiments": {
+        "gov-mixed": 10
+      },
+      "intelligenceLevel": 55,
+      "attributes": {
+        "health": 90,
+        "intelligence": 60,
+        "strength": 45,
+        "agility": 44,
+        "endurance": 50,
+        "empathy": 40,
+        "charisma": 35
+      },
+      "skills": {
+        "fighting": 12,
+        "medicine": 8,
+        "business": 20,
+        "finance": 15,
+        "publicPlanning": 10,
+        "science": 25
+      }
+    },
+    {
+      "id": "person-mx-2",
+      "firstName": "Rae",
+      "lastName": "Storm",
+      "homeZoneId": "zone-mx-1",
+      "governingOrganizationSentiments": {
+        "gov-mixed": -5
+      },
+      "intelligenceLevel": 48,
+      "attributes": {
+        "health": 80,
+        "intelligence": 48,
+        "strength": 50,
+        "agility": 53,
+        "endurance": 52,
+        "empathy": 30,
+        "charisma": 40
+      },
+      "skills": {
+        "fighting": 18,
+        "medicine": 6,
+        "business": 14,
+        "finance": 12,
+        "publicPlanning": 6,
+        "science": 16
+      }
+    }
+  ],
+  "agents": [
+    {
+      "id": "agent-mx-1",
+      "personId": "person-mx-1",
+      "codeName": "galen-1",
+      "role": "Scientist",
+      "health": 92
+    }
+  ],
+  "buildings": [
+    {
+      "id": "building-mx-1",
+      "name": "Beta Office",
+      "type": "Office",
+      "size": 6,
+      "zoneId": "zone-mx-2",
+      "intelligenceLevel": 72,
+      "upkeepCost": 25,
+      "infrastructureLoad": 6
+    }
+  ]
+}
