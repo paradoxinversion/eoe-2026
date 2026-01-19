@@ -103,7 +103,8 @@ Checkpoint: US3 functional and testable
 - Note: perf artifact written to `tests_output/generation-bench-seed-2026.json`.
 - [x] T042 [P] Add or update API contract evidence in `specs/001-dashboard-ui/contracts/openapi.yml`
 - Note: API contract added at `specs/001-dashboard-ui/contracts/openapi.yml`.
-- [ ] T043 [P] Update `quickstart.md` to reflect any new test or dev commands
+- [x] T043 [P] Update `quickstart.md` to reflect any new test or dev commands
+- Note: quickstart added at `specs/001-dashboard-ui/quickstart.md`.
 
 ---
 
@@ -127,7 +128,8 @@ Checkpoint: US3 functional and testable
 - Note: perf artifact written to `tests_output/generation-bench-seed-2026.json`.
 - [x] T042 [P] Add or update API contract evidence in `specs/001-dashboard-ui/contracts/openapi.yml`
 - Note: API contract added at `specs/001-dashboard-ui/contracts/openapi.yml`.
-- [ ] T043 [P] Update `quickstart.md` to reflect any new test or dev commands
+- [x] T043 [P] Update `quickstart.md` to reflect any new test or dev commands
+- Note: quickstart added at `specs/001-dashboard-ui/quickstart.md`.
 
 ---
 
