@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Zone",
+    "type": "object",
+    "required": [
+        "id",
+        "name",
+        "size",
+        "wealth",
+        "intelligenceLevel",
+        "currentOccupants"
+    ],
+    "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "size": { "type": "number" },
+        "wealth": { "type": "number" },
+        "intelligenceLevel": { "type": "number", "minimum": 0, "maximum": 100 },
+        "capacity": { "type": "number" },
+        "currentOccupants": { "type": "array", "items": { "type": "string" } }
+    },
+    "additionalProperties": false
+}

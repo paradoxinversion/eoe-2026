@@ -1,0 +1,29 @@
+{
+    "schemaVersion": "1.0.0",
+    "people": [
+        {
+            "id": "person-dup-1",
+            "firstName": "Alex",
+            "lastName": "Dup",
+            "governingOrganizationSentiments": {},
+            "intelligenceLevel": 40
+        },
+        {
+            "id": "person-dup-1",
+            "firstName": "Alex2",
+            "lastName": "Dup",
+            "governingOrganizationSentiments": {},
+            "intelligenceLevel": 35
+        }
+    ],
+    "zones": [
+        {
+            "id": "zone-dup",
+            "name": "DupZone",
+            "size": 10,
+            "wealth": 20,
+            "intelligenceLevel": 30,
+            "currentOccupants": ["person-dup-1"]
+        }
+    ]
+}

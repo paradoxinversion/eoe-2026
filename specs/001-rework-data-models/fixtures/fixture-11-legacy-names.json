@@ -1,0 +1,21 @@
+{
+    "schemaVersion": "0.6.0",
+    "zones": [
+        {
+            "id": "zone-legacy-names",
+            "name": "OldQuarter",
+            "size": 25,
+            "wealth": 35,
+            "intelligenceLevel": 40,
+            "currentOccupants": ["person-old-1"]
+        }
+    ],
+    "people": [
+        {
+            "id": "person-old-1",
+            "name": "Juan Carlos de la Vega",
+            "sentiment": -20
+        }
+    ],
+    "agents": []
+}
