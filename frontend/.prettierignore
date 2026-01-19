@@ -1,6 +1,17 @@
 node_modules/
 dist/
 build/
+coverage/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+frontend/tests_output/
+.DS_Store
+.env
+.env.*
+node_modules/
+dist/
+build/
 .vite/
 .git/
 .idea/

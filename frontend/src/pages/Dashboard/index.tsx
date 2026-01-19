@@ -7,37 +7,11 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import Main from "./Dashboard/Main";
-import Settings from "./Dashboard/Settings";
-import {
-  saveGameState,
-  loadGameState,
-  listGameStates,
-  deleteConfig,
-} from "../services/persistence";
+import Main from "./Main";
+import Settings from "./Settings";
 
 export default function Dashboard() {
   const [tab, setTab] = React.useState(0);
-
-  const [savedGames, setSavedGames] = React.useState<
-    Array<{ name: string; updatedAt: number }>
-  >([]);
-  const [day, setDay] = React.useState<number | null>(null);
-
-  React.useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const list = await listGameStates();
-        if (mounted) setSavedGames(list || []);
-      } catch (e) {
-        // ignore
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
 
   React.useEffect(() => {
     // diagnostic log to help detect mounting in browser environments
@@ -93,11 +67,7 @@ export default function Dashboard() {
           <div data-testid="dashboard-mounted" style={{ display: "none" }}>
             mounted
           </div>
-          {tab === 0 && (
-            <Box>
-              <Main openSettings={() => setTab(6)} />
-            </Box>
-          )}
+          {tab === 0 && <Main openSettings={() => setTab(6)} />}
           {tab === 1 && <div>Intel (stub)</div>}
           {tab === 2 && <div>Personnel (stub)</div>}
           {tab === 3 && <div>Economy (stub)</div>}

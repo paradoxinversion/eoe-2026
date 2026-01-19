@@ -4,19 +4,14 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import LoadModal from "../components/LoadModal";
-import { saveConfig } from "../services/persistence";
-import { defaultConfig } from "../config/schema";
 
 export default function TitlePage() {
   const [openLoad, setOpenLoad] = useState(false);
 
   async function handleNewGame() {
-    const name = `quick-new-${Date.now()}`;
-    await saveConfig(name, defaultConfig);
-    // minimal behavior: notify user that new game saved; app should navigate to game view
-    // we keep this simple for now
-    // eslint-disable-next-line no-alert
-    alert(`New game created: ${name}`);
+    // Navigate to the character generation flow (internal SPA)
+    const { navigate } = await import("../lib/navigate");
+    navigate("/character-generation");
   }
 
   return (
@@ -31,10 +26,7 @@ export default function TitlePage() {
         <Button variant="outlined" onClick={() => setOpenLoad(true)}>
           Load Game
         </Button>
-        <Button
-          variant="text"
-          onClick={() => (window.location.hash = "#/options")}
-        >
+        <Button variant="text" onClick={() => setOpenLoad(true)}>
           Options
         </Button>
       </Stack>

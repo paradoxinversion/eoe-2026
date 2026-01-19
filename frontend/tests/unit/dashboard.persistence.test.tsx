@@ -22,6 +22,7 @@ describe("Dashboard persistence UI", () => {
       loadGameState,
       listGameStates,
       deleteConfig,
+      loadConfig: vi.fn().mockResolvedValue(null),
     }));
 
     const { default: Dashboard } = await import("../../src/pages/Dashboard");
@@ -60,6 +61,7 @@ describe("Dashboard persistence UI", () => {
       loadGameState,
       listGameStates,
       deleteConfig,
+      loadConfig: vi.fn().mockResolvedValue(null),
     }));
 
     const { default: Dashboard } = await import("../../src/pages/Dashboard");
