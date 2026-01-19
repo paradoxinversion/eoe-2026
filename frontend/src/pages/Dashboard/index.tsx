@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Main from "./Main";
+import Settings from "./Settings";
 
 export default function Dashboard() {
   const [tab, setTab] = React.useState(0);
@@ -30,7 +31,7 @@ export default function Dashboard() {
         {tab === 3 && <div>Economy (stub)</div>}
         {tab === 4 && <div>Infirmary (stub)</div>}
         {tab === 5 && <div>Captives (stub)</div>}
-        {tab === 6 && <div>Settings (stub)</div>}
+        {tab === 6 && <Settings />}
       </Box>
     </Box>
   );
