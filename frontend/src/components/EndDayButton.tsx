@@ -13,7 +13,7 @@ export default function EndDayButton({ onEndDay, disabled, label }: Props) {
       variant="contained"
       onClick={onEndDay}
       disabled={disabled}
-      aria-label={label || "End Turn"}
+      aria-label={label || "End-Turn"}
     >
       {label || "End Day"}
     </Button>
