@@ -170,6 +170,11 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
         resources={state.resources}
         startingSeed={startingSeed}
         onEndTurn={handleEndDay}
+        metrics={[
+          { title: "Gold", value: state.resources?.gold ?? 0 },
+          { title: "Science", value: state.resources?.science ?? 0 },
+          { title: "Seed", value: startingSeed ?? "—" },
+        ]}
       />
 
       <Box sx={{ mt: 3, display: "flex", gap: 2 }}>

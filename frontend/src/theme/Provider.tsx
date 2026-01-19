@@ -4,7 +4,7 @@ import {
   createTheme,
 } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import getTokens, { ThemeMode } from "./index";
+import getTokens, { type ThemeMode } from "./index";
 
 export interface AppThemeProviderProps {
   mode: ThemeMode;

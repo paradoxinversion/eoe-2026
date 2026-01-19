@@ -1,11 +1,9 @@
-import tokensByMode, {
-  ThemeMode,
-  ThemeTokens,
-  darkTokens,
-  lightTokens,
-} from "./tokens";
+import tokensByMode, { darkTokens, lightTokens } from "./tokens";
 
-export { ThemeMode, ThemeTokens, darkTokens, lightTokens, tokensByMode };
+import type { ThemeMode, ThemeTokens } from "./tokens";
+
+export type { ThemeMode, ThemeTokens };
+export { darkTokens, lightTokens, tokensByMode };
 
 export function getTokens(mode: ThemeMode): ThemeTokens {
   return tokensByMode[mode] ?? tokensByMode.dark;

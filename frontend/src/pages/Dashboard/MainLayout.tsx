@@ -1,8 +1,9 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import type { GameState } from "../../services/turn";
+import Button from "@mui/material/Button";
+import MetricCard from "./MetricCard";
 
 export interface MainLayoutProps {
   playerName?: string;
@@ -10,6 +11,7 @@ export interface MainLayoutProps {
   resources?: { gold: number; science: number };
   startingSeed?: number;
   onEndTurn?: () => Promise<void> | void;
+  metrics?: Array<{ title: string; value: string | number; subtitle?: string }>;
 }
 
 export default function MainLayout({
@@ -18,6 +20,7 @@ export default function MainLayout({
   resources = { gold: 0, science: 0 },
   startingSeed,
   onEndTurn,
+  metrics = [],
 }: MainLayoutProps) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -42,6 +45,24 @@ export default function MainLayout({
           </Button>
         </Box>
       </Box>
+
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        {metrics.length > 0 ? (
+          metrics.map((m, i) => (
+            <Grid item xs={12} sm={6} md={4} key={i}>
+              <MetricCard
+                title={m.title}
+                value={m.value}
+                subtitle={m.subtitle}
+              />
+            </Grid>
+          ))
+        ) : (
+          <Grid item xs={12}>
+            <Typography variant="body2">No metrics available</Typography>
+          </Grid>
+        )}
+      </Grid>
 
       <Box
         sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}
