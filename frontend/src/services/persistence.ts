@@ -103,6 +103,48 @@ export async function clearAllConfigs() {
   await tx.done;
 }
 
+// --- Preferences helpers (generic key/value stored under `config` field)
+export async function savePreferences(name: string, value: unknown) {
+  const db = await getDB();
+  await db.put(STORE_CONFIGS, { name, config: value, updatedAt: Date.now() });
+}
+
+export async function loadPreferences(name: string): Promise<unknown | null> {
+  const db = await getDB();
+  const rec = await db.get(STORE_CONFIGS, name);
+  if (!rec) return null;
+  return (rec as { config?: unknown }).config ?? null;
+}
+
+// Convenience helpers for themeMode specifically
+export async function saveThemeMode(mode: "dark" | "light") {
+  try {
+    const existing = (await loadPreferences("preferences")) as Record<
+      string,
+      unknown
+    > | null;
+    const updated = Object.assign({}, existing || {}, { theme: mode });
+    await savePreferences("preferences", updated);
+  } catch (e) {
+    // swallow persistence errors; caller may still update UI
+    console.warn("saveThemeMode failed", e);
+  }
+}
+
+export async function loadThemeMode(): Promise<"dark" | "light" | null> {
+  try {
+    const prefs = (await loadPreferences("preferences")) as Record<
+      string,
+      unknown
+    > | null;
+    if (!prefs) return null;
+    const t = prefs.theme;
+    return t === "light" ? "light" : t === "dark" ? "dark" : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 // --- Game state helpers (stored in the same configs store under a `game:` prefix)
 export async function saveGameState(name: string, state: unknown) {
   const db = await getDB();
