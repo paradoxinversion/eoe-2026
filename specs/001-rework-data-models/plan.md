@@ -7,7 +7,7 @@
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+Rework core simulation data models (Person, Agent, Zone, Building, GoverningOrganization), define migration strategy, provide JSON schemas and fixtures, and scaffold migration tooling and tests. The aim is safe, testable migrations from legacy saves and a local-first migration UX (dry-run + human-readable report).
 
 ## Technical Context
 
@@ -95,6 +95,36 @@ ios/ or android/
 ```
 
 **Structure Decision**: Use the existing web-app structure rooted at `frontend/`. Feature work will live in `frontend/src/models/` (model stubs), `frontend/src/services/` (migration + persistence), and tests under `frontend/tests/{unit,integration,perf,visual}`. Contracts and plan artifacts remain in `specs/001-rework-data-models/`.
+
+## Phase Status
+
+- Phase 0 — Research: COMPLETED. Outputs: `research.md` (decision log), clarifications recorded in `spec.md`.
+- Phase 1 — Design: COMPLETED (data model interfaces, JSON schemas, quickstart, and fixtures created). Outputs: `data-model.md`, `contracts/*.json`, `quickstart.md`, and `specs/001-rework-data-models/fixtures/` (20 samples).
+
+## Artifacts Generated (so far)
+
+- Documentation: `specs/001-rework-data-models/spec.md`, `research.md`, `data-model.md`, `quickstart.md`, `plan.md`, `checklists/requirements.md`.
+- Contracts: `specs/001-rework-data-models/contracts/{person,agent,zone,building,governingOrganization}.schema.json`.
+- Fixtures: 20 representative JSON fixtures in `specs/001-rework-data-models/fixtures/`.
+- Code scaffolding: `frontend/src/services/migration.ts` (migration helpers), model stubs referenced in spec targets.
+- Tests:
+    - Unit: `frontend/tests/unit/migration.unit.test.ts` and other unit tests.
+    - Integration: `frontend/tests/integration/migration.integration.test.ts` (runs fixtures through migration).
+    - Perf: `frontend/tests/perf/load-200-entities.bench.ts` (migration dry-run benchmark) and existing perf tests.
+- Agent context updated: `.github/agents/copilot-instructions.md` updated with plan metadata.
+
+## Next Steps (Phase 2 — Implementation)
+
+- Implement model stubs in `frontend/src/models/*` and wire persistence updates (`frontend/src/services/persistence.ts`).
+- Harden migration transforms, add id helper, and finalize migration UX (import/export with dry-run UI).
+- Add CI job to run unit/integration/perf tests and publish perf artifacts to `tests_output/`.
+- Review & merge: open PR for `001-rework-data-models`, attach representative fixtures and migration test results.
+
+## Report
+
+- Branch: `001-rework-data-models`
+- Implementation plan path: `specs/001-rework-data-models/plan.md`
+- Generated artifacts (paths): listed above (docs, contracts, fixtures, code, tests).
 
 ## Complexity Tracking
 
