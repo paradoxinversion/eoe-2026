@@ -159,6 +159,56 @@ export function migrateFixture(fixture: any, options?: { dryRun?: boolean }) {
     }
   }
 
+  // Normalize legacy `zone.currentOccupants` formats and reconcile with people
+  for (const z of fixture.zones) {
+    let occupantIds: string[] = [];
+    if (Array.isArray(z.currentOccupants)) {
+      occupantIds = z.currentOccupants.map((id: any) => String(id));
+    } else if (typeof z.currentOccupants === "string") {
+      occupantIds = z.currentOccupants
+        .split(/[\s,;]+/)
+        .map((s: string) => s.trim())
+        .filter(Boolean);
+    } else if (typeof z.currentOccupants === "number") {
+      occupantIds = [String(z.currentOccupants)];
+    }
+
+    if (occupantIds.length) {
+      // ensure person.homeZoneId is set for referenced people
+      for (const pid of occupantIds) {
+        const person = fixture.people.find(
+          (p: any) => String(p.id) === String(pid),
+        );
+        if (person) {
+          if (!person.homeZoneId) {
+            person.homeZoneId = z.id;
+            report.summary.migrated++;
+            report.examples.push({
+              type: "setHomeZone",
+              personId: pid,
+              zoneId: z.id,
+            });
+          }
+        } else {
+          report.quarantine.push({
+            id: pid,
+            reason: "zone references missing person",
+            payload: { zoneId: z.id },
+          });
+          report.summary.quarantined++;
+        }
+      }
+      // normalize to array of strings
+      z.currentOccupants = occupantIds;
+      report.summary.migrated++;
+      report.examples.push({
+        type: "normalizeZoneOccupants",
+        zoneId: z.id,
+        count: occupantIds.length,
+      });
+    }
+  }
+
   // Basic integrity: quarantine agents with missing person references
   for (const a of fixture.agents) {
     const exists = fixture.people.some((p: any) => p.id === a.personId);

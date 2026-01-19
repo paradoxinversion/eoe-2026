@@ -26,7 +26,7 @@ User Story: People & Agent Lifecycle [US1] (Priority: P1)
 
 - [x] T011 [US2] Implement zone occupant query helper `frontend/src/services/zoneService.ts` that returns `Person` records for a given `zoneId` and joins `Agent` data when present — frontend/src/services/zoneService.ts
 - [x] T012 [P] [US2] Add integration test for occupant queries: `frontend/tests/integration/zone.occupants.test.ts` using fixtures in `specs/001-rework-data-models/fixtures/` — frontend/tests/integration/zone.occupants.test.ts
-- [ ] T013 [US2] Ensure `Zone.currentOccupants` is used correctly across persistence and migrate any legacy relationships during migration — modify `frontend/src/services/persistence.ts` and `frontend/src/services/migration.ts` accordingly
+- [x] T013 [US2] Ensure `Zone.currentOccupants` is used correctly across persistence and migrate any legacy relationships during migration — modify `frontend/src/services/persistence.ts` and `frontend/src/services/migration.ts` accordingly
 
 User Story: Backward Compatibility & Migration Safety [US3] (Priority: P3)
 
