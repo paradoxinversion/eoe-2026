@@ -14,21 +14,41 @@ describe("integration: Personnel Overview", () => {
   });
 
   it("renders capacity widgets and agent type breakdown from persisted agents", async () => {
-    const personnel = await import("../../src/services/personnelPersistence");
-    // create two agents
-    await personnel.default.saveAgent({
-      id: "a1",
-      firstName: "Astra",
-      lastName: "One",
-      agentType: "Scientist",
-      leadership: 2,
-    });
-    await personnel.default.saveAgent({
-      id: "a2",
-      firstName: "Borin",
-      lastName: "Two",
-      agentType: "Worker",
-      leadership: 1,
+    // mock personnelPersistence to return two agents for the UI
+    vi.mock("../../src/services/personnelPersistence", async () => {
+      const actual = await vi.importActual(
+        "../../src/services/personnelPersistence",
+      );
+      const now = Date.now();
+      return {
+        default: {
+          ...(actual as any).default,
+          listAgents: async () => [
+            {
+              id: "a1",
+              updatedAt: now,
+              agent: {
+                id: "a1",
+                firstName: "Astra",
+                lastName: "One",
+                agentType: "Scientist",
+                leadership: 2,
+              },
+            },
+            {
+              id: "a2",
+              updatedAt: now,
+              agent: {
+                id: "a2",
+                firstName: "Borin",
+                lastName: "Two",
+                agentType: "Worker",
+                leadership: 1,
+              },
+            },
+          ],
+        },
+      };
     });
 
     const { default: PersonnelTab } =
