@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   getOccupants,
   getOccupantsWithAgents,
-} from "../../frontend/src/services/zoneService";
+} from "../../src/services/zoneService";
 
 describe("zoneService occupants", () => {
   const state = {

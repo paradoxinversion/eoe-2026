@@ -14,12 +14,21 @@ export function getOccupants(zoneId: string, state?: any): Array<any> {
 
   // If zone has currentOccupants as ids, use that, else infer from homeZoneId
   const zone = zones.find((z: any) => z.id === zoneId) || {};
-  const occupantIds: string[] = Array.isArray(zone.currentOccupants)
-    ? zone.currentOccupants
-    : [];
+  // Support legacy `currentOccupants` formats: array, comma/space-separated string, or numbers
+  let occupantIds: string[] = [];
+  if (Array.isArray(zone.currentOccupants)) {
+    occupantIds = zone.currentOccupants.map((id: any) => String(id));
+  } else if (typeof zone.currentOccupants === "string") {
+    occupantIds = zone.currentOccupants
+      .split(/[\s,;]+/)
+      .map((s: string) => s.trim())
+      .filter(Boolean);
+  } else if (typeof zone.currentOccupants === "number") {
+    occupantIds = [String(zone.currentOccupants)];
+  }
 
   if (occupantIds.length) {
-    return people.filter((p) => occupantIds.includes(p.id));
+    return people.filter((p) => occupantIds.includes(String(p.id)));
   }
 
   return people.filter((p) => p.homeZoneId === zoneId || p.zoneId === zoneId);
