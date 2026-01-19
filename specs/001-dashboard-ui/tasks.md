@@ -30,7 +30,7 @@ Purpose: Core wiring required before user stories (routing, persistence access p
 
 - [x] T003 [ ] Confirm `persistence.ts` API supports storing `preferences.theme` and `preferences.seed` (file: `frontend/src/services/persistence.ts`)
 - [x] T004 [ ] Ensure `generation.ts` exposes a seed-accepting API and deterministic output contract (file: `frontend/src/services/generation.ts`)
-- [ ] T005 [P] Add integration smoke test harness for programmatic navigation and generation (tests/integration/new-game.integration.test.ts)
+- [x] T005 [P] Add integration smoke test harness for programmatic navigation and generation (tests/integration/new-game.integration.test.ts)
 
 Checkpoint: Foundation ready — user story work may begin
 
@@ -44,17 +44,17 @@ Independent Test: From Title Page, click `New Game`, enter name, confirm; assert
 
 ### Tests (write first)
 
-- [ ] T010 [P] [US1] Unit: generation deterministicity test (tests/unit/generation.seed.test.ts)
-- [ ] T011 [ ] [US1] Component: `CharacterGeneration` renders and validates name input (tests/unit/characterGeneration.test.tsx)
-- [ ] T012 [ ] [US1] Integration: end-to-end New Game flow (tests/integration/new-game.integration.test.ts)
+- [x] T010 [P] [US1] Unit: generation deterministicity test (tests/unit/generation.seed.test.ts)
+- [x] T011 [ ] [US1] Component: `CharacterGeneration` renders and validates name input (tests/unit/characterGeneration.test.tsx)
+- [x] T012 [ ] [US1] Integration: end-to-end New Game flow (tests/integration/new-game.integration.test.ts)
 
 ### Implementation
 
-- [ ] T013 [ ] [US1] Implement `TitlePage` `New Game` button (frontend/src/pages/TitlePage.tsx) that routes to `CharacterGeneration`
-- [ ] T014 [ ] [US1] Implement `CharacterGeneration` page/component (frontend/src/pages/CharacterGeneration.tsx) with name form and confirm action
-- [ ] T015 [ ] [US1] Implement blocking `LoadModal` usage during generation (frontend/src/components/LoadModal.tsx + CharacterGeneration)
-- [ ] T016 [ ] [US1] Wire generation call to `generation.ts` with seed handling and persist seed to `preferences.seed` via `persistence.ts`
-- [ ] T017 [ ] [US1] Programmatic navigation to Dashboard Main on generation success and display player name (frontend/src/pages/Dashboard/index.tsx)
+- [x] T013 [ ] [US1] Implement `TitlePage` `New Game` button (frontend/src/pages/TitlePage.tsx) that routes to `CharacterGeneration`
+- [x] T014 [ ] [US1] Implement `CharacterGeneration` page/component (frontend/src/pages/CharacterGeneration.tsx) with name form and confirm action
+- [x] T015 [ ] [US1] Implement blocking `LoadModal` usage during generation (frontend/src/components/LoadModal.tsx + CharacterGeneration)
+- [x] T016 [ ] [US1] Wire generation call to `generation.ts` with seed handling and persist seed to `preferences.seed` via `persistence.ts`
+- [x] T017 [ ] [US1] Programmatic navigation to Dashboard Main on generation success and display player name (frontend/src/pages/Dashboard/index.tsx)
 
 Checkpoint: US1 functional and testable
 

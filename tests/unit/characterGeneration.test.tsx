@@ -1,4 +1,77 @@
 import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+
+import CharacterGeneration from "../../frontend/src/pages/CharacterGeneration";
+import * as persistence from "../../frontend/src/services/persistence";
+import generateWorld from "../../frontend/src/services/generation";
+
+describe("CharacterGeneration component", () => {
+    let saveGameSpy: any;
+    let saveConfigSpy: any;
+
+    beforeEach(() => {
+        saveGameSpy = vi
+            .spyOn(persistence, "saveGameState")
+            .mockResolvedValue(undefined as any);
+        saveConfigSpy = vi
+            .spyOn(persistence, "saveConfig")
+            .mockResolvedValue(undefined as any);
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it("renders name input and confirm button", () => {
+        render(<CharacterGeneration />);
+        expect(screen.getByLabelText("character-name")).toBeTruthy();
+        expect(screen.getByText("Confirm")).toBeTruthy();
+    });
+
+    it("shows validation error when name is empty", async () => {
+        render(<CharacterGeneration />);
+        const btn = screen.getByText("Confirm");
+        fireEvent.click(btn);
+        expect(await screen.findByText("Name is required")).toBeTruthy();
+    });
+
+    it("saves world and prefs when name provided", async () => {
+        const worldSpy = vi.spyOn(
+            require("../../frontend/src/services/generation"),
+            "generateWorld",
+        );
+        worldSpy.mockImplementation(
+            () =>
+                ({
+                    seed: 1,
+                    player: {
+                        id: "p",
+                        name: "p",
+                        resources: {
+                            evil: 0,
+                            money: 0,
+                            infrastructure: 0,
+                            science: 0,
+                        },
+                        zones: [],
+                    },
+                }) as any,
+        );
+
+        render(<CharacterGeneration />);
+        const input = screen.getByLabelText(
+            "character-name",
+        ) as HTMLInputElement;
+        fireEvent.change(input, { target: { value: "Tester" } });
+        const btn = screen.getByText("Confirm");
+        fireEvent.click(btn);
+
+        await waitFor(() => expect(saveGameSpy).toHaveBeenCalled());
+        expect(saveConfigSpy).toHaveBeenCalled();
+    });
+});
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import CharacterGeneration from "../../frontend/src/pages/CharacterGeneration";
 
