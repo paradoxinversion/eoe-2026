@@ -68,15 +68,21 @@ export default function MainLayout({
         sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}
       >
         <Box sx={{ p: 2, borderRadius: 1, bgcolor: "background.paper" }}>
-          <Typography variant="subtitle2">Gold</Typography>
+          <Typography variant="subtitle2" component="div">
+            Gold
+          </Typography>
           <Typography variant="h5">{resources.gold}</Typography>
         </Box>
         <Box sx={{ p: 2, borderRadius: 1, bgcolor: "background.paper" }}>
-          <Typography variant="subtitle2">Science</Typography>
+          <Typography variant="subtitle2" component="div">
+            Science
+          </Typography>
           <Typography variant="h5">{resources.science}</Typography>
         </Box>
         <Box sx={{ p: 2, borderRadius: 1, bgcolor: "background.paper" }}>
-          <Typography variant="subtitle2">Seed</Typography>
+          <Typography variant="subtitle2" component="div">
+            Seed
+          </Typography>
           <Typography variant="h5">{startingSeed ?? "—"}</Typography>
         </Box>
       </Box>

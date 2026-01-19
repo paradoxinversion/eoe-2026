@@ -34,6 +34,7 @@ Phase 3: User Story Phases (priority order)
 - [ ] T015 [US2] Create visual snapshot tests for Dashboard Main (desktop/tablet/mobile) under frontend/tests/visual/dashboard.main.snap.test.ts
 - [x] T015 [US2] Create visual snapshot tests for Dashboard Main (desktop/tablet/mobile) under frontend/tests/visual/dashboard.main.snap.test.tsx
 - [ ] T016 [US2] Run axe accessibility checks for updated pages and fix any WCAG 2.1 AA violations; add smoke checks in frontend/tests/a11y/dashboard.a11y.test.ts
+- [x] T016 [US2] Run axe accessibility checks for updated pages and fix any WCAG 2.1 AA violations; add smoke checks in frontend/tests/a11y/dashboard.a11y.test.ts
 
 **User Story 3 — Advanced controls relocated (Priority: P3)**
 
