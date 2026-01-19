@@ -65,7 +65,7 @@ jobs:
             - name: Run perf benchmark (migration 200 entities)
               if: steps.perf_check.outputs.found == 'true'
               working-directory: frontend
-              run: npx vitest run tests/perf/load-200-entities.bench.ts --run
+              run: npx vitest run tests/perf/load-200-entities.test.ts --run
 
             - name: Upload perf artifacts
               if: steps.perf_check.outputs.found == 'true'
