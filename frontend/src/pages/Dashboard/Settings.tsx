@@ -42,6 +42,16 @@ export default function Settings() {
         ...defaultConfig,
         theme: newTheme,
       });
+      // notify app of preference change so global theme updates
+      try {
+        window.dispatchEvent(
+          new CustomEvent("preferences:changed", {
+            detail: { theme: newTheme },
+          }),
+        );
+      } catch (err) {
+        // ignore dispatch errors in older test environments
+      }
     } catch (e) {
       // eslint-disable-next-line no-console
       console.warn("failed to save theme", e);

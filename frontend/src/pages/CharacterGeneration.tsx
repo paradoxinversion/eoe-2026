@@ -41,8 +41,9 @@ export default function CharacterGeneration() {
         startingSeed: seed,
       });
 
-      // navigate to dashboard (app shell may wire this to real router)
-      window.location.hash = "#/dashboard";
+      // navigate to dashboard using internal SPA navigation
+      const { navigate } = await import("../lib/navigate");
+      navigate("/dashboard");
     } catch (e) {
       setError(String(e));
     } finally {
@@ -75,7 +76,10 @@ export default function CharacterGeneration() {
         </Button>
         <Button
           variant="outlined"
-          onClick={() => (window.location.hash = "#/")}
+          onClick={() => {
+            const { navigate } = require("../lib/navigate");
+            navigate("/");
+          }}
         >
           Cancel
         </Button>

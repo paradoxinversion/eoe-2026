@@ -86,11 +86,11 @@ Goal: Add Dark/Light toggle in Settings, default Dark for fresh installs, persis
 
 ### Tests
 
-- [ ] T030 [ ] [US3] Unit test for theme persistence (tests/unit/theme.persistence.test.ts)
+- [x] T030 [US3] Unit test for theme persistence (tests/unit/settings.theme.persistence.test.tsx)
 
 ### Implementation
 
-- [ ] T031 [ ] [US3] Implement Settings theme toggle (frontend/src/pages/Dashboard/Settings.tsx) and persist via `persistence.ts`
+- [x] T031 [US3] Implement Settings theme toggle (frontend/src/pages/Dashboard/Settings.tsx) and persist via `persistence.ts`; App now applies persisted theme via MUI ThemeProvider
 
 Checkpoint: US3 functional and testable
 
@@ -117,22 +117,6 @@ Checkpoint: US3 functional and testable
 - Follow test-first: write tests in `tests/` and ensure they fail before implementation where applicable.
 - Tasks labeled `[P]` can be worked on in parallel.
 - Prioritize P1 tasks (Phases 3 and 4) for the initial merge; Phase 5 and 6 follow.
-
-## Phase 5: User Story US3 - Settings & Theme (Priority: P2)
-
-Goal: Add Dark/Light toggle in Settings, default Dark for fresh installs, persist choice in `preferences.theme`
-
-### Tests
-
-- [ ] T030 [ ] [US3] Unit test for theme persistence (tests/unit/theme.persistence.test.ts)
-
-### Implementation
-
-- [ ] T031 [ ] [US3] Implement Settings theme toggle (frontend/src/pages/Dashboard/Settings.tsx) and persist via `persistence.ts`
-
-Checkpoint: US3 functional and testable
-
----
 
 ## Phase 6: Cross-Cutting Concerns & Polish
 

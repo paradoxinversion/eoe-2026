@@ -1,3 +1,23 @@
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+
+import Dashboard from "../../frontend/src/pages/Dashboard/index";
+
+describe("Dashboard tabs", () => {
+    it("renders tabs and switches content", () => {
+        render(<Dashboard />);
+
+        // Main tab should be visible
+        expect(screen.getByRole("tab", { name: /Main/i })).toBeTruthy();
+        expect(screen.getByText(/Main/)).toBeTruthy();
+
+        // Click Settings tab and expect Settings content
+        const settingsTab = screen.getByRole("tab", { name: /Settings/i });
+        fireEvent.click(settingsTab);
+        expect(screen.getByText(/Settings/)).toBeTruthy();
+    });
+});
 /** @vitest-environment jsdom */
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";

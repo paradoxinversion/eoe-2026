@@ -9,8 +9,9 @@ export default function TitlePage() {
   const [openLoad, setOpenLoad] = useState(false);
 
   async function handleNewGame() {
-    // Navigate to the character generation flow (will handle creation)
-    window.location.hash = "#/character-generation";
+    // Navigate to the character generation flow (internal SPA)
+    const { navigate } = await import("../lib/navigate");
+    navigate("/character-generation");
   }
 
   return (
@@ -25,10 +26,7 @@ export default function TitlePage() {
         <Button variant="outlined" onClick={() => setOpenLoad(true)}>
           Load Game
         </Button>
-        <Button
-          variant="text"
-          onClick={() => (window.location.hash = "#/options")}
-        >
+        <Button variant="text" onClick={() => setOpenLoad(true)}>
           Options
         </Button>
       </Stack>

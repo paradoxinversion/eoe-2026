@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import { loadGameState, listGameStates } from "../../services/persistence";
 import { advanceTurn } from "../../services/turn";
 
-export default function Main() {
+export default function Main({ openSettings }: { openSettings?: () => void }) {
   const [playerName, setPlayerName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,9 +34,22 @@ export default function Main() {
       <Typography sx={{ mb: 2 }}>
         Player: {playerName || "(unknown)"}
       </Typography>
-      <Button variant="contained" onClick={handleEndTurn} aria-label="end-turn">
-        End Turn
-      </Button>
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <Button
+          variant="contained"
+          onClick={handleEndTurn}
+          aria-label="end-turn"
+        >
+          End Turn
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => openSettings && openSettings()}
+          aria-label="open-settings"
+        >
+          Settings
+        </Button>
+      </Box>
     </Box>
   );
 }
