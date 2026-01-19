@@ -23,12 +23,13 @@ import {
   saveGameState,
   loadGameState,
   listGameStates,
+  deleteConfig,
 } from "../services/persistence";
-import { deleteConfig } from "../services/persistence";
 
 export default function Dashboard() {
   const cfg = defaultConfig;
-  const [rng] = useState(() => createRng(cfg.startingSeed));
+  const [startingSeed, setStartingSeed] = useState<number>(cfg.startingSeed);
+  const rng = React.useMemo(() => createRng(startingSeed), [startingSeed]);
 
   const [state, setState] = useState<GameState>({
     day: 0,
@@ -108,6 +109,25 @@ export default function Dashboard() {
     };
   }, []);
 
+  // Load preferences (starting seed, playerName) and apply
+  React.useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const mod = await import("../services/persistence");
+      const prefs = await mod.loadConfig("preferences");
+      if (!mounted || !prefs) return;
+      try {
+        const p = prefs as any;
+        if (typeof p.startingSeed === "number") setStartingSeed(p.startingSeed);
+      } catch (e) {
+        // ignore
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   async function refreshSavedGames() {
     const list = await listGameStates();
     setSavedGames(list);
@@ -155,6 +175,10 @@ export default function Dashboard() {
         <Paper sx={{ p: 2, minWidth: 160 }}>
           <Typography variant="subtitle2">Science</Typography>
           <Typography variant="h6">{state.resources.science}</Typography>
+        </Paper>
+        <Paper sx={{ p: 2, minWidth: 160 }}>
+          <Typography variant="subtitle2">Seed</Typography>
+          <Typography variant="h6">{String(startingSeed)}</Typography>
         </Paper>
       </Box>
 

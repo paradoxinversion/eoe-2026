@@ -9,7 +9,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import generateWorld from "../services/generation";
-import { saveGameState } from "../services/persistence";
+import { saveGameState, saveConfig } from "../services/persistence";
+import { defaultConfig } from "../config/schema";
 
 export default function CharacterGeneration() {
   const [name, setName] = useState("");
@@ -25,12 +26,20 @@ export default function CharacterGeneration() {
 
     setLoading(true);
     try {
-      // choose or derive a seed; use timestamp-based string for now
-      const seed = String(Date.now());
+      // choose or derive a seed; use timestamp-based number for determinism
+      const seed = Date.now();
       const world = generateWorld(seed);
 
       // persist the generated world as a game state
       await saveGameState(name, { playerName: name, world });
+
+      // persist player preferences / starting seed so the app can recall it
+      // merge with defaults to satisfy config shape
+      await saveConfig("preferences", {
+        ...defaultConfig,
+        playerName: name,
+        startingSeed: seed,
+      });
 
       // navigate to dashboard (app shell may wire this to real router)
       window.location.hash = "#/dashboard";
