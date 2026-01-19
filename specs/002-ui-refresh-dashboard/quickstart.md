@@ -40,3 +40,9 @@ npx --yes vitest run frontend/tests/perf --run
 - Implement `frontend/src/theme/tokens.ts` and integrate into the project's ThemeProvider.
 - Refactor `frontend/src/pages/Dashboard/Main.tsx` to consume tokens and the new layout.
 - Add visual snapshot tests under `frontend/tests/visual/` and update `specs/002-ui-refresh-dashboard/research.md` with screenshots.
+
+7. Theme persistence:
+
+- The app persists UI preferences under the `preferences` config key in IndexedDB. Use the provided helpers in `frontend/src/services/persistence.ts`:
+    - `saveThemeMode(mode: 'dark'|'light')` — persist the selected theme
+    - `loadThemeMode()` — read the persisted theme (returns `'dark'|'light'|null`)
