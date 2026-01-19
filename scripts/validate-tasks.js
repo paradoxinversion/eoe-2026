@@ -3,16 +3,44 @@ const fs = require("fs");
 const path = require("path");
 
 function findTaskFiles(root) {
+    // Validate only the current branch's feature spec folder.
+    let branch = null;
+    try {
+        const cp = require("child_process");
+        branch = (
+            cp.execSync("git rev-parse --abbrev-ref HEAD", { cwd: root }) || ""
+        )
+            .toString()
+            .trim();
+    } catch (e) {
+        branch = null;
+    }
+
     const specsDir = path.join(root, "specs");
     if (!fs.existsSync(specsDir)) return [];
     const entries = fs.readdirSync(specsDir, { withFileTypes: true });
-    const files = [];
-    for (const e of entries) {
-        if (!e.isDirectory()) continue;
-        const p = path.join(specsDir, e.name, "tasks.md");
-        if (fs.existsSync(p)) files.push(p);
+
+    if (branch) {
+        const exact = entries.find((e) => e.isDirectory() && e.name === branch);
+        if (exact) {
+            const p = path.join(specsDir, exact.name, "tasks.md");
+            return fs.existsSync(p) ? [p] : [];
+        }
+        const prefixMatch = branch.match(/^(\d{3})/);
+        if (prefixMatch) {
+            const prefix = prefixMatch[1];
+            const matched = entries.find(
+                (e) => e.isDirectory() && e.name.startsWith(prefix),
+            );
+            if (matched) {
+                const p = path.join(specsDir, matched.name, "tasks.md");
+                return fs.existsSync(p) ? [p] : [];
+            }
+        }
     }
-    return files;
+
+    // Fallback: nothing to validate
+    return [];
 }
 
 function validateFile(filePath) {

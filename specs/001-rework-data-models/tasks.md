@@ -15,14 +15,11 @@ Phase 3: User Stories (priority order)
 
 User Story: People & Agent Lifecycle [US1] (Priority: P1)
 
-- [ ] T006 [US1] Create `frontend/src/models/person.ts` with fields from `specs/001-rework-data-models/data-model.md` (firstName, lastName, attributes, skills, governingOrganizationSentiments, intelligenceLevel) — frontend/src/models/person.ts
-- [ ] T007 [US1] Create `frontend/src/models/agent.ts` with `personId`, `codeName`, `role`, `inventory`, `health` — frontend/src/models/agent.ts
-- [ ] T008 [US1] Implement hire flow service that creates an `Agent` referencing a `Person`: `frontend/src/services/hiring.ts` (unit tests under `frontend/tests/unit/hiring.test.ts`) — frontend/src/services/hiring.ts
-- [ ] T009 [US1] Add unit tests for Person/Agent model serialization and validation using fixtures: `frontend/tests/unit/person.model.test.ts`, `frontend/tests/unit/agent.model.test.ts` — frontend/tests/unit/
 - [x] T006 [US1] Create `frontend/src/models/person.ts` with fields from `specs/001-rework-data-models/data-model.md` (firstName, lastName, attributes, skills, governingOrganizationSentiments, intelligenceLevel) — frontend/src/models/person.ts
 - [x] T007 [US1] Create `frontend/src/models/agent.ts` with `personId`, `codeName`, `role`, `inventory`, `health` — frontend/src/models/agent.ts
 - [x] T008 [US1] Implement hire flow service that creates an `Agent` referencing a `Person`: `frontend/src/services/hiring.ts` (unit tests under `frontend/tests/unit/hiring.test.ts`) — frontend/src/services/hiring.ts
 - [x] T009 [US1] Add unit tests for Person/Agent model serialization and validation using fixtures: `frontend/tests/unit/person.model.test.ts`, `frontend/tests/unit/agent.model.test.ts` — frontend/tests/unit/
+
 - [ ] T010 [P] [US1] Update `frontend/src/services/migration.ts` to include deterministic mapping rules for `Person.name`->split and `Agent.name`->`codeName` and export a stable dry-run report to `specs/001-rework-data-models/migration-reports/` — frontend/src/services/migration.ts
 
 User Story: Occupants & Relationship Queries [US2] (Priority: P2)
