@@ -22,9 +22,9 @@ User Story: People & Agent Lifecycle [US1] (Priority: P1)
 
 - [x] T010 [P] [US1] Update `frontend/src/services/migration.ts` to include deterministic mapping rules for `Person.name`->split and `Agent.name`->`codeName` and export a stable dry-run report to `specs/001-rework-data-models/migration-reports/` — frontend/src/services/migration.ts
 
-User Story: Occupants & Relationship Queries [US2] (Priority: P2)
+- User Story: Occupants & Relationship Queries [US2] (Priority: P2)
 
-- [ ] T011 [US2] Implement zone occupant query helper `frontend/src/services/zoneService.ts` that returns `Person` records for a given `zoneId` and joins `Agent` data when present — frontend/src/services/zoneService.ts
+- [x] T011 [US2] Implement zone occupant query helper `frontend/src/services/zoneService.ts` that returns `Person` records for a given `zoneId` and joins `Agent` data when present — frontend/src/services/zoneService.ts
 - [ ] T012 [P] [US2] Add integration test for occupant queries: `frontend/tests/integration/zone.occupants.test.ts` using fixtures in `specs/001-rework-data-models/fixtures/` — frontend/tests/integration/zone.occupants.test.ts
 - [ ] T013 [US2] Ensure `Zone.currentOccupants` is used correctly across persistence and migrate any legacy relationships during migration — modify `frontend/src/services/persistence.ts` and `frontend/src/services/migration.ts` accordingly
 
