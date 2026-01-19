@@ -41,8 +41,8 @@
 - [x] Unit tests defined for model validation and ID generation
 - [x] Migration unit tests for rename, name split, sentiment mapping, Agent derivation
 - [x] Integration tests for persistence round-trips (IndexedDB fixtures)
-- [x] Migration integration tests using representative saved-game fixtures
-- [ ] Performance benchmark to validate SC-002 (load ~200 entities within target)
+      -- [x] Migration integration tests using representative saved-game fixtures
+      -- [x] Performance benchmark to validate SC-002 (load ~200 entities within target)
 
 ## Validation Notes
 
