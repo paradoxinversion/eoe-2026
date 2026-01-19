@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import type { Person } from "../../frontend/src/models/person";
-import type { Agent } from "../../frontend/src/models/agent";
-import { hirePerson } from "../../frontend/src/services/hiring";
+import type { Person } from "../../src/models/person";
+import type { Agent } from "../../src/models/agent";
+import { hirePerson } from "../../src/services/hiring";
 
 describe("Person/Agent models", () => {
   it("serializes and deserializes Person and Agent shapes", () => {

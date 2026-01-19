@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { hirePerson } from "../../frontend/src/services/hiring";
-import type { Person } from "../../frontend/src/models/person";
+import { hirePerson } from "../../src/services/hiring";
+import type { Person } from "../../src/models/person";
 
 describe("hirePerson", () => {
   it("creates an Agent referencing the Person with defaults", () => {
