@@ -1,4 +1,9 @@
-import tokensByMode, { ThemeMode, ThemeTokens, darkTokens, lightTokens } from './tokens';
+import tokensByMode, {
+  ThemeMode,
+  ThemeTokens,
+  darkTokens,
+  lightTokens,
+} from "./tokens";
 
 export { ThemeMode, ThemeTokens, darkTokens, lightTokens, tokensByMode };
 
