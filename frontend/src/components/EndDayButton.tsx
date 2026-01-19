@@ -9,7 +9,12 @@ type Props = {
 
 export default function EndDayButton({ onEndDay, disabled, label }: Props) {
   return (
-    <Button variant="contained" onClick={onEndDay} disabled={disabled}>
+    <Button
+      variant="contained"
+      onClick={onEndDay}
+      disabled={disabled}
+      aria-label={label || "End Turn"}
+    >
       {label || "End Day"}
     </Button>
   );
