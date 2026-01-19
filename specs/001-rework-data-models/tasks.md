@@ -42,3 +42,4 @@ Phase 4: Polish & Cross-Cutting Concerns
 - [ ] T020 [P] Add representative fixtures verification script `specs/001-rework-data-models/scripts/verify-fixtures.sh` to validate each fixture against JSON schemas and run in CI — specs/001-rework-data-models/scripts/verify-fixtures.sh
 
 Final acceptance: confirm CI passing (unit + integration + perf within target) and update `specs/001-rework-data-models/checklists/requirements.md` to mark all items complete
+
