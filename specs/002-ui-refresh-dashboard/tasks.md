@@ -47,7 +47,7 @@ Final Phase: Polish & Cross-Cutting Concerns
 
 - [x] T020 Update `specs/002-ui-refresh-dashboard/quickstart.md` with developer steps and visual baseline instructions (file exists; update if needed)
 - [ ] T021 Add/adjust perf benchmark(s) in frontend/tests/perf to validate End Turn UI latency and compare against `tests_output/` baseline
-- [ ] T022 Generate visual baseline screenshots into specs/002-ui-refresh-dashboard/visual-baseline/ and commit them
+- [x] T022 Generate visual baseline screenshots into specs/002-ui-refresh-dashboard/visual-baseline/ and commit them
 - [ ] T023 Run full test suites locally and document results in specs/002-ui-refresh-dashboard/README.md
 - [ ] T024 Open PR from branch `002-ui-refresh-dashboard` with link to this tasks file and request review
 
