@@ -1,13 +1,18 @@
 export type MigrationReport = {
   summary: { processed: number; migrated: number; quarantined: number };
-  examples: any[];
-  quarantine: { id?: string; reason: string; payload?: any }[];
+  examples: unknown[];
+  quarantine: { id?: string; reason: string; payload?: unknown }[];
   actions?: string[];
 };
 
 function shortId() {
-  if (typeof crypto !== "undefined" && (crypto as any).randomUUID) {
-    return (crypto as any).randomUUID().slice(0, 8);
+  if (
+    typeof crypto !== "undefined" &&
+    (crypto as unknown as { randomUUID?: () => string }).randomUUID
+  ) {
+    return (
+      (crypto as unknown as { randomUUID?: () => string }).randomUUID() || ""
+    ).slice(0, 8);
   }
   return Math.random().toString(36).slice(2, 10);
 }
@@ -40,41 +45,48 @@ export function generateCodeNameFromSeed(seed?: string) {
   const hash = stableHash(seed);
   return `codename-${hash}`;
 }
-export function mapLegacySentiment(person: any, govIds: string[] = []) {
-  if (person.governingOrganizationSentiments)
-    return person.governingOrganizationSentiments;
+const isObject = (v: unknown): v is Record<string, unknown> =>
+  typeof v === "object" && v !== null;
+
+export function mapLegacySentiment(person: unknown, govIds: string[] = []) {
+  if (!isObject(person)) return {};
+  if (person.governingOrganizationSentiments) {
+    return person.governingOrganizationSentiments as Record<string, number>;
+  }
   const out: Record<string, number> = {};
   if (typeof person.sentiment === "number") {
     const target = govIds.length ? govIds[0] : "player-unknown";
-    out[target] = person.sentiment;
+    out[target] = person.sentiment as number;
   }
   return out;
 }
 
-export function generateBuildingsForZone(zone: any) {
-  const numBuildings = Math.max(1, Math.round((zone.size || 10) / 10));
-  const buildings = [];
+export function generateBuildingsForZone(zone: unknown) {
+  const z = (isObject(zone) ? zone : {}) as Record<string, unknown>;
+  const size = typeof z.size === "number" ? z.size : 10;
+  const wealth = typeof z.wealth === "number" ? z.wealth : 10;
+  const numBuildings = Math.max(1, Math.round(size / 10));
+  const buildings: Record<string, unknown>[] = [];
   for (let i = 0; i < numBuildings; i++) {
     buildings.push({
       id: `building-${shortId()}`,
-      name: `${zone.name || "Zone"} Building ${i + 1}`,
-      type:
-        zone.wealth >= 75
-          ? "Office"
-          : zone.wealth < 25
-            ? "Residence"
-            : "Office",
-      size: Math.max(1, Math.round((zone.size || 10) / numBuildings)),
-      zoneId: zone.id,
-      intelligenceLevel: zone.intelligenceLevel ?? 50,
-      upkeepCost: Math.max(1, Math.round((zone.wealth || 10) / 10)),
+      name: `${(z.name as string) || "Zone"} Building ${i + 1}`,
+      type: wealth >= 75 ? "Office" : wealth < 25 ? "Residence" : "Office",
+      size: Math.max(1, Math.round(size / numBuildings)),
+      zoneId: z.id,
+      intelligenceLevel:
+        typeof z.intelligenceLevel === "number" ? z.intelligenceLevel : 50,
+      upkeepCost: Math.max(1, Math.round((wealth || 10) / 10)),
       infrastructureLoad: 1,
     });
   }
   return buildings;
 }
 
-export function migrateFixture(fixture: any, options?: { dryRun?: boolean }) {
+export function migrateFixture(
+  fixture: unknown,
+  options?: { dryRun?: boolean },
+) {
   const opts = options || {};
   const report: MigrationReport = {
     summary: { processed: 0, migrated: 0, quarantined: 0 },
@@ -82,47 +94,57 @@ export function migrateFixture(fixture: any, options?: { dryRun?: boolean }) {
     quarantine: [],
     actions: [],
   };
+  const fx = isObject(fixture) ? fixture : ({} as Record<string, unknown>);
 
-  const govIds = (fixture.governingOrganizations || [])
-    .map((g: any) => g.id)
+  const govIds = (
+    Array.isArray(fx.governingOrganizations)
+      ? (fx.governingOrganizations as unknown[])
+      : []
+  )
+    .map((g) => (isObject(g) && g.id ? String(g.id) : ""))
     .filter(Boolean);
 
   // Ensure arrays exist
-  fixture.people = fixture.people || [];
-  fixture.agents = fixture.agents || [];
-  fixture.zones = fixture.zones || [];
-  fixture.buildings = fixture.buildings || [];
+  if (!Array.isArray(fx.people)) fx.people = [];
+  if (!Array.isArray(fx.agents)) fx.agents = [];
+  if (!Array.isArray(fx.zones)) fx.zones = [];
+  if (!Array.isArray(fx.buildings)) fx.buildings = [];
 
   // Migrate people
-  for (const p of fixture.people) {
+  for (const p of fx.people as unknown[]) {
     report.summary.processed++;
-    if (p.name && (!p.firstName || !p.lastName)) {
-      const { firstName, lastName } = splitPersonName(p.name);
-      p.firstName = p.firstName || firstName;
-      p.lastName = p.lastName || lastName;
-      report.summary.migrated++;
-      report.examples.push({
-        type: "splitName",
-        id: p.id,
-        firstName: p.firstName,
-        lastName: p.lastName,
-      });
-    }
-    if (!p.governingOrganizationSentiments) {
-      const mapped = mapLegacySentiment(p, govIds);
-      if (Object.keys(mapped).length) {
-        p.governingOrganizationSentiments = mapped;
+    if (isObject(p)) {
+      if (p.name && (!p.firstName || !p.lastName)) {
+        const { firstName, lastName } = splitPersonName(String(p.name));
+        p.firstName = (p.firstName as string) || firstName;
+        p.lastName = (p.lastName as string) || lastName;
         report.summary.migrated++;
+        report.examples.push({
+          type: "splitName",
+          id: p.id,
+          firstName: p.firstName,
+          lastName: p.lastName,
+        });
+      }
+      if (!p.governingOrganizationSentiments) {
+        const mapped = mapLegacySentiment(p, govIds);
+        if (Object.keys(mapped).length) {
+          p.governingOrganizationSentiments = mapped as unknown;
+          report.summary.migrated++;
+        }
       }
     }
   }
 
   // Migrate agents
-  for (const a of fixture.agents) {
+  for (const a of fx.agents as unknown[]) {
+    if (!isObject(a)) continue;
     // If the legacy `name` exists prefer it but store deterministically as `codeName`
     if (a.name && !a.codeName) {
       a.codeName = String(a.name);
-      delete a.name;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore - deleting legacy prop
+      delete (a as Record<string, unknown>).name;
       report.summary.migrated++;
       report.examples.push({
         type: "renameAgentName",
@@ -132,7 +154,7 @@ export function migrateFixture(fixture: any, options?: { dryRun?: boolean }) {
     }
     // If still missing, generate a stable codeName derived from personId or id
     if (!a.codeName) {
-      const seed = a.personId || a.id || "unknown";
+      const seed = (a.personId as string) || (a.id as string) || "unknown";
       a.codeName = generateCodeNameFromSeed(seed);
       report.summary.migrated++;
       report.examples.push({
@@ -145,11 +167,15 @@ export function migrateFixture(fixture: any, options?: { dryRun?: boolean }) {
   }
 
   // Generate buildings for zones that lack them
-  for (const z of fixture.zones) {
-    const has = (fixture.buildings || []).some((b: any) => b.zoneId === z.id);
+  for (const z of fx.zones as unknown[]) {
+    const zid = isObject(z) && (z.id ? String(z.id) : undefined);
+    const has = (fx.buildings as unknown[]).some(
+      (b) =>
+        isObject(b) && String((b as Record<string, unknown>).zoneId) === zid,
+    );
     if (!has) {
       const gen = generateBuildingsForZone(z);
-      fixture.buildings.push(...gen);
+      (fx.buildings as unknown[]).push(...gen);
       report.summary.migrated += gen.length;
       report.examples.push({
         type: "generateBuildings",
@@ -160,61 +186,70 @@ export function migrateFixture(fixture: any, options?: { dryRun?: boolean }) {
   }
 
   // Normalize legacy `zone.currentOccupants` formats and reconcile with people
-  for (const z of fixture.zones) {
+  for (const z of fx.zones as unknown[]) {
     let occupantIds: string[] = [];
-    if (Array.isArray(z.currentOccupants)) {
-      occupantIds = z.currentOccupants.map((id: any) => String(id));
-    } else if (typeof z.currentOccupants === "string") {
-      occupantIds = z.currentOccupants
+    if (isObject(z) && Array.isArray(z.currentOccupants)) {
+      occupantIds = (z.currentOccupants as unknown[]).map((id) => String(id));
+    } else if (isObject(z) && typeof z.currentOccupants === "string") {
+      occupantIds = (z.currentOccupants as string)
         .split(/[\s,;]+/)
-        .map((s: string) => s.trim())
+        .map((s) => s.trim())
         .filter(Boolean);
-    } else if (typeof z.currentOccupants === "number") {
+    } else if (isObject(z) && typeof z.currentOccupants === "number") {
       occupantIds = [String(z.currentOccupants)];
     }
 
     if (occupantIds.length) {
       // ensure person.homeZoneId is set for referenced people
       for (const pid of occupantIds) {
-        const person = fixture.people.find(
-          (p: any) => String(p.id) === String(pid),
+        const person = (fx.people as unknown[]).find(
+          (p) =>
+            isObject(p) &&
+            String((p as Record<string, unknown>).id) === String(pid),
         );
-        if (person) {
-          if (!person.homeZoneId) {
-            person.homeZoneId = z.id;
+        if (person && isObject(person)) {
+          if (!(person as Record<string, unknown>).homeZoneId) {
+            (person as Record<string, unknown>).homeZoneId = (
+              z as Record<string, unknown>
+            ).id;
             report.summary.migrated++;
             report.examples.push({
               type: "setHomeZone",
               personId: pid,
-              zoneId: z.id,
+              zoneId: (z as Record<string, unknown>).id,
             });
           }
         } else {
           report.quarantine.push({
             id: pid,
             reason: "zone references missing person",
-            payload: { zoneId: z.id },
+            payload: { zoneId: (z as Record<string, unknown>).id },
           });
           report.summary.quarantined++;
         }
       }
       // normalize to array of strings
-      z.currentOccupants = occupantIds;
+      if (isObject(z)) (z.currentOccupants as unknown) = occupantIds;
       report.summary.migrated++;
       report.examples.push({
         type: "normalizeZoneOccupants",
-        zoneId: z.id,
+        zoneId: (z as Record<string, unknown>).id,
         count: occupantIds.length,
       });
     }
   }
 
   // Basic integrity: quarantine agents with missing person references
-  for (const a of fixture.agents) {
-    const exists = fixture.people.some((p: any) => p.id === a.personId);
+  for (const a of fx.agents as unknown[]) {
+    const exists = (fx.people as unknown[]).some(
+      (p) =>
+        isObject(p) &&
+        String((p as Record<string, unknown>).id) ===
+          String((a as Record<string, unknown>).personId),
+    );
     if (!exists) {
       report.quarantine.push({
-        id: a.id,
+        id: (a as Record<string, unknown>).id,
         reason: "missing person reference",
         payload: a,
       });
@@ -224,19 +259,18 @@ export function migrateFixture(fixture: any, options?: { dryRun?: boolean }) {
 
   // Optionally export a dry-run report to disk (Node only).
   try {
-    if ((opts as any).exportReport && (opts as any).fixtureName) {
+    const o = opts as unknown as Record<string, unknown>;
+    if (o.exportReport && o.fixtureName) {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       const res = exportDryRunReport(
         report,
-        (opts as any).fixtureName,
-        (opts as any).outDir,
+        String(o.fixtureName),
+        o.outDir ? String(o.outDir) : undefined,
       );
-      if ((res as any)?.ok) {
-        report.actions!.push(`exported-report:${(res as any).path}`);
+      if (res.ok) {
+        report.actions!.push(`exported-report:${res.path}`);
       } else {
-        report.actions!.push(
-          `export-failed:${JSON.stringify((res as any).error)}`,
-        );
+        report.actions!.push(`export-failed:${JSON.stringify(res.error)}`);
       }
     }
   } catch (err) {
@@ -252,7 +286,7 @@ export function exportDryRunReport(
   report: MigrationReport,
   fixtureName: string,
   outDir?: string,
-) {
+): { ok: boolean; path?: string; error?: string } {
   try {
     // Only attempt fs operations in Node
     // eslint-disable-next-line @typescript-eslint/no-var-requires

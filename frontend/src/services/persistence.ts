@@ -154,21 +154,24 @@ export async function saveGameState(name: string, state: unknown) {
   const key = `game:${name}`;
   // Normalize zones.currentOccupants before saving to ensure consistent shape
   try {
-    const s = (state as any) || {};
+    const s = (state as Record<string, unknown>) || {};
     if (Array.isArray(s.zones)) {
-      for (const z of s.zones) {
-        if (z && z.currentOccupants !== undefined) {
-          if (Array.isArray(z.currentOccupants)) {
-            z.currentOccupants = z.currentOccupants.map((id: any) =>
-              String(id),
-            );
-          } else if (typeof z.currentOccupants === "string") {
-            z.currentOccupants = z.currentOccupants
-              .split(/[\s,;]+/)
-              .map((s2: string) => s2.trim())
-              .filter(Boolean);
-          } else if (typeof z.currentOccupants === "number") {
-            z.currentOccupants = [String(z.currentOccupants)];
+      for (const z of s.zones as unknown[]) {
+        if (z && typeof z === "object") {
+          const zz = z as Record<string, unknown>;
+          if (zz.currentOccupants !== undefined) {
+            if (Array.isArray(zz.currentOccupants)) {
+              zz.currentOccupants = (zz.currentOccupants as unknown[]).map(
+                (id) => String(id),
+              );
+            } else if (typeof zz.currentOccupants === "string") {
+              zz.currentOccupants = (zz.currentOccupants as string)
+                .split(/[\s,;]+/)
+                .map((s2) => s2.trim())
+                .filter(Boolean);
+            } else if (typeof zz.currentOccupants === "number") {
+              zz.currentOccupants = [String(zz.currentOccupants)];
+            }
           }
         }
       }
@@ -194,21 +197,23 @@ export async function loadGameState(name: string): Promise<unknown | null> {
   const r = rec as { state?: unknown; schemaVersion?: number };
   // Coerce legacy zone.currentOccupants on load to array of strings
   try {
-    const s = r.state as any;
+    const s = r.state as Record<string, unknown> | undefined;
     if (s && Array.isArray(s.zones)) {
-      for (const z of s.zones) {
-        if (
-          z &&
-          z.currentOccupants !== undefined &&
-          !Array.isArray(z.currentOccupants)
-        ) {
-          if (typeof z.currentOccupants === "string") {
-            z.currentOccupants = z.currentOccupants
-              .split(/[\s,;]+/)
-              .map((s2: string) => s2.trim())
-              .filter(Boolean);
-          } else if (typeof z.currentOccupants === "number") {
-            z.currentOccupants = [String(z.currentOccupants)];
+      for (const z of s.zones as unknown[]) {
+        if (z && typeof z === "object") {
+          const zz = z as Record<string, unknown>;
+          if (
+            zz.currentOccupants !== undefined &&
+            !Array.isArray(zz.currentOccupants)
+          ) {
+            if (typeof zz.currentOccupants === "string") {
+              zz.currentOccupants = (zz.currentOccupants as string)
+                .split(/[\s,;]+/)
+                .map((s2) => s2.trim())
+                .filter(Boolean);
+            } else if (typeof zz.currentOccupants === "number") {
+              zz.currentOccupants = [String(zz.currentOccupants)];
+            }
           }
         }
       }
