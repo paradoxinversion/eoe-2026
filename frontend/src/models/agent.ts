@@ -1,3 +1,28 @@
+import type { UUID } from "./person";
+
+export type AgentRole =
+  | "Recruit"
+  | "Administrator"
+  | "Scientist"
+  | "Doctor"
+  | "Soldier";
+
+export interface AgentInventoryItem {
+  itemId: string;
+  qty: number;
+}
+
+export interface Agent {
+  id: UUID;
+  personId: UUID;
+  codeName: string;
+  role: AgentRole;
+  affiliationId?: UUID;
+  inventory?: AgentInventoryItem[];
+  health: number;
+}
+
+export default Agent;
 export type AgentStatus = "active" | "idle" | "unavailable" | "dead";
 
 export type Agent = {

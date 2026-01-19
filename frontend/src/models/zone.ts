@@ -1,3 +1,16 @@
+import type { UUID } from "./person";
+
+export interface Zone {
+  id: UUID;
+  name: string;
+  size: number;
+  wealth: number;
+  intelligenceLevel: number;
+  capacity?: number;
+  currentOccupants: UUID[];
+}
+
+export default Zone;
 export type Zone = {
   id: string;
   name: string;

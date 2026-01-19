@@ -145,11 +145,19 @@ export async function loadThemeMode(): Promise<"dark" | "light" | null> {
   }
 }
 
+// --- Schema/version for persisted game saves
+export const SCHEMA_VERSION = 1;
+
 // --- Game state helpers (stored in the same configs store under a `game:` prefix)
 export async function saveGameState(name: string, state: unknown) {
   const db = await getDB();
   const key = `game:${name}`;
-  await db.put(STORE_CONFIGS, { name: key, state, updatedAt: Date.now() });
+  await db.put(STORE_CONFIGS, {
+    name: key,
+    state,
+    schemaVersion: SCHEMA_VERSION,
+    updatedAt: Date.now(),
+  });
 }
 
 export async function loadGameState(name: string): Promise<unknown | null> {
@@ -157,7 +165,7 @@ export async function loadGameState(name: string): Promise<unknown | null> {
   const key = `game:${name}`;
   const rec = (await db.get(STORE_CONFIGS, key)) as unknown;
   if (!rec) return null;
-  const r = rec as { state?: unknown };
+  const r = rec as { state?: unknown; schemaVersion?: number };
   return r.state === undefined ? null : r.state;
 }
 

@@ -1,3 +1,39 @@
+export type UUID = string;
+
+export interface PersonAttributes {
+  health: number;
+  intelligence: number;
+  strength: number;
+  agility: number;
+  endurance: number;
+  empathy: number;
+  charisma: number;
+}
+
+export interface PersonSkills {
+  fighting: number;
+  medicine: number;
+  business: number;
+  finance: number;
+  publicPlanning: number;
+  science: number;
+}
+
+export interface Person {
+  id: UUID;
+  firstName: string;
+  lastName: string;
+  homeZoneId?: UUID;
+  governingOrganizationSentiments: {
+    [governingOrganizationId: string]: number;
+  };
+  intelligenceLevel: number;
+  occupation?: string;
+  attributes: PersonAttributes;
+  skills: PersonSkills;
+}
+
+export default Person;
 export type Person = {
   id: string;
   name: string;
