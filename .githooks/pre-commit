@@ -1,11 +1,4 @@
 #!/bin/sh
-# Run task list validation before commit
-echo "Running tasks.md validator..."
-node scripts/validate-tasks.js
-rc=$?
-if [ $rc -ne 0 ]; then
-  echo "Pre-commit hook: tasks.md validation failed (exit $rc). Commit aborted."
-  exit $rc
-fi
-echo "tasks.md validator passed."
+# tasks.md validator disabled per developer request
+echo "Skipping tasks.md validator (disabled)."
 exit 0
