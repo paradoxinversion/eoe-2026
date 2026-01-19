@@ -46,6 +46,20 @@ jobs:
                   path: |
                       specs/001-rework-data-models/migration-reports/**
 
+            - name: Verify fixtures (schema)
+              id: verify_fixtures
+              run: |
+                  chmod +x specs/001-rework-data-models/scripts/verify-fixtures.sh || true
+                  specs/001-rework-data-models/scripts/verify-fixtures.sh --report-dir=specs/001-rework-data-models/verify-reports || true
+              continue-on-error: true
+
+            - name: Upload fixture verification reports
+              uses: actions/upload-artifact@v4
+              with:
+                  name: verify-reports
+                  path: |
+                      specs/001-rework-data-models/verify-reports/**
+
             - name: Run accessibility tests
               working-directory: frontend
               run: npm run test:a11y
