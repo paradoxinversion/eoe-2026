@@ -1,41 +1,89 @@
 # Quickstart — Migration & Local Testing
 
-This quickstart explains minimal steps to run migration dry-runs, validate schemas, and exercise persistence tests locally.
+This quickstart contains the exact commands and sequence for running migration dry-runs, validating fixtures, and applying migrations locally.
 
 Prerequisites
 
-- Node 18+ and the repository's package manager installed (`npm`, `pnpm`, or `yarn`).
-- Developer shell in the repository root.
+- Node 18+ and `npm` available.
+- A working shell at the repository root.
 
-Quick steps
-
-1. Run the dev/test setup (install dependencies):
+Install dependencies
 
 ```bash
-npm install
-# or pnpm install
+# from repo root
+cd frontend
+npm ci
+cd -
 ```
 
-2. Run unit and integration tests (Vitest):
+Run tests
 
 ```bash
-npm test
-# or pnpm test
+# unit
+cd frontend && npm run test:unit
+# integration
+cd frontend && npm run test:integration
+# accessibility
+cd frontend && npm run test:a11y
 ```
 
-3. Validate JSON schemas (optional): use a JSON schema validator against files in `specs/001-rework-data-models/contracts/`.
+Migration dry-run (produce reviewable reports)
 
-4. Migration dry-run (manual import):
+1. Back up existing fixtures (recommended):
 
-- The migration tool will be implemented at `frontend/src/services/migration.ts`. For now, run the test-suite migration harness which exercises transform rules against fixtures.
+```bash
+cd specs/001-rework-data-models
+TS=$(date +%Y%m%d%H%M%S)
+cp -R fixtures "fixtures-backup-$TS"
+cd -
+```
 
-5. Representative fixtures: place saved-game fixtures under `specs/001-rework-data-models/fixtures/` (recommended >=20 samples). See `specs/001-rework-data-models/research.md` for fixture expectations.
+2. Run the migration exporter in dry-run mode (writes reports to `specs/001-rework-data-models/migration-reports/`):
 
-Notes
+```bash
+# from repo root
+APPLY=0 ./scripts/migrate-fixtures.sh
+```
 
-- The migration tool is designed to be non-destructive by default (dry-run). Always review the generated migration report before applying changes.
-- CI will run migration tests and performance benchmarks; ensure local runs pass before opening PRs.
+3. Inspect reports:
 
-Repository rule: tasks.md validation
+```bash
+ls -la specs/001-rework-data-models/migration-reports
+jq . specs/001-rework-data-models/migration-reports/fixture-01-small-report.json | less
+```
 
-- After completing any implementation task, update the feature `tasks.md` in the feature spec directory and ensure it is free of duplicates and correctly formatted. A pre-commit hook validates `specs/*/tasks.md` and will block commits if duplicate task IDs or formatting issues are found. Run `node scripts/validate-tasks.js` to check locally.
+Apply migrations (destructive — only when reviewed)
+
+```bash
+# backup first (see above), then:
+APPLY=1 ./scripts/migrate-fixtures.sh
+# Applied fixtures are written to specs/001-rework-data-models/migration-applied/
+```
+
+Fixture verification
+
+- Validate fixtures against JSON schemas in `specs/001-rework-data-models/contracts/` (use your preferred JSON schema validator).
+- Run `node scripts/verify-fixtures.js` if provided; otherwise use `ajv` or `ajv-cli`.
+
+CI notes
+
+- CI runs the migration exporter and uploads `migration-reports` as artifacts for review. The perf step is guarded and will only run when perf tests exist.
+- If you change migration behavior, add or update integration tests under `frontend/tests/integration/` and ensure the migration exporter test (`migration.exporter.test.ts`) still passes.
+
+Repository hygiene
+
+- Update `specs/001-rework-data-models/tasks.md` after completing implementation tasks and run the validator:
+
+```bash
+node scripts/validate-tasks.js specs/001-rework-data-models/tasks.md
+```
+
+- Avoid committing generated `migration-reports/` — CI will publish them as artifacts. Commit curated samples only under `specs/001-rework-data-models/migration-reports-committed/`.
+
+Troubleshooting
+
+- If the exporter step fails in CI but passes locally, check for environment differences (node version, installed binaries). Use `gh run view <run-id>` to fetch run details and download artifacts with `gh run download` for investigation.
+
+Contact
+
+- If unsure, open a PR and request review; CI will attach migration reports as artifacts for reviewers.

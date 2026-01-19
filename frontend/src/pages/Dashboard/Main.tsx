@@ -5,9 +5,9 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import { defaultConfig } from "../../config/schema";
-import createRng from "../../lib/rng";
+// createRng not needed here
 import { advanceTurn, GameState } from "../../services/turn";
-import EndDayButton from "../../components/EndDayButton";
+// EndDayButton removed — not used in this view
 import MainLayout from "./MainLayout";
 import { createAgent, assignAgentToProject, Agent } from "../../models/agent";
 import {
@@ -37,7 +37,7 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
   >([]);
   const [saveName, setSaveName] = useState<string>("");
 
-  const rng = React.useMemo(() => createRng(startingSeed), [startingSeed]);
+  // keep RNG creation deferred for future features; avoid unused variable
 
   useEffect(() => {
     let mounted = true;
@@ -123,7 +123,9 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
   function handleAssign(agentId: string, projectId: string) {
     setState((s) => {
       const agents = (s.agents || []).map((a) =>
-        a.id === agentId ? assignAgentToProject({ ...a } as any, projectId) : a,
+        a.id === agentId
+          ? assignAgentToProject({ ...a } as Agent, projectId)
+          : a,
       );
       const projects = (s.projects || []).map((p) => {
         if (p.id !== projectId) return p;
@@ -184,6 +186,11 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
         <Button variant="outlined" onClick={handleAddProject}>
           Add Project
         </Button>
+        {openSettings ? (
+          <Button variant="text" onClick={() => openSettings?.()}>
+            Settings
+          </Button>
+        ) : null}
       </Box>
 
       <Box sx={{ mt: 3, display: "flex", gap: 2, alignItems: "center" }}>

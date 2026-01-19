@@ -76,9 +76,9 @@ export default function CharacterGeneration() {
         </Button>
         <Button
           variant="outlined"
-          onClick={() => {
-            const { navigate } = require("../lib/navigate");
-            navigate("/");
+          onClick={async () => {
+            const mod = await import("../lib/navigate");
+            mod.navigate("/");
           }}
         >
           Cancel
