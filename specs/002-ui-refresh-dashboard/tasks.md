@@ -38,8 +38,9 @@ Phase 3: User Story Phases (priority order)
 
 **User Story 3 — Advanced controls relocated (Priority: P3)**
 
-- [ ] T017 [US3] Design and implement Advanced Controls panel component in frontend/src/components/AdvancedPanel.tsx
+- [x] T017 [US3] Design and implement Advanced Controls panel component in frontend/src/components/AdvancedPanel.tsx
 - [ ] T018 [US3] Add a clearly labeled toggle/button in MainLayout to open the Advanced panel (frontend/src/pages/Dashboard/MainLayout.tsx)
+- [x] T018 [US3] Add a clearly labeled toggle/button in MainLayout to open the Advanced panel (frontend/src/pages/Dashboard/MainLayout.tsx)
 - [ ] T019 [US3] Add tests for AdvancedPanel accessibility and keyboard interaction in frontend/tests/unit/advanced.panel.test.tsx
 
 Final Phase: Polish & Cross-Cutting Concerns
