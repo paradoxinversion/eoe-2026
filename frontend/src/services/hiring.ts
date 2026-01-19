@@ -9,15 +9,15 @@ export function hirePerson(
   opts?: Partial<Agent>,
 ): Agent {
   const id = makeId("agent");
-  const codeName = (opts && (opts as any).codeName) || generateCodeName();
+  const codeName = opts?.codeName ?? generateCodeName();
   const agent: Agent = {
     id,
     personId: person.id,
     codeName,
-    role: (role as any) || "Recruit",
-    affiliationId: (opts && (opts as any).affiliationId) || undefined,
-    inventory: (opts && (opts as any).inventory) || [],
-    health: (opts && (opts as any).health) ?? 100,
+    role: (role as Agent["role"]) || "Recruit",
+    affiliationId: opts?.affiliationId,
+    inventory: opts?.inventory ?? [],
+    health: opts?.health ?? 100,
   } as Agent;
   return agent;
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { migrateFixture } from "../services/migration";
 
-type Report = any;
+type Report = unknown;
 
 export default function MigrationTool(): JSX.Element {
   const [fileName, setFileName] = useState<string | null>(null);
@@ -20,10 +20,11 @@ export default function MigrationTool(): JSX.Element {
       const stripComments = (s: string) =>
         s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:\\])\/\/.*$/gm, "$1");
       const fixture = JSON.parse(stripComments(raw));
-      const { transformed, report } = migrateFixture(fixture, { dryRun: true });
-      setReport(report);
-    } catch (err: any) {
-      setError(String(err?.message || err));
+      const result = migrateFixture(fixture, { dryRun: true });
+      setReport(result.report);
+    } catch (err: unknown) {
+      const e = err as Error | undefined;
+      setError(String(e?.message ?? String(err)));
     }
   }
 

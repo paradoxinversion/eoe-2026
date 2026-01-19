@@ -1,43 +1,18 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Button from "@mui/material/Button";
+// unused imports removed
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Main from "./Dashboard/Main";
 import Settings from "./Dashboard/Settings";
-import {
-  saveGameState,
-  loadGameState,
-  listGameStates,
-  deleteConfig,
-} from "../services/persistence";
+// persistence helpers not needed in this view
 
 export default function Dashboard() {
   const [tab, setTab] = React.useState(0);
 
-  const [savedGames, setSavedGames] = React.useState<
-    Array<{ name: string; updatedAt: number }>
-  >([]);
-  const [day, setDay] = React.useState<number | null>(null);
-
-  React.useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const list = await listGameStates();
-        if (mounted) setSavedGames(list || []);
-      } catch (e) {
-        // ignore
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  // savedGames/day not required in this view; removed to satisfy lint
 
   React.useEffect(() => {
     // diagnostic log to help detect mounting in browser environments

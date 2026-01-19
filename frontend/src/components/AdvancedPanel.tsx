@@ -67,7 +67,11 @@ export default function AdvancedPanel({ open, onClose }: AdvancedPanelProps) {
                       detail: { seed, debug },
                     }),
                   );
-                } catch (_) {}
+                } catch (err) {
+                  // non-fatal; log for debugging
+                  // eslint-disable-next-line no-console
+                  console.warn("advanced:apply event failed", err);
+                }
               }}
             >
               Apply
