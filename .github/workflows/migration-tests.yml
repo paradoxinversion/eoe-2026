@@ -65,7 +65,27 @@ jobs:
             - name: Run perf benchmark (migration 200 entities)
               if: steps.perf_check.outputs.found == 'true'
               working-directory: frontend
-              run: npx vitest run tests/perf/load-200-entities.test.ts --run
+              run: |
+                  # Measure wall-clock time for the perf test and fail if over SC-002 (3s)
+                  THRESHOLD_MS=3000
+                  START_MS=$(python - <<'PY'
+import time
+print(int(time.time()*1000))
+PY
+)
+                  echo "Starting perf test at ${START_MS}ms"
+                  npx vitest run tests/perf/load-200-entities.test.ts --run
+                  END_MS=$(python - <<'PY'
+import time
+print(int(time.time()*1000))
+PY
+)
+                  DURATION_MS=$((END_MS-START_MS))
+                  echo "Perf test duration: ${DURATION_MS} ms"
+                  if [ ${DURATION_MS} -gt ${THRESHOLD_MS} ]; then
+                    echo "PERF FAILURE: migration dry-run exceeded SC-002 threshold (${THRESHOLD_MS} ms)"
+                    exit 1
+                  fi
 
             - name: Upload perf artifacts
               if: steps.perf_check.outputs.found == 'true'

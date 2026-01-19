@@ -37,8 +37,8 @@ User Story: Backward Compatibility & Migration Safety [US3] (Priority: P3)
 Phase 4: Polish & Cross-Cutting Concerns
 
 - [x] T017 [P] Add CI job to run unit/integration/perf tests and upload perf artifacts (create `.github/workflows/migration-tests.yml`) — .github/workflows/migration-tests.yml
-- [ ] T018 [P] Document migration quickstart and developer guide: update `specs/001-rework-data-models/quickstart.md` with commands and expectations — specs/001-rework-data-models/quickstart.md
-- [ ] T019 [P] Add performance benchmark & gating: create a perf job that fails the build if migration dry-run on 200 entities exceeds SC-002 budget — .github/workflows/migration-tests.yml
+- [x] T018 [P] Document migration quickstart and developer guide: update `specs/001-rework-data-models/quickstart.md` with commands and expectations — specs/001-rework-data-models/quickstart.md
+- [x] T019 [P] Add performance benchmark & gating: create a perf job that fails the build if migration dry-run on 200 entities exceeds SC-002 budget — .github/workflows/migration-tests.yml
 - [ ] T020 [P] Add representative fixtures verification script `specs/001-rework-data-models/scripts/verify-fixtures.sh` to validate each fixture against JSON schemas and run in CI — specs/001-rework-data-models/scripts/verify-fixtures.sh
 
 Final acceptance: confirm CI passing (unit + integration + perf within target) and update `specs/001-rework-data-models/checklists/requirements.md` to mark all items complete
