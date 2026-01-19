@@ -1,106 +1,117 @@
 # Feature Specification: [FEATURE NAME]
 
-**Feature Branch**: `[###-feature-name]`  
-**Created**: [DATE]  
-**Status**: Draft  
-**Input**: User description: "$ARGUMENTS"
+**Feature Branch**: `[###-feature-name]`
 
-## User Scenarios & Testing _(mandatory)_
+# Feature Specification: UI Refresh — Dashboard Simplification
 
-<!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
+**Feature Branch**: `002-ui-refresh-dashboard`
+**Created**: 2026-01-18
+**Status**: Draft
+**Input**: User description: "Improve UI appearance across the app; simplify Main Dashboard page with modern styling and layout."
 
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  # Feature Specification: UI Refresh — Dashboard Simplification
+## Summary
 
-  **Feature Branch**: `002-ui-refresh-dashboard`
-  **Created**: 2026-01-18
-  **Status**: Draft
-  **Input**: User description: "Improve UI appearance across the app; simplify Main Dashboard page with modern styling and layout."
+Improve visual clarity and usability of the game's frontend by modernizing the global theme tokens, simplifying the Dashboard Main layout, and moving advanced controls out of the primary content area. The goal is a sleeker, more readable interface that reduces cognitive load while preserving all existing gameplay behavior.
 
-[Describe this user journey in plain language]
+## User Scenarios & Testing (mandatory)
 
-**Why this priority**: [Explain the value and why it has this priority level]
+P1 — Primary: Simplified Main Dashboard
 
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+- User: New or returning player
+- Goal: View the Main dashboard and perform core turn actions (End Turn, quick info) with minimal distractions
+- Flow: Player opens game → Dashboard → Main tab visible with day/turn, player name, three primary metrics, End Turn button, quick actions panel
+- Independent Test: Render Dashboard Main, verify presence and ordering of primary elements, simulate End Turn action and assert game state advances
 
-**Acceptance Scenarios**:
+Acceptance Scenarios (P1):
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-2. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. Given the player is on Dashboard Main, when the page loads, then the header shows player name, day/turn, and three primary metrics in the top region.
+2. Given the player presses End Turn, when the confirmation (if shown) is accepted, then the turn advances and the UI updates within one second.
 
 ---
-### User Story 2 - [Brief Title] (Priority: P2)
 
-[Describe this user journey in plain language]
+P2 — Theme tokens and visual polish
 
-**Why this priority**: [Explain the value and why it has this priority level]
+- User: Any player who changes theme or views dashboard
+- Goal: Use coherent color, spacing, and typography tokens across screens; default to dark theme
+- Independent Test: Toggle theme in Settings and confirm tokens update color/contrast and persist across reloads
 
-**Independent Test**: [Describe how this can be tested independently]
+Acceptance Scenarios (P2):
 
-**Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. Given default install, when the player first opens the app, then the dark theme is applied.
+2. Given a player toggles theme to light and reloads, then the selected theme persists.
 
 ---
-### User Story 3 - [Brief Title] (Priority: P3)
 
-[Describe this user journey in plain language]
+P3 — Advanced controls relocated (P3)
 
-**Why this priority**: [Explain the value and why it has this priority level]
+- User: Power user who uses advanced controls frequently
+- Goal: Move rarely used controls out of the central view into a collapsible side panel or modal to declutter the Main area
+- Independent Test: Confirm advanced controls are accessible via a clearly labeled toggle and remain functional
 
-**Independent Test**: [Describe how this can be tested independently]
+Acceptance Scenarios (P3):
 
-**Acceptance Scenarios**:
+1. Given Dashboard Main, when user opens "Advanced" panel, then the controls are visible and functional.
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+---
 
+Edge Cases
 
-[Add more user stories as needed, each with an assigned priority]
+- Very small viewports: Ensure layout stacks vertically and End Turn remains reachable.
+- Large metric values: Truncate or wrap values; ensure layout doesn't break.
+- Persistent user preferences: If persistence store is unavailable, UI falls back to default theme and shows an unobtrusive warning.
 
-### Edge Cases
+## Requirements (mandatory)
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
+- FR-UI-001: Update and centralize theme tokens (colors, spacing, typography scale, elevation) so all screens use the same token set.
+    - Acceptance: Theme tokens are applied across Dashboard, Title, and Settings; visual regressions compared to prior baseline are intentional and documented.
 
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+- FR-UI-002: Redesign Dashboard Main layout to present (1) top header with player name and day/turn, (2) three primary metric cards, (3) End Turn prominent control, (4) quick actions area; layout must be responsive.
+    - Acceptance: Automated layout snapshot tests for desktop/tablet/mobile match expected component presence and ordering.
 
-## Requirements _(mandatory)_
+- FR-UI-003: Move advanced controls out of primary content into an accessible side panel or modal reachable from Main.
+    - Acceptance: Controls remain fully functional and accessible via keyboard and screen reader.
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
--->
+- FR-UI-004: Preserve existing game behavior and data flows (generation seed, saving, End Turn mechanics) — this feature is UI-only unless a regression is discovered.
+    - Acceptance: Integration tests that exercise turn progression and persistence continue to pass.
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
-  -->
+- FR-UI-005: Accessibility: All updated components must pass existing accessibility checks (axe-based) with no new violations of WCAG 2.1 AA criteria for color contrast and semantics.
+    - Acceptance: Axe reports show zero new violations; any remaining warnings are documented with justification.
 
-### Measurable Outcomes
+- FR-UI-006: Performance: UI updates for End Turn and primary screen transitions must remain within existing perf baselines (no >20% regression in measured metrics).
+    - Acceptance: Perf benchmark comparison to baseline artifacts shows no more than 20% regression.
 
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+## Measurable Outcomes / Success Criteria
 
-## Constitution References _(mandatory)_
+- SC-001: 95% of users can find and use the End Turn control within 5 seconds on first load (measured via usability test or instrumented telemetry).
+- SC-002: Theme toggle changes persist across reloads for 100% of successful saves in environments where persistence is available.
+- SC-003: Accessibility: No new critical or severe accessibility violations introduced (axe severity >= critical) across updated pages.
+- SC-004: Performance: Average turn-advance UI latency increases by no more than 20% compared to baseline artifacts in `tests_output/`.
 
-Each specification MUST include a `Constitution References` section that:
+## Key Entities (if data involved)
 
-- Names the applicable principles from `.specify/memory/constitution.md`.
-- Explains how the feature meets each principle or lists an approved
-  exception with rationale.
-- Provides measurable acceptance criteria for Tests, Performance,
-  UX consistency, Accessibility, and Local-First behavior where relevant.
+- `ThemeTokens`: set of named tokens (primary, background, surface, text, muted, spacing scale, typography scale) — described conceptually only.
+- `DashboardLayout`: presentation composition of header, metrics, actions, advanced panel.
 
-Include short links to plan and test artifacts that demonstrate compliance.
+## Assumptions
+
+- The project will reuse the existing frontend theming and persistence mechanism; this work will focus on token values and component layout rather than introducing new platform dependencies.
+- Existing gameplay APIs (turn advance, generation, persistence) remain unchanged and will be used as-is.
+
+## Acceptance Tests / Test Plan
+
+- Unit tests: component rendering, token application, accessibility smoke tests.
+- Integration tests: end-to-end turn progression and persistence flows must remain green.
+- Accessibility: Run axe-core checks on updated pages; report and resolve violations.
+- Visual testing: Generate snapshot/visual-diff baselines for Dashboard Main desktop/tablet/mobile.
+
+## Dependencies
+
+- Existing persistence and generation services (seed, save/load) must be present and exercised by integration tests.
+
+## Constitution References (mandatory)
+
+- See `.specify/memory/constitution.md` for relevant principles. This feature emphasizes "Local-first" behavior (preferences persist locally) and "Accessible by default"; testing and measurable acceptance criteria are included above.
+
+## Notes
+
+- This spec intentionally avoids implementation details (libraries, frameworks). Where the project has existing conventions, those will be followed and documented in implementation tasks.
