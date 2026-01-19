@@ -4,6 +4,8 @@ Phase 1: Setup
 
 - [ ] T001 Initialize feature branch and ensure working tree matches plan (create branch `001-rework-data-models` if missing) — repo root
 - [ ] T002 Install dev dependencies and verify test runner: run `npm ci` in `frontend/` and ensure `npm run test:unit` exits successfully — frontend/package.json
+- [x] T001 Initialize feature branch and ensure working tree matches plan (create branch `001-rework-data-models` if missing) — repo root
+- [x] T002 Install dev dependencies and verify test runner: run `npm ci` in `frontend/` and ensure `npm run test:unit` exits successfully — frontend/package.json
 
 Phase 2: Foundational
 
