@@ -41,12 +41,12 @@ describe("End Turn integration", () => {
       await import("../../src/pages/Dashboard/index");
     render(React.createElement(Dashboard));
 
-    // ensure Main tab heading is visible
+    // ensure Main tab button is visible
     await waitFor(() =>
-      expect(screen.getByRole("heading", { name: /Main/i })).toBeTruthy(),
+      expect(screen.getByRole("button", { name: /Main/i })).toBeTruthy(),
     );
 
-    const endBtn = screen.getByRole("button", { name: /end-turn/i });
+    const endBtn = screen.getByLabelText("end-turn");
     fireEvent.click(endBtn);
 
     await waitFor(() => expect(advanceTurn).toHaveBeenCalled());

@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Dashboard Main visual snapshots > desktop snapshot 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-0"
+  >
+    <div
+      class="MuiBox-root css-6r2fzw"
+    >
+      <div
+        class="MuiBox-root css-69i1ev"
+      >
+        <h4
+          class="MuiTypography-root MuiTypography-h4 css-bk90y8-MuiTypography-root"
+        >
+          Player

@@ -77,7 +77,7 @@ describe("Dashboard persistence UI", () => {
     const loadBtn = within(listItem).getByText("Load");
     fireEvent.click(loadBtn);
 
-    // After loading, UI should reflect day 5
-    await waitFor(() => expect(screen.getByText("5")).toBeTruthy());
+    // After loading, UI should reflect day 5 (look for 'Day 5')
+    await waitFor(() => expect(screen.getByText(/Day\s*5/)).toBeTruthy());
   });
 });

@@ -1,5 +1,7 @@
 // Polyfill for jsdom canvas used by axe-core during accessibility tests
 // Provides a no-op getContext to avoid "Not implemented: HTMLCanvasElement.prototype.getContext" errors
+// Provide fake indexedDB for tests that use idb
+import "fake-indexeddb/auto";
 declare global {
   interface HTMLCanvasElement {
     getContext(contextId?: string): any;

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
+import AppThemeProvider from "./theme/Provider";
 import { loadConfig } from "./services/persistence";
 import { registerNavigator } from "./lib/navigate";
 import OptionsPage from "./pages/OptionsPage";
@@ -74,8 +73,7 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={createTheme({ palette: { mode } })}>
-      <CssBaseline />
+    <AppThemeProvider mode={mode}>
       <Box sx={{ p: 2 }}>
         <Box
           sx={{
@@ -121,6 +119,6 @@ export default function App() {
         </Box>
         {renderRoute()}
       </Box>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

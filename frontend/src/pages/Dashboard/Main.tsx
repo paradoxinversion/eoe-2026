@@ -8,6 +8,7 @@ import { defaultConfig } from "../../config/schema";
 import createRng from "../../lib/rng";
 import { advanceTurn, GameState } from "../../services/turn";
 import EndDayButton from "../../components/EndDayButton";
+import MainLayout from "./MainLayout";
 import { createAgent, assignAgentToProject, Agent } from "../../models/agent";
 import {
   createScienceProject,
@@ -163,45 +164,18 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
 
   return (
     <Box>
-      <Typography variant="h4" component="h1">
-        Main
-      </Typography>
-      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-        <Paper sx={{ p: 2, minWidth: 160 }}>
-          <Typography variant="subtitle2" component="div">
-            Day
-          </Typography>
-          <Typography variant="h6" component="div">
-            {state.day}
-          </Typography>
-        </Paper>
-        <Paper sx={{ p: 2, minWidth: 160 }}>
-          <Typography variant="subtitle2" component="div">
-            Gold
-          </Typography>
-          <Typography variant="h6" component="div">
-            {state.resources.gold}
-          </Typography>
-        </Paper>
-        <Paper sx={{ p: 2, minWidth: 160 }}>
-          <Typography variant="subtitle2" component="div">
-            Science
-          </Typography>
-          <Typography variant="h6" component="div">
-            {state.resources.science}
-          </Typography>
-        </Paper>
-        <Paper sx={{ p: 2, minWidth: 160 }}>
-          <Typography variant="subtitle2" component="div">
-            Seed
-          </Typography>
-          <Typography variant="h6" component="div">
-            {String(startingSeed)}
-          </Typography>
-        </Paper>
-      </Box>
-
-      <EndDayButton onEndDay={handleEndDay} />
+      <MainLayout
+        playerName={state.player?.playerName || "Player"}
+        day={state.day}
+        resources={state.resources}
+        startingSeed={startingSeed}
+        onEndTurn={handleEndDay}
+        metrics={[
+          { title: "Gold", value: state.resources?.gold ?? 0 },
+          { title: "Science", value: state.resources?.science ?? 0 },
+          { title: "Seed", value: startingSeed ?? "—" },
+        ]}
+      />
 
       <Box sx={{ mt: 3, display: "flex", gap: 2 }}>
         <Button variant="outlined" onClick={handleHireScientist}>

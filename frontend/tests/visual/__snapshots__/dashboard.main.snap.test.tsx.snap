@@ -1,0 +1,997 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Dashboard Main visual snapshots > desktop snapshot 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-0"
+  >
+    <div
+      class="MuiBox-root css-6r2fzw"
+    >
+      <div
+        class="MuiBox-root css-69i1ev"
+      >
+        <h4
+          class="MuiTypography-root MuiTypography-h4 css-bk90y8-MuiTypography-root"
+        >
+          Player
+        </h4>
+        <div
+          class="MuiBox-root css-yzkv41"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-1p806sr-MuiTypography-root"
+          >
+            Day 
+            0
+          </p>
+          <button
+            aria-label="open-advanced"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-10yelns-MuiButtonBase-root-MuiIconButton-root"
+            tabindex="0"
+            title="Advanced"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1jxdcj3-MuiSvgIcon-root"
+              data-testid="SettingsIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6"
+              />
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            aria-label="end-turn"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1ramel5-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="button"
+          >
+            End Turn
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-19ezdg1-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-19y5bwi-MuiPaper-root"
+          >
+            <div
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+              >
+                Gold
+              </div>
+              <div
+                class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+              >
+                0
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-19y5bwi-MuiPaper-root"
+          >
+            <div
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+              >
+                Science
+              </div>
+              <div
+                class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+              >
+                0
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-19y5bwi-MuiPaper-root"
+          >
+            <div
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+              >
+                Seed
+              </div>
+              <div
+                class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+              >
+                42
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-136783u"
+      >
+        <div
+          class="MuiBox-root css-1bom9at"
+        >
+          <div
+            class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+          >
+            Gold
+          </div>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+          >
+            0
+          </h5>
+        </div>
+        <div
+          class="MuiBox-root css-1bom9at"
+        >
+          <div
+            class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+          >
+            Science
+          </div>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+          >
+            0
+          </h5>
+        </div>
+        <div
+          class="MuiBox-root css-1bom9at"
+        >
+          <div
+            class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+          >
+            Seed
+          </div>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+          >
+            42
+          </h5>
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-1yuhvjn"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-17wmpu3-MuiTypography-root"
+        >
+          Quick actions and summaries will appear here.
+        </p>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-1ld3fof"
+    >
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-aasnv1-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Hire Scientist
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-aasnv1-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Add Project
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+    <div
+      class="MuiBox-root css-nyj9fb"
+    >
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      >
+        <label
+          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1m1w9rf-MuiFormLabel-root-MuiInputLabel-root"
+          data-shrink="false"
+          for=":r1:"
+          id=":r1:-label"
+        >
+          Save name
+        </label>
+        <div
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-18u6sda-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-13lw7c0-MuiInputBase-input-MuiOutlinedInput-input"
+            id=":r1:"
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-10vdd4c-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-njhac4-MuiNotchedOutlined-root"
+            >
+              <span>
+                Save name
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+      <button
+        aria-label="save-game"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1ramel5-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Save
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+    <div
+      class="MuiBox-root css-h5fkc8"
+    >
+      <div
+        class="MuiTypography-root MuiTypography-h6 css-17dtehc-MuiTypography-root"
+      >
+        Saved Games
+      </div>
+      <div
+        class="MuiBox-root css-0"
+      >
+        <ul>
+          <li>
+            No saved games
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-1ld3fof"
+    >
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-19cskeq-MuiPaper-root"
+      >
+        <div
+          class="MuiTypography-root MuiTypography-subtitle1 css-1kf71o9-MuiTypography-root"
+        >
+          Agents
+        </div>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1j1hmmi-MuiTypography-root"
+        >
+          No agents hired.
+        </p>
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-w6kwp3-MuiPaper-root"
+      >
+        <div
+          class="MuiTypography-root MuiTypography-subtitle1 css-1kf71o9-MuiTypography-root"
+        >
+          Projects
+        </div>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1j1hmmi-MuiTypography-root"
+        >
+          No projects.
+        </p>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-1hnm6b6"
+    >
+      <div
+        class="MuiTypography-root MuiTypography-subtitle1 css-1kf71o9-MuiTypography-root"
+      >
+        Log
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-ovv316-MuiPaper-root"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1j1hmmi-MuiTypography-root"
+        >
+          No events yet.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Dashboard Main visual snapshots > mobile snapshot 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-0"
+  >
+    <div
+      class="MuiBox-root css-6r2fzw"
+    >
+      <div
+        class="MuiBox-root css-69i1ev"
+      >
+        <h4
+          class="MuiTypography-root MuiTypography-h4 css-bk90y8-MuiTypography-root"
+        >
+          Player
+        </h4>
+        <div
+          class="MuiBox-root css-yzkv41"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-1p806sr-MuiTypography-root"
+          >
+            Day 
+            0
+          </p>
+          <button
+            aria-label="open-advanced"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-10yelns-MuiButtonBase-root-MuiIconButton-root"
+            tabindex="0"
+            title="Advanced"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1jxdcj3-MuiSvgIcon-root"
+              data-testid="SettingsIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6"
+              />
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            aria-label="end-turn"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1ramel5-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="button"
+          >
+            End Turn
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-19ezdg1-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-19y5bwi-MuiPaper-root"
+          >
+            <div
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+              >
+                Gold
+              </div>
+              <div
+                class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+              >
+                0
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-19y5bwi-MuiPaper-root"
+          >
+            <div
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+              >
+                Science
+              </div>
+              <div
+                class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+              >
+                0
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-19y5bwi-MuiPaper-root"
+          >
+            <div
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+              >
+                Seed
+              </div>
+              <div
+                class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+              >
+                42
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-136783u"
+      >
+        <div
+          class="MuiBox-root css-1bom9at"
+        >
+          <div
+            class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+          >
+            Gold
+          </div>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+          >
+            0
+          </h5>
+        </div>
+        <div
+          class="MuiBox-root css-1bom9at"
+        >
+          <div
+            class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+          >
+            Science
+          </div>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+          >
+            0
+          </h5>
+        </div>
+        <div
+          class="MuiBox-root css-1bom9at"
+        >
+          <div
+            class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+          >
+            Seed
+          </div>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+          >
+            42
+          </h5>
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-1yuhvjn"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-17wmpu3-MuiTypography-root"
+        >
+          Quick actions and summaries will appear here.
+        </p>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-1ld3fof"
+    >
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-aasnv1-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Hire Scientist
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-aasnv1-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Add Project
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+    <div
+      class="MuiBox-root css-nyj9fb"
+    >
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      >
+        <label
+          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1m1w9rf-MuiFormLabel-root-MuiInputLabel-root"
+          data-shrink="false"
+          for=":r5:"
+          id=":r5:-label"
+        >
+          Save name
+        </label>
+        <div
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-18u6sda-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-13lw7c0-MuiInputBase-input-MuiOutlinedInput-input"
+            id=":r5:"
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-10vdd4c-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-njhac4-MuiNotchedOutlined-root"
+            >
+              <span>
+                Save name
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+      <button
+        aria-label="save-game"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1ramel5-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Save
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+    <div
+      class="MuiBox-root css-h5fkc8"
+    >
+      <div
+        class="MuiTypography-root MuiTypography-h6 css-17dtehc-MuiTypography-root"
+      >
+        Saved Games
+      </div>
+      <div
+        class="MuiBox-root css-0"
+      >
+        <ul>
+          <li>
+            No saved games
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-1ld3fof"
+    >
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-19cskeq-MuiPaper-root"
+      >
+        <div
+          class="MuiTypography-root MuiTypography-subtitle1 css-1kf71o9-MuiTypography-root"
+        >
+          Agents
+        </div>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1j1hmmi-MuiTypography-root"
+        >
+          No agents hired.
+        </p>
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-w6kwp3-MuiPaper-root"
+      >
+        <div
+          class="MuiTypography-root MuiTypography-subtitle1 css-1kf71o9-MuiTypography-root"
+        >
+          Projects
+        </div>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1j1hmmi-MuiTypography-root"
+        >
+          No projects.
+        </p>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-1hnm6b6"
+    >
+      <div
+        class="MuiTypography-root MuiTypography-subtitle1 css-1kf71o9-MuiTypography-root"
+      >
+        Log
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-ovv316-MuiPaper-root"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1j1hmmi-MuiTypography-root"
+        >
+          No events yet.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Dashboard Main visual snapshots > tablet snapshot 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-0"
+  >
+    <div
+      class="MuiBox-root css-6r2fzw"
+    >
+      <div
+        class="MuiBox-root css-69i1ev"
+      >
+        <h4
+          class="MuiTypography-root MuiTypography-h4 css-bk90y8-MuiTypography-root"
+        >
+          Player
+        </h4>
+        <div
+          class="MuiBox-root css-yzkv41"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-1p806sr-MuiTypography-root"
+          >
+            Day 
+            0
+          </p>
+          <button
+            aria-label="open-advanced"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-10yelns-MuiButtonBase-root-MuiIconButton-root"
+            tabindex="0"
+            title="Advanced"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1jxdcj3-MuiSvgIcon-root"
+              data-testid="SettingsIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6"
+              />
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            aria-label="end-turn"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1ramel5-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="button"
+          >
+            End Turn
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-19ezdg1-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-19y5bwi-MuiPaper-root"
+          >
+            <div
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+              >
+                Gold
+              </div>
+              <div
+                class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+              >
+                0
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-19y5bwi-MuiPaper-root"
+          >
+            <div
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+              >
+                Science
+              </div>
+              <div
+                class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+              >
+                0
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 css-19y5bwi-MuiPaper-root"
+          >
+            <div
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+              >
+                Seed
+              </div>
+              <div
+                class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+              >
+                42
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-136783u"
+      >
+        <div
+          class="MuiBox-root css-1bom9at"
+        >
+          <div
+            class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+          >
+            Gold
+          </div>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+          >
+            0
+          </h5>
+        </div>
+        <div
+          class="MuiBox-root css-1bom9at"
+        >
+          <div
+            class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+          >
+            Science
+          </div>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+          >
+            0
+          </h5>
+        </div>
+        <div
+          class="MuiBox-root css-1bom9at"
+        >
+          <div
+            class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
+          >
+            Seed
+          </div>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
+          >
+            42
+          </h5>
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-1yuhvjn"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-17wmpu3-MuiTypography-root"
+        >
+          Quick actions and summaries will appear here.
+        </p>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-1ld3fof"
+    >
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-aasnv1-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Hire Scientist
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-aasnv1-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Add Project
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+    <div
+      class="MuiBox-root css-nyj9fb"
+    >
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      >
+        <label
+          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1m1w9rf-MuiFormLabel-root-MuiInputLabel-root"
+          data-shrink="false"
+          for=":r3:"
+          id=":r3:-label"
+        >
+          Save name
+        </label>
+        <div
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-18u6sda-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-13lw7c0-MuiInputBase-input-MuiOutlinedInput-input"
+            id=":r3:"
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-10vdd4c-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-njhac4-MuiNotchedOutlined-root"
+            >
+              <span>
+                Save name
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+      <button
+        aria-label="save-game"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1ramel5-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Save
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+    <div
+      class="MuiBox-root css-h5fkc8"
+    >
+      <div
+        class="MuiTypography-root MuiTypography-h6 css-17dtehc-MuiTypography-root"
+      >
+        Saved Games
+      </div>
+      <div
+        class="MuiBox-root css-0"
+      >
+        <ul>
+          <li>
+            No saved games
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-1ld3fof"
+    >
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-19cskeq-MuiPaper-root"
+      >
+        <div
+          class="MuiTypography-root MuiTypography-subtitle1 css-1kf71o9-MuiTypography-root"
+        >
+          Agents
+        </div>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1j1hmmi-MuiTypography-root"
+        >
+          No agents hired.
+        </p>
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-w6kwp3-MuiPaper-root"
+      >
+        <div
+          class="MuiTypography-root MuiTypography-subtitle1 css-1kf71o9-MuiTypography-root"
+        >
+          Projects
+        </div>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1j1hmmi-MuiTypography-root"
+        >
+          No projects.
+        </p>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-1hnm6b6"
+    >
+      <div
+        class="MuiTypography-root MuiTypography-subtitle1 css-1kf71o9-MuiTypography-root"
+      >
+        Log
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-ovv316-MuiPaper-root"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1j1hmmi-MuiTypography-root"
+        >
+          No events yet.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
