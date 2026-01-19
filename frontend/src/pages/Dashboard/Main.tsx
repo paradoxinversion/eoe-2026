@@ -6,7 +6,7 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import { defaultConfig } from "../../config/schema";
 import createRng from "../../lib/rng";
-import { resolveTurn, GameState } from "../../services/turn";
+import { advanceTurn, GameState } from "../../services/turn";
 import EndDayButton from "../../components/EndDayButton";
 import { createAgent, assignAgentToProject, Agent } from "../../models/agent";
 import {
@@ -88,9 +88,13 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
   }, []);
 
   async function handleEndDay() {
-    const next = resolveTurn(state, rng);
-    setState(next);
-    await saveGameState("autosave", next);
+    try {
+      const next = await advanceTurn();
+      if (next) setState(next);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn("end day failed", e);
+    }
   }
 
   function handleHireScientist() {
