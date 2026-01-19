@@ -23,10 +23,10 @@ tests/
 : Follow standard conventions
 
 ## Recent Changes
+- 002-ui-refresh-dashboard: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 - 001-dashboard-ui: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 - 001-dashboard-ui: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 
-- 001-empire-game-spec: Added
 
 <!-- MANUAL ADDITIONS START -->
 
