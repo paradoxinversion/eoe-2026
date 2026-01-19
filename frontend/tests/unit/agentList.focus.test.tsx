@@ -21,11 +21,11 @@ describe("AgentList focus behavior", () => {
 
     // initial focus should be on first row (tabIndex 0)
     rows[0].focus();
-    expect(rows[0]).toHaveAttribute("tabindex", "0");
+    expect(rows[0].getAttribute("tabindex")).toBe("0");
 
     // ArrowDown moves focus to second row
     fireEvent.keyDown(rows[0], { key: "ArrowDown" });
-    expect(rows[1]).toHaveAttribute("aria-selected", "true");
+    expect(rows[1].getAttribute("aria-selected")).toBe("true");
 
     // Press Enter on the focused row triggers onFocus
     fireEvent.keyDown(rows[1], { key: "Enter" });

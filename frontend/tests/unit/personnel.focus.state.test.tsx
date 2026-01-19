@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import { describe, it, vi, expect } from "vitest";
 
 import PersonnelTab from "../../../frontend/src/components/personnel/PersonnelTab";
@@ -35,7 +35,9 @@ describe("PersonnelTab focus wiring", () => {
     const focusButton = await screen.findByLabelText(/Focus Astra One/);
     fireEvent.click(focusButton);
 
-    // Profile should show the agent name
-    expect(await screen.findByText("Astra One")).toBeTruthy();
+    // Profile should show the agent name inside the Profile section
+    const profileHeading = await screen.findByText("Profile");
+    const profileSection = profileHeading.parentElement as HTMLElement;
+    expect(within(profileSection).getByText("Astra One")).toBeTruthy();
   });
 });
