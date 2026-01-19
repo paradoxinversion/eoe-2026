@@ -23,9 +23,9 @@ export default function Main() {
 
   async function handleEndTurn() {
     await advanceTurn();
-    // simple visual feedback via alert for now
-    // eslint-disable-next-line no-alert
-    alert("Turn advanced");
+    // simple visual feedback for now (console in tests/environments without window.alert)
+    // eslint-disable-next-line no-console
+    console.log("Turn advanced");
   }
 
   return (

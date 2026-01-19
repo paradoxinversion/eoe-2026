@@ -21,4 +21,9 @@ if (typeof globalThis.HTMLCanvasElement !== "undefined") {
   } as any;
 }
 
+// Provide a no-op alert implementation for jsdom-based tests
+if (typeof globalThis.alert === "undefined") {
+  (globalThis as any).alert = () => {};
+}
+
 export {};

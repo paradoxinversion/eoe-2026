@@ -28,8 +28,8 @@ Purpose: Ensure tooling and linters are in place and repository is ready for fea
 
 Purpose: Core wiring required before user stories (routing, persistence access patterns).
 
-- [ ] T003 [ ] Confirm `persistence.ts` API supports storing `preferences.theme` and `preferences.seed` (file: `frontend/src/services/persistence.ts`)
-- [ ] T004 [ ] Ensure `generation.ts` exposes a seed-accepting API and deterministic output contract (file: `frontend/src/services/generation.ts`)
+- [x] T003 [ ] Confirm `persistence.ts` API supports storing `preferences.theme` and `preferences.seed` (file: `frontend/src/services/persistence.ts`)
+- [x] T004 [ ] Ensure `generation.ts` exposes a seed-accepting API and deterministic output contract (file: `frontend/src/services/generation.ts`)
 - [ ] T005 [P] Add integration smoke test harness for programmatic navigation and generation (tests/integration/new-game.integration.test.ts)
 
 Checkpoint: Foundation ready — user story work may begin
