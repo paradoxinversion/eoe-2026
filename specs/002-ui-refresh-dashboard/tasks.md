@@ -2,26 +2,28 @@
 
 Phase 1: Setup
 
-- [ ] T001 [P] Create theme tokens module in frontend/src/theme/tokens.ts
-- [ ] T002 [P] Add theme entrypoint and exports in frontend/src/theme/index.ts
-- [ ] T003 Initialize visual snapshot baseline folder at specs/002-ui-refresh-dashboard/visual-baseline/
+- [x] T001 [P] Create theme tokens module in frontend/src/theme/tokens.ts
+- [x] T002 [P] Add theme entrypoint and exports in frontend/src/theme/index.ts
+- [x] T003 Initialize visual snapshot baseline folder at specs/002-ui-refresh-dashboard/visual-baseline/
 
 Phase 2: Foundational (blocking prerequisites)
 
-- [ ] T004 Implement basic `ThemeTokens` values (dark + light) in frontend/src/theme/tokens.ts
-- [ ] T005 Integrate tokens into existing ThemeProvider in frontend/src/theme/index.ts and update provider usage in frontend/src/main.tsx
-- [ ] T006 [P] Add persistence key/handler for `themeMode` in frontend/src/services/persistence.ts (or extend existing persistence calls) and docs in specs/002-ui-refresh-dashboard/quickstart.md
+- [x] T004 Implement basic `ThemeTokens` values (dark + light) in frontend/src/theme/tokens.ts
+- [x] T005 Integrate tokens into existing ThemeProvider in frontend/src/theme/index.ts and update provider usage in frontend/src/main.tsx
+- [x] T006 [P] Add persistence key/handler for `themeMode` in frontend/src/services/persistence.ts (or extend existing persistence calls) and docs in specs/002-ui-refresh-dashboard/quickstart.md
 
 Phase 3: User Story Phases (priority order)
 
 **User Story 1 — Simplified Main Dashboard (Priority: P1)**
 
-- [ ] T007 [US1] Create new Dashboard Main layout component skeleton in frontend/src/pages/Dashboard/MainLayout.tsx
-- [ ] T008 [US1] Implement header area showing player name and day/turn in frontend/src/pages/Dashboard/MainLayout.tsx
-- [ ] T009 [US1] Implement three primary metric cards in frontend/src/pages/Dashboard/MetricCard.tsx and import into MainLayout
-- [ ] T010 [US1] Ensure End Turn control is prominent and wired to existing `advanceTurn()` in frontend/src/pages/Dashboard/MainLayout.tsx
+- [x] T007 [US1] Create new Dashboard Main layout component skeleton in frontend/src/pages/Dashboard/MainLayout.tsx
+- [x] T008 [US1] Implement header area showing player name and day/turn in frontend/src/pages/Dashboard/MainLayout.tsx
+- [x] T009 [US1] Implement three primary metric cards in frontend/src/pages/Dashboard/MetricCard.tsx and import into MainLayout
+- [x] T010 [US1] Ensure End Turn control is prominent and wired to existing `advanceTurn()` in frontend/src/pages/Dashboard/MainLayout.tsx
 - [ ] T011 [US1] Add unit tests for MainLayout and MetricCard in frontend/tests/unit/dashboard.main.test.tsx
 - [ ] T012 [US1] Add integration test that simulates End Turn and asserts state advance in frontend/tests/integration/turns.dashboard.integration.test.ts
+- [x] T011 [US1] Add unit tests for MainLayout and MetricCard in frontend/tests/unit/dashboard.main.test.tsx
+- [x] T012 [US1] Add integration test that simulates End Turn and asserts state advance in frontend/tests/integration/turns.dashboard.integration.test.ts
 
 **User Story 2 — Theme tokens & visual polish (Priority: P2)**
 
@@ -38,7 +40,7 @@ Phase 3: User Story Phases (priority order)
 
 Final Phase: Polish & Cross-Cutting Concerns
 
-- [ ] T020 Update `specs/002-ui-refresh-dashboard/quickstart.md` with developer steps and visual baseline instructions (file exists; update if needed)
+- [x] T020 Update `specs/002-ui-refresh-dashboard/quickstart.md` with developer steps and visual baseline instructions (file exists; update if needed)
 - [ ] T021 Add/adjust perf benchmark(s) in frontend/tests/perf to validate End Turn UI latency and compare against `tests_output/` baseline
 - [ ] T022 Generate visual baseline screenshots into specs/002-ui-refresh-dashboard/visual-baseline/ and commit them
 - [ ] T023 Run full test suites locally and document results in specs/002-ui-refresh-dashboard/README.md
@@ -59,4 +61,4 @@ Implementation Strategy
 - MVP: Deliver `US1` first with minimal theme tokens (dark defaults) so the simplified Main is usable and testable. Then deliver `US2` (theme toggle + persistence) and finally `US3` (Advanced panel).
 - Incremental delivery: Each story phase produces a self-contained, testable increment: rendering + tests + a11y checks + snapshot.
 
-Task numbering and labels follow the project checklist format and reference concrete file paths so each task is independently implementable by an LLM or developer.
+- Task numbering and labels follow the project checklist format and reference concrete file paths so each task is independently implementable by an LLM or developer.
