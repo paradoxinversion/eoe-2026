@@ -117,8 +117,11 @@ export default function Dashboard() {
       const prefs = await mod.loadConfig("preferences");
       if (!mounted || !prefs) return;
       try {
-        const p = prefs as any;
-        if (typeof p.startingSeed === "number") setStartingSeed(p.startingSeed);
+        if (typeof prefs === "object") {
+          const p = prefs as { startingSeed?: number };
+          if (typeof p.startingSeed === "number")
+            setStartingSeed(p.startingSeed);
+        }
       } catch (e) {
         // ignore
       }

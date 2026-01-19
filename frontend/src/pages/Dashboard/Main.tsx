@@ -13,8 +13,10 @@ export default function Main() {
       // try to read the most recent saved game
       const states = await listGameStates();
       const rec = states[0] ? await loadGameState(states[0].name) : null;
-      if (rec && (rec as any).playerName)
-        setPlayerName((rec as any).playerName);
+      if (rec && typeof rec === "object") {
+        const r = rec as { playerName?: string };
+        if (r.playerName) setPlayerName(r.playerName);
+      }
     }
     void load();
   }, []);

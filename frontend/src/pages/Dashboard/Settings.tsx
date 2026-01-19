@@ -16,7 +16,10 @@ export default function Settings() {
       try {
         const prefs = await loadConfig("preferences");
         if (!mounted) return;
-        if (prefs && (prefs as any).theme) setTheme((prefs as any).theme);
+        if (prefs && typeof prefs === "object") {
+          const p = prefs as { theme?: string };
+          if (p.theme) setTheme(p.theme);
+        }
       } catch (e) {
         // ignore
       }
@@ -55,6 +58,7 @@ export default function Settings() {
       <FormControlLabel
         control={<Switch checked={theme === "dark"} onChange={handleToggle} />}
         label={`Theme: ${theme === "dark" ? "Dark" : "Light"}`}
+        disabled={loading}
       />
     </Box>
   );

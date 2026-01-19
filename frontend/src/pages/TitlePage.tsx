@@ -4,8 +4,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import LoadModal from "../components/LoadModal";
-import { saveConfig } from "../services/persistence";
-import { defaultConfig } from "../config/schema";
 
 export default function TitlePage() {
   const [openLoad, setOpenLoad] = useState(false);

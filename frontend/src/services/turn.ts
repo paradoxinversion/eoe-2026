@@ -235,17 +235,26 @@ export async function advanceTurn(name?: string) {
   if (!state) throw new Error("game state not found");
 
   // determine RNG seed: prefer world.seed if present, else fallback to Date.now()
-  // state.player.world may not exist; attempt to read nested path if present
-  // This function assumes `state` may include a player/world shape produced by generation
+  const maybe = state as GameState & {
+    world?: { seed?: number };
+    player?: { world?: { seed?: number } };
+  };
   const seed =
-    (state as any).world?.seed ||
-    (state.player as any)?.world?.seed ||
+    (maybe.world && typeof maybe.world.seed === "number"
+      ? maybe.world.seed
+      : undefined) ??
+    (maybe.player &&
+    maybe.player.world &&
+    typeof maybe.player.world.seed === "number"
+      ? maybe.player.world.seed
+      : undefined) ??
     Date.now();
-  const rng = createRng(seed as any);
 
-  const next = resolveTurn(state, rng as unknown as RNG);
+  const rng = createRng(seed);
+
+  const next = resolveTurn(state, rng);
 
   // save back the updated state under the same key name
-  await saveGameState(pick, next as unknown);
+  await saveGameState(pick, next);
   return next;
 }

@@ -19,8 +19,8 @@ description: "Task list for Dashboard UI feature (001-dashboard-ui)"
 
 Purpose: Ensure tooling and linters are in place and repository is ready for feature work.
 
-- [ ] T001 [P] Verify `frontend` dev scripts and dependencies (`frontend/package.json`) are present and working
-- [ ] T002 [P] Ensure linting/formatting configured (`.eslintrc`, `prettier`) and run against `frontend/src`
+- [x] T001 [P] Verify `frontend` dev scripts and dependencies (`frontend/package.json`) are present and working
+- [x] T002 [P] Ensure linting/formatting configured (`.eslintrc`, `prettier`) and run against `frontend/src`
 
 ---
 
