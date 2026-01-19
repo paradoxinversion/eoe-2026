@@ -1,0 +1,18 @@
+{
+  "fixture": "fixture-17-anon-people.json",
+  "ok": true,
+  "details": {
+    "people": {
+      "ok": true,
+      "total": 2,
+      "failed": 0,
+      "errors": []
+    },
+    "zones": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    }
+  }
+}

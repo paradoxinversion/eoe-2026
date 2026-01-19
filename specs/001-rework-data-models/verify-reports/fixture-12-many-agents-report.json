@@ -1,0 +1,30 @@
+{
+  "fixture": "fixture-12-many-agents.json",
+  "ok": true,
+  "details": {
+    "governingOrganizations": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    },
+    "zones": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    },
+    "people": {
+      "ok": true,
+      "total": 2,
+      "failed": 0,
+      "errors": []
+    },
+    "agents": {
+      "ok": true,
+      "total": 2,
+      "failed": 0,
+      "errors": []
+    }
+  }
+}

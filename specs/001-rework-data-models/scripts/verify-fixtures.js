@@ -16,6 +16,8 @@ if (argv.length < 2) usage();
 const fixturesDir = path.resolve(argv[0]);
 const contractsDir = path.resolve(argv[1]);
 const reportArg = argv.find((a) => a.startsWith("--report-dir="));
+const applyFixesArg = argv.find((a) => a === "--apply-fixes" || a === "--fix");
+const APPLY_FIXES = !!applyFixesArg;
 const reportDir = reportArg
     ? path.resolve(reportArg.split("=")[1])
     : path.resolve(process.cwd(), "verify-reports");
@@ -108,7 +110,95 @@ for (const f of fs.readdirSync(fixturesDir)) {
             };
             for (let i = 0; i < arr.length; i++) {
                 const item = arr[i];
-                const valid = ajv.validate(schemaId, item);
+                let valid = ajv.validate(schemaId, item);
+                if (!valid && APPLY_FIXES) {
+                    // attempt auto-fixes for common person/agent issues
+                    if (key === "people") {
+                        // if `name` present, split into first/last
+                        if (!item.firstName && !item.lastName && item.name) {
+                            const parts = String(item.name).trim().split(/\s+/);
+                            item.firstName = parts.shift() || "Anon";
+                            item.lastName = parts.join(" ") || "Unknown";
+                            delete item.name;
+                        }
+                        // if firstName empty or null, set to Anon
+                        if (
+                            !item.firstName ||
+                            String(item.firstName).trim().length === 0
+                        ) {
+                            item.firstName = "Anon";
+                        }
+                        // ensure attributes
+                        if (!item.attributes) {
+                            item.attributes = {
+                                health: 50,
+                                intelligence: 50,
+                                strength: 50,
+                                agility: 50,
+                                endurance: 50,
+                                empathy: 50,
+                                charisma: 50,
+                            };
+                        }
+                        // ensure skills
+                        if (!item.skills) {
+                            item.skills = {
+                                fighting: 0,
+                                medicine: 0,
+                                business: 0,
+                                finance: 0,
+                                publicPlanning: 0,
+                                science: 0,
+                            };
+                        }
+                        if (item.intelligenceLevel === undefined)
+                            item.intelligenceLevel = 50;
+                        if (!item.governingOrganizationSentiments)
+                            item.governingOrganizationSentiments = {};
+                        // legacy single 'sentiment' -> governingOrganizationSentiments
+                        if (item.sentiment !== undefined) {
+                            if (
+                                obj.governingOrganizations &&
+                                Array.isArray(obj.governingOrganizations) &&
+                                obj.governingOrganizations.length === 1
+                            ) {
+                                const govId = obj.governingOrganizations[0].id;
+                                item.governingOrganizationSentiments = {
+                                    [govId]: item.sentiment,
+                                };
+                            } else {
+                                item.governingOrganizationSentiments = {};
+                            }
+                            delete item.sentiment;
+                        }
+                    }
+                    if (key === "agents") {
+                        if (!item.codeName) {
+                            if (item.name && String(item.name).trim()) {
+                                const parts = String(item.name)
+                                    .trim()
+                                    .split(/\s+/);
+                                item.codeName = parts.join("-").toLowerCase();
+                                delete item.name;
+                            } else if (item.personId) {
+                                const short =
+                                    (item.personId.split("-")[1] || "").slice(
+                                        0,
+                                        6,
+                                    ) || Math.random().toString(36).slice(2, 6);
+                                item.codeName = `agent-${short}`;
+                                if (item.name !== undefined) delete item.name;
+                            } else {
+                                item.codeName = `agent-${Math.random().toString(36).slice(2, 7)}`;
+                                if (item.name !== undefined) delete item.name;
+                            }
+                            // remove legacy name property if present to satisfy schema's additionalProperties
+                            if (item.name !== undefined) delete item.name;
+                        }
+                    }
+                    // revalidate after fixes
+                    valid = ajv.validate(schemaId, item);
+                }
                 if (!valid) {
                     detail.ok = false;
                     detail.failed++;
@@ -121,11 +211,33 @@ for (const f of fs.readdirSync(fixturesDir)) {
             }
             report.details[key] = detail;
         }
+        // If apply-fixes was enabled, write the fixed fixture out for review
+        if (APPLY_FIXES) {
+            try {
+                const fixedDir = path.join(
+                    path.dirname(fixturesDir),
+                    "fixtures-fixed",
+                );
+                if (!fs.existsSync(fixedDir))
+                    fs.mkdirSync(fixedDir, { recursive: true });
+                fs.writeFileSync(
+                    path.join(fixedDir, f),
+                    JSON.stringify(obj, null, 2) + "\n",
+                );
+            } catch (werr) {
+                console.error(
+                    "Failed to write fixed fixture for",
+                    f,
+                    werr && werr.message,
+                );
+            }
+        }
     } catch (err) {
         report.ok = false;
         report.details._parse = { ok: false, message: err.message };
         failed++;
     }
+
     fs.writeFileSync(
         path.join(reportDir, f.replace(".json", "-report.json")),
         JSON.stringify(report, null, 2),

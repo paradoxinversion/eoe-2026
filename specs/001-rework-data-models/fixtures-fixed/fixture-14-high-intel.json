@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "zones": [
+    {
+      "id": "zone-smart",
+      "name": "Academia",
+      "size": 20,
+      "wealth": 60,
+      "intelligenceLevel": 95,
+      "currentOccupants": [
+        "person-smart-1"
+      ]
+    }
+  ],
+  "people": [
+    {
+      "id": "person-smart-1",
+      "firstName": "Iris",
+      "lastName": "Kwan",
+      "homeZoneId": "zone-smart",
+      "governingOrganizationSentiments": {},
+      "intelligenceLevel": 99,
+      "attributes": {
+        "health": 88,
+        "intelligence": 99,
+        "strength": 30,
+        "agility": 45,
+        "endurance": 50,
+        "empathy": 60,
+        "charisma": 55
+      },
+      "skills": {
+        "fighting": 2,
+        "medicine": 40,
+        "business": 25,
+        "finance": 30,
+        "publicPlanning": 35,
+        "science": 98
+      }
+    }
+  ],
+  "buildings": [
+    {
+      "id": "building-acad-1",
+      "name": "Grand Lab",
+      "type": "Lab",
+      "size": 10,
+      "zoneId": "zone-smart",
+      "intelligenceLevel": 98,
+      "upkeepCost": 40,
+      "infrastructureLoad": 8
+    }
+  ]
+}

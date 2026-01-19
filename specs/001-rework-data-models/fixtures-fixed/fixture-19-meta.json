@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "source": "exported-tool-0.1",
+    "notes": "Contains extra metadata that should be ignored by migration"
+  },
+  "zones": [
+    {
+      "id": "zone-meta-1",
+      "name": "Metro",
+      "size": 50,
+      "wealth": 55,
+      "intelligenceLevel": 60,
+      "currentOccupants": []
+    }
+  ],
+  "people": []
+}

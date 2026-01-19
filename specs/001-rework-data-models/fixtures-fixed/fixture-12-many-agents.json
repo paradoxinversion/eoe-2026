@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0.0",
+  "governingOrganizations": [
+    {
+      "id": "gov-many",
+      "name": "ManyGov"
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone-many-1",
+      "name": "Operations",
+      "size": 60,
+      "wealth": 50,
+      "intelligenceLevel": 60,
+      "currentOccupants": []
+    }
+  ],
+  "people": [
+    {
+      "id": "person-a1",
+      "firstName": "Alpha",
+      "lastName": "One",
+      "homeZoneId": "zone-many-1",
+      "governingOrganizationSentiments": {
+        "gov-many": 10
+      },
+      "intelligenceLevel": 60,
+      "attributes": {
+        "health": 90,
+        "intelligence": 70,
+        "strength": 50,
+        "agility": 50,
+        "endurance": 50,
+        "empathy": 40,
+        "charisma": 30
+      },
+      "skills": {
+        "fighting": 20,
+        "medicine": 30,
+        "business": 10,
+        "finance": 10,
+        "publicPlanning": 15,
+        "science": 25
+      }
+    },
+    {
+      "id": "person-a2",
+      "firstName": "Beta",
+      "lastName": "Two",
+      "homeZoneId": "zone-many-1",
+      "governingOrganizationSentiments": {
+        "gov-many": 5
+      },
+      "intelligenceLevel": 55,
+      "attributes": {
+        "health": 85,
+        "intelligence": 65,
+        "strength": 45,
+        "agility": 48,
+        "endurance": 46,
+        "empathy": 42,
+        "charisma": 28
+      },
+      "skills": {
+        "fighting": 15,
+        "medicine": 10,
+        "business": 20,
+        "finance": 12,
+        "publicPlanning": 10,
+        "science": 22
+      }
+    }
+  ],
+  "agents": [
+    {
+      "id": "agent-a1",
+      "personId": "person-a1",
+      "codeName": "alpha-1",
+      "role": "Soldier",
+      "health": 90
+    },
+    {
+      "id": "agent-a2",
+      "personId": "person-a2",
+      "codeName": "beta-2",
+      "role": "Administrator",
+      "health": 88
+    }
+  ]
+}

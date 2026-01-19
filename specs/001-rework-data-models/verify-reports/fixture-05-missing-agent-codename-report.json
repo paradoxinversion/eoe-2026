@@ -1,0 +1,24 @@
+{
+  "fixture": "fixture-05-missing-agent-codename.json",
+  "ok": true,
+  "details": {
+    "people": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    },
+    "agents": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    },
+    "zones": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "fixture": "fixture-10-low-wealth.json",
+  "ok": true,
+  "details": {
+    "governingOrganizations": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    },
+    "zones": {
+      "ok": true,
+      "total": 1,
+      "failed": 0,
+      "errors": []
+    },
+    "people": {
+      "ok": true,
+      "total": 2,
+      "failed": 0,
+      "errors": []
+    },
+    "buildings": {
+      "ok": true,
+      "total": 0,
+      "failed": 0,
+      "errors": []
+    }
+  }
+}
