@@ -29,7 +29,10 @@ Phase 3: User Story Phases (priority order)
 
 - [ ] T013 [US2] Add Settings toggle UI to modify `themeMode` in frontend/src/pages/Settings/ThemeToggle.tsx
 - [ ] T014 [US2] Persist theme selection and add test to verify persistence in frontend/tests/integration/theme.persistence.test.ts
+- [x] T013 [US2] Add Settings toggle UI to modify `themeMode` in frontend/src/pages/Settings/ThemeToggle.tsx
+- [x] T014 [US2] Persist theme selection and add test to verify persistence in frontend/tests/integration/theme.persistence.test.ts
 - [ ] T015 [US2] Create visual snapshot tests for Dashboard Main (desktop/tablet/mobile) under frontend/tests/visual/dashboard.main.snap.test.ts
+- [x] T015 [US2] Create visual snapshot tests for Dashboard Main (desktop/tablet/mobile) under frontend/tests/visual/dashboard.main.snap.test.tsx
 - [ ] T016 [US2] Run axe accessibility checks for updated pages and fix any WCAG 2.1 AA violations; add smoke checks in frontend/tests/a11y/dashboard.a11y.test.ts
 
 **User Story 3 — Advanced controls relocated (Priority: P3)**
