@@ -4,14 +4,14 @@ Feature: Personnel Tab (specs/003-personnel-tab/spec.md)
 
 Phase 1: Setup
 
-- [ ] T001 [P] Create research notes in specs/003-personnel-tab/research.md
-- [ ] T002 [P] Create data model doc in specs/003-personnel-tab/data-model.md
-- [ ] T003 [P] Add JSON contracts in specs/003-personnel-tab/contracts/ (people.schema.json, profile.schema.json)
-- [ ] T004 [P] Add quickstart in specs/003-personnel-tab/quickstart.md
+- [x] T001 [P] Create research notes in specs/003-personnel-tab/research.md
+- [x] T002 [P] Create data model doc in specs/003-personnel-tab/data-model.md
+- [x] T003 [P] Add JSON contracts in specs/003-personnel-tab/contracts/ (people.schema.json, profile.schema.json)
+- [x] T004 [P] Add quickstart in specs/003-personnel-tab/quickstart.md
 
 Phase 2: Foundational (blocking prerequisites)
 
-- [ ] T005 [ ] Complete frontend service helpers in frontend/src/services/personnelService.ts (intelligenceToConfidence, computeCapacity, reassignment helpers)
+- [x] T005 [ ] Complete frontend service helpers in frontend/src/services/personnelService.ts (intelligenceToConfidence, computeCapacity, reassignment helpers)
 - [ ] T006 [ ] Add persistence adapter for personnel reads/writes in frontend/src/services/personnelPersistence.ts (IndexedDB integration calling frontend/src/services/persistence.ts)
 - [ ] T007 [ ] Add AJV runtime validators for contracts in frontend/src/services/validation/personContracts.ts (use specs/003-personnel-tab/contracts/\*.json)
 
@@ -28,21 +28,21 @@ US1 — View Personnel Overview (Priority: P1)
 US2 — Browse and Focus Agent (Priority: P1)
 
 - [ ] T013 [P] [US2] Finalize `AgentList` in frontend/src/components/personnel/AgentList.tsx: add Focus button, keyboard/ARIA support, and visual focus state
-- [ ] T014 [P] [US2] Add `Focus` action wiring in frontend/src/components/personnel/PersonnelTab.tsx to load Profile when an Agent is focused
+- [x] T014 [P] [US2] Add `Focus` action wiring in frontend/src/components/personnel/PersonnelTab.tsx to load Profile when an Agent is focused
 - [ ] T015 [P] [US2] Add unit tests frontend/tests/unit/agentList.focus.test.tsx and frontend/tests/unit/personnel.focus.state.test.tsx
 - [ ] T016 [ ] [US2] Integration test frontend/tests/integration/personnel.focus.integration.test.ts for clicking/keyboard focusing and Profile loading
 - [ ] T017 [ ] [US2] Accessibility tests frontend/tests/accessibility/personnel.a11y.test.tsx covering tab order and ARIA labels for rows and focus actions
 
 US3 — Profile for Agents and People (Priority: P2)
 
-- [ ] T018 [P] [US3] Complete `Profile` component in frontend/src/components/personnel/Profile.tsx to display Agent fields first and person attributes with confidence indicators
-- [ ] T019 [P] [US3] Implement confidence rendering using frontend/src/services/personnelService.ts (`intelligenceToConfidence`) and ensure Agents show 100% confidence where applicable
+- [x] T018 [P] [US3] Complete `Profile` component in frontend/src/components/personnel/Profile.tsx to display Agent fields first and person attributes with confidence indicators
+- [x] T019 [P] [US3] Implement confidence rendering using frontend/src/services/personnelService.ts (`intelligenceToConfidence`) and ensure Agents show 100% confidence where applicable
 - [ ] T020 [P] [US3] Unit tests frontend/tests/unit/profile.confidence.test.ts to validate confidence mapping and conditional field visibility
 - [ ] T021 [ ] [US3] Integration test frontend/tests/integration/personnel.profile.integration.test.ts verifying Agent profile vs non-agent profile rendering and data accuracy indicators
 
 Final Phase: Polish & Cross-cutting Concerns
 
-- [ ] T022 [ ] Update docs and quickstart: ensure specs/003-personnel-tab/quickstart.md references new commands and fixtures
+- [x] T022 [ ] Update docs and quickstart: ensure specs/003-personnel-tab/quickstart.md references new commands and fixtures
 - [ ] T023 [ ] Add performance check script scripts/perf/personnel-warm-render.sh and document run steps in README
 - [ ] T024 [ ] Add CI matrix entry to run `frontend` unit tests and `frontend` a11y tests for this feature (modify .github/workflows/ci.yml or add job entry)
 
