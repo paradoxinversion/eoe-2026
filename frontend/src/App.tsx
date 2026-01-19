@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import OptionsPage from "./pages/OptionsPage";
+import TitlePage from "./pages/TitlePage";
 
 export default function App() {
   const [showOptions, setShowOptions] = useState(false);
@@ -16,11 +17,7 @@ export default function App() {
           Close Options
         </Button>
       </Box>
-      {showOptions ? (
-        <OptionsPage />
-      ) : (
-        <p>Title Page, Options, and Game will be added here.</p>
-      )}
+      {showOptions ? <OptionsPage /> : <TitlePage />}
     </Box>
   );
 }
