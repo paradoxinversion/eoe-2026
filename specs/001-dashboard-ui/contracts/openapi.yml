@@ -1,7 +1,16 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
-    title: Dashboard UI - Minimal Contracts
-    version: 0.1.0
+    title: Dashboard UI - Frontend Contracts
+    version: '1.0.0'
+    description: >-
+        Expanded contract documenting the frontend-facing persistence,
+        deterministic generation, and turn-advance interfaces relied upon by the
+        Dashboard UI feature (specs/001-dashboard-ui). This file provides minimal
+        schemas and endpoints sufficient for test harnesses and integration
+        documentation.
+servers:
+    - url: http://localhost:5173/api
+        description: Local dev stub (frontend-facing)
 paths:
     /api/new-game:
         post:
@@ -11,35 +20,149 @@ paths:
                 content:
                     application/json:
                         schema:
-                            type: object
-                            properties:
-                                name:
-                                    type: string
-                                seed:
-                                    type: string
-                            required: [name]
+                            $ref: '#/components/schemas/NewGameRequest'
             responses:
-                "200":
-                    description: Generation started and completed; returns dashboard state
+                '200':
+                    description: Generation completed; returns DashboardState
                     content:
                         application/json:
                             schema:
-                                $ref: "#/components/schemas/DashboardState"
-                "500":
+                                $ref: '#/components/schemas/DashboardState'
+                '500':
                     description: Generation failed
+
+    /api/persistence/{key}:
+        get:
+            summary: Retrieve a persisted value by key
+            parameters:
+                - name: key
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                    description: Persistence key (e.g., "preferences", "game:<name>")
+            responses:
+                '200':
+                    description: Value found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                '404':
+                    description: Key not found
+        put:
+            summary: Store/replace a value by key
+            parameters:
+                - name: key
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+            responses:
+                '204':
+                    description: Stored successfully
+
+    /api/generate:
+        post:
+            summary: Deterministic world generation (alternate to /api/new-game)
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GenerationRequest'
+            responses:
+                '200':
+                    description: Generated World document
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/World'
+
+    /api/turn/advance:
+        post:
+            summary: Advance the game one turn (server-side or helper)
+            description: |
+                Accepts the current game state and returns the updated game state after
+                resolving events and effects for a single turn.
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GameState'
+            responses:
+                '200':
+                    description: Updated game state after advancing one turn
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TurnResult'
+
     /api/dashboard/state:
         get:
             summary: Read current dashboard state
             responses:
-                "200":
+                '200':
                     description: Dashboard state
                     content:
                         application/json:
                             schema:
-                                $ref: "#/components/schemas/DashboardState"
+                                $ref: '#/components/schemas/DashboardState'
 
 components:
     schemas:
+        NewGameRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                seed:
+                    type: integer
+            required: [name]
+
+        GenerationRequest:
+            type: object
+            properties:
+                seed:
+                    type: integer
+                    description: Numeric seed used for deterministic generation
+                playerName:
+                    type: string
+                    description: Name of the player/character to embed in the world
+            required: [seed, playerName]
+
+        World:
+            type: object
+            properties:
+                seed:
+                    type: integer
+                player:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                zones:
+                    type: array
+                    items:
+                        type: object
+            required: [seed, player, zones]
+
+        Preferences:
+            type: object
+            properties:
+                theme:
+                    type: string
+                    enum: [dark, light]
+                seed:
+                    type: integer
+
         DashboardState:
             type: object
             properties:
@@ -49,3 +172,26 @@ components:
                     type: integer
                 playerId:
                     type: string
+
+        GameState:
+            type: object
+            description: Minimal representation of the frontend game state used by the turn helper
+            properties:
+                day:
+                    type: integer
+                world:
+                    $ref: '#/components/schemas/World'
+                players:
+                    type: array
+                    items:
+                        type: object
+
+        TurnResult:
+            type: object
+            properties:
+                gameState:
+                    $ref: '#/components/schemas/GameState'
+                events:
+                    type: array
+                    items:
+                        type: object

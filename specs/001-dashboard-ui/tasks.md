@@ -101,7 +101,8 @@ Checkpoint: US3 functional and testable
 - [x] T040 [P] Accessibility checks for new controls (tests/accessibility/\*)
 - [x] T041 [P] Performance benchmark for generation and worker migration assessment (tests/perf/generation.bench.ts)
 - Note: perf artifact written to `tests_output/generation-bench-seed-2026.json`.
-- [ ] T042 [P] Add or update API contract evidence in `specs/001-dashboard-ui/contracts/openapi.yml`
+- [x] T042 [P] Add or update API contract evidence in `specs/001-dashboard-ui/contracts/openapi.yml`
+- Note: API contract added at `specs/001-dashboard-ui/contracts/openapi.yml`.
 - [ ] T043 [P] Update `quickstart.md` to reflect any new test or dev commands
 
 ---
@@ -124,7 +125,8 @@ Checkpoint: US3 functional and testable
 - [x] T040 [P] Accessibility checks for new controls (tests/accessibility/\*)
 - [x] T041 [P] Performance benchmark for generation and worker migration assessment (tests/perf/generation.bench.ts)
 - Note: perf artifact written to `tests_output/generation-bench-seed-2026.json`.
-- [ ] T042 [P] Add or update API contract evidence in `specs/001-dashboard-ui/contracts/openapi.yml`
+- [x] T042 [P] Add or update API contract evidence in `specs/001-dashboard-ui/contracts/openapi.yml`
+- Note: API contract added at `specs/001-dashboard-ui/contracts/openapi.yml`.
 - [ ] T043 [P] Update `quickstart.md` to reflect any new test or dev commands
 
 ---
