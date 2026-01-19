@@ -6,6 +6,12 @@
 **Status**: Draft
 **Input**: User description: "We are now going to do another pass on the interface, focusing on the Personnel tab first. The Personnel tab contains information about all Agents employed by the Player's Empire. At the top of the page, there will be small widgets that show: 1) the Current amount of Agents employed, and the maximum total of agents that can be, 2) A circular chart that shows the breakdown of employed Agent Types.\n\nBelow the widgets at the top will be a component that shows the most relevant data about Empire Agents. At minimum, this data will include their name (first and last), codename, role, pay, and status. There should be a button that allows Players to focus on a certain Agent.\n\nWhen an Agent is in focus, the Personnel tab should load a Profile.\n\nThe Profile is a reusable component that will be used for Agents and Non-Agent People. It should surface all properties and attributes (except for IDs or properties used for internal processes) about the person. When an Agent is being profiled, their relevant Agent properties should be shown at the top of the profile. If the person is not an agent, the accuracy of the information is dependent upon person's intelligence level (ie, the amount/accuracy of the data the Empire has on the person)"
 
+## Clarifications
+
+### Session 2026-01-19
+
+- Q: How should `intelligenceLevel` map to displayed accuracy? → A: Linear mapping: scale `intelligenceLevel` to a 0–100% confidence percentage (e.g., if the domain is 0–10, confidence = `intelligenceLevel * 10%`).
+
 ## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - View Personnel Overview (Priority: P1)
@@ -69,7 +75,7 @@ As a Player, I want to view a complete Profile for the selected person that surf
 - **FR-004**: Provide a clearly labeled "Focus" action on each Agent row that opens the Profile for that person.
 - **FR-005**: The Profile component MUST be reusable for both Agents and non-agent People and MUST NOT display internal-only fields such as persistence IDs or ephemeral process flags.
 - **FR-006**: When an Agent is profiled, surface Agent-specific properties (codename, role, pay, status) at the top of the Profile.
-- **FR-007**: For non-agent People, the UI MUST display an accuracy/confidence indicator derived from the person's `intelligenceLevel` attribute. Uncertain or inferred values MUST be shown with a confidence percentage (for example: "Skill: X (70% confidence)") computed from the `intelligenceLevel` score.
+- **FR-007**: For non-agent People, the UI MUST display an accuracy/confidence indicator derived from the person's `intelligenceLevel` attribute. Uncertain or inferred values MUST be shown with a confidence percentage (for example: "Skill: X (70% confidence)") computed from the `intelligenceLevel` score. Confidence is computed with a linear mapping from `intelligenceLevel` to percentage (for example, if `intelligenceLevel` ranges 0–10, use `confidence = intelligenceLevel * 10%`).
 - **FR-008**: The Personnel tab UI must present accessible controls (keyboard focusable, ARIA labels where appropriate) and include screen-reader friendly labels for widgets and the Profile.
 - **FR-009**: When agents exceed configured capacity, visually communicate capacity status and disable actions that would create additional Agents unless overridden by configuration.
 - **FR-010**: The Personnel tab MUST support a reasonable loading state and error messages when data retrieval fails.
