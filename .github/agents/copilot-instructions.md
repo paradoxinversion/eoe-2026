@@ -24,6 +24,7 @@ tests/
 
 ## Recent Changes
 - 001-dashboard-ui: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+- 001-dashboard-ui: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 
 - 001-empire-game-spec: Added
 
