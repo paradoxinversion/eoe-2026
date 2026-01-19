@@ -20,6 +20,15 @@ Tests & artifacts
     - `tests_output/generation-bench-seed-2026.json`
     - `tests_output/perf-turn-latency-seed-2026.json`
 
+CI / Local run summary (Jan 18, 2026):
+
+- Unit: 13 files, 35 tests — passed
+- Integration: 8 files, 12 tests — passed
+- Accessibility: 4 files — passed
+- Perf: 2 benchmarks — artifacts written to `tests_output/`
+
+PR: https://github.com/paradoxinversion/eoe-2026/pull/7
+
 How to run locally
 
 - Start dev server
