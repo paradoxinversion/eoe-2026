@@ -24,6 +24,22 @@ export function generateCodeName() {
   return `codename-${shortId()}`;
 }
 
+export function stableHash(input: string | undefined, length = 8) {
+  if (!input) return shortId();
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  // convert to base36 and pad
+  const s = (h >>> 0).toString(36);
+  return s.slice(0, length).padEnd(length, "0");
+}
+
+export function generateCodeNameFromSeed(seed?: string) {
+  const hash = stableHash(seed);
+  return `codename-${hash}`;
+}
 export function mapLegacySentiment(person: any, govIds: string[] = []) {
   if (person.governingOrganizationSentiments)
     return person.governingOrganizationSentiments;
@@ -59,6 +75,7 @@ export function generateBuildingsForZone(zone: any) {
 }
 
 export function migrateFixture(fixture: any, options?: { dryRun?: boolean }) {
+  const opts = options || {};
   const report: MigrationReport = {
     summary: { processed: 0, migrated: 0, quarantined: 0 },
     examples: [],
@@ -102,19 +119,27 @@ export function migrateFixture(fixture: any, options?: { dryRun?: boolean }) {
 
   // Migrate agents
   for (const a of fixture.agents) {
+    // If the legacy `name` exists prefer it but store deterministically as `codeName`
     if (a.name && !a.codeName) {
-      a.codeName = a.name;
+      a.codeName = String(a.name);
       delete a.name;
       report.summary.migrated++;
-      report.examples.push({ type: "renameAgentName", id: a.id });
+      report.examples.push({
+        type: "renameAgentName",
+        id: a.id,
+        codeName: a.codeName,
+      });
     }
+    // If still missing, generate a stable codeName derived from personId or id
     if (!a.codeName) {
-      a.codeName = generateCodeName();
+      const seed = a.personId || a.id || "unknown";
+      a.codeName = generateCodeNameFromSeed(seed);
       report.summary.migrated++;
       report.examples.push({
         type: "generateCodeName",
         id: a.id,
         codeName: a.codeName,
+        seed,
       });
     }
   }
@@ -147,7 +172,60 @@ export function migrateFixture(fixture: any, options?: { dryRun?: boolean }) {
     }
   }
 
+  // Optionally export a dry-run report to disk (Node only).
+  try {
+    if ((opts as any).exportReport && (opts as any).fixtureName) {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      const res = exportDryRunReport(
+        report,
+        (opts as any).fixtureName,
+        (opts as any).outDir,
+      );
+      if ((res as any)?.ok) {
+        report.actions!.push(`exported-report:${(res as any).path}`);
+      } else {
+        report.actions!.push(
+          `export-failed:${JSON.stringify((res as any).error)}`,
+        );
+      }
+    }
+  } catch (err) {
+    // non-fatal for browser environments
+    report.actions!.push(`export-error:${String(err)}`);
+  }
+
   return { transformed: fixture, report };
+}
+
+// Export a dry-run report to disk. This function is Node-safe and will no-op in browsers.
+export function exportDryRunReport(
+  report: MigrationReport,
+  fixtureName: string,
+  outDir?: string,
+) {
+  try {
+    // Only attempt fs operations in Node
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const fs = require("fs");
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const path = require("path");
+    const base = outDir
+      ? String(outDir)
+      : path.join(
+          process.cwd(),
+          "specs",
+          "001-rework-data-models",
+          "migration-reports",
+        );
+    if (!fs.existsSync(base)) fs.mkdirSync(base, { recursive: true });
+    const safeName = String(fixtureName).replace(/\.[^.]+$/, "");
+    const filename = path.join(base, `${safeName}-report.json`);
+    fs.writeFileSync(filename, JSON.stringify(report, null, 2), "utf8");
+    return { ok: true, path: filename };
+  } catch (err) {
+    // If fs isn't available (browser), just return a noop result
+    return { ok: false, error: String(err) };
+  }
 }
 
 export default {
@@ -155,4 +233,7 @@ export default {
   splitPersonName,
   generateCodeName,
   mapLegacySentiment,
+  generateCodeNameFromSeed,
+  stableHash,
+  exportDryRunReport,
 };

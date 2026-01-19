@@ -20,7 +20,7 @@ User Story: People & Agent Lifecycle [US1] (Priority: P1)
 - [x] T008 [US1] Implement hire flow service that creates an `Agent` referencing a `Person`: `frontend/src/services/hiring.ts` (unit tests under `frontend/tests/unit/hiring.test.ts`) — frontend/src/services/hiring.ts
 - [x] T009 [US1] Add unit tests for Person/Agent model serialization and validation using fixtures: `frontend/tests/unit/person.model.test.ts`, `frontend/tests/unit/agent.model.test.ts` — frontend/tests/unit/
 
-- [ ] T010 [P] [US1] Update `frontend/src/services/migration.ts` to include deterministic mapping rules for `Person.name`->split and `Agent.name`->`codeName` and export a stable dry-run report to `specs/001-rework-data-models/migration-reports/` — frontend/src/services/migration.ts
+- [x] T010 [P] [US1] Update `frontend/src/services/migration.ts` to include deterministic mapping rules for `Person.name`->split and `Agent.name`->`codeName` and export a stable dry-run report to `specs/001-rework-data-models/migration-reports/` — frontend/src/services/migration.ts
 
 User Story: Occupants & Relationship Queries [US2] (Priority: P2)
 
@@ -42,4 +42,3 @@ Phase 4: Polish & Cross-Cutting Concerns
 - [ ] T020 [P] Add representative fixtures verification script `specs/001-rework-data-models/scripts/verify-fixtures.sh` to validate each fixture against JSON schemas and run in CI — specs/001-rework-data-models/scripts/verify-fixtures.sh
 
 Final acceptance: confirm CI passing (unit + integration + perf within target) and update `specs/001-rework-data-models/checklists/requirements.md` to mark all items complete
-
