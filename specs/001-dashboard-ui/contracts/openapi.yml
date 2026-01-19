@@ -1,0 +1,51 @@
+openapi: 3.0.1
+info:
+    title: Dashboard UI - Minimal Contracts
+    version: 0.1.0
+paths:
+    /api/new-game:
+        post:
+            summary: Start a new game (character creation + world generation)
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                seed:
+                                    type: string
+                            required: [name]
+            responses:
+                "200":
+                    description: Generation started and completed; returns dashboard state
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/DashboardState"
+                "500":
+                    description: Generation failed
+    /api/dashboard/state:
+        get:
+            summary: Read current dashboard state
+            responses:
+                "200":
+                    description: Dashboard state
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/DashboardState"
+
+components:
+    schemas:
+        DashboardState:
+            type: object
+            properties:
+                currentTab:
+                    type: string
+                turn:
+                    type: integer
+                playerId:
+                    type: string
