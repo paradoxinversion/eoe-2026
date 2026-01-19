@@ -26,6 +26,28 @@ exports[`Dashboard Main visual snapshots > desktop snapshot 1`] = `
             0
           </p>
           <button
+            aria-label="open-advanced"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-10yelns-MuiButtonBase-root-MuiIconButton-root"
+            tabindex="0"
+            title="Advanced"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1jxdcj3-MuiSvgIcon-root"
+              data-testid="SettingsIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6"
+              />
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <button
             aria-label="end-turn"
             class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1ramel5-MuiButtonBase-root-MuiButton-root"
             tabindex="0"
@@ -114,11 +136,11 @@ exports[`Dashboard Main visual snapshots > desktop snapshot 1`] = `
         <div
           class="MuiBox-root css-1bom9at"
         >
-          <h6
+          <div
             class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
           >
             Gold
-          </h6>
+          </div>
           <h5
             class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
           >
@@ -128,11 +150,11 @@ exports[`Dashboard Main visual snapshots > desktop snapshot 1`] = `
         <div
           class="MuiBox-root css-1bom9at"
         >
-          <h6
+          <div
             class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
           >
             Science
-          </h6>
+          </div>
           <h5
             class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
           >
@@ -142,11 +164,11 @@ exports[`Dashboard Main visual snapshots > desktop snapshot 1`] = `
         <div
           class="MuiBox-root css-1bom9at"
         >
-          <h6
+          <div
             class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
           >
             Seed
-          </h6>
+          </div>
           <h5
             class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
           >
@@ -336,6 +358,28 @@ exports[`Dashboard Main visual snapshots > mobile snapshot 1`] = `
             0
           </p>
           <button
+            aria-label="open-advanced"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-10yelns-MuiButtonBase-root-MuiIconButton-root"
+            tabindex="0"
+            title="Advanced"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1jxdcj3-MuiSvgIcon-root"
+              data-testid="SettingsIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6"
+              />
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <button
             aria-label="end-turn"
             class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1ramel5-MuiButtonBase-root-MuiButton-root"
             tabindex="0"
@@ -424,11 +468,11 @@ exports[`Dashboard Main visual snapshots > mobile snapshot 1`] = `
         <div
           class="MuiBox-root css-1bom9at"
         >
-          <h6
+          <div
             class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
           >
             Gold
-          </h6>
+          </div>
           <h5
             class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
           >
@@ -438,11 +482,11 @@ exports[`Dashboard Main visual snapshots > mobile snapshot 1`] = `
         <div
           class="MuiBox-root css-1bom9at"
         >
-          <h6
+          <div
             class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
           >
             Science
-          </h6>
+          </div>
           <h5
             class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
           >
@@ -452,11 +496,11 @@ exports[`Dashboard Main visual snapshots > mobile snapshot 1`] = `
         <div
           class="MuiBox-root css-1bom9at"
         >
-          <h6
+          <div
             class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
           >
             Seed
-          </h6>
+          </div>
           <h5
             class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
           >
@@ -646,6 +690,28 @@ exports[`Dashboard Main visual snapshots > tablet snapshot 1`] = `
             0
           </p>
           <button
+            aria-label="open-advanced"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-10yelns-MuiButtonBase-root-MuiIconButton-root"
+            tabindex="0"
+            title="Advanced"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1jxdcj3-MuiSvgIcon-root"
+              data-testid="SettingsIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6"
+              />
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <button
             aria-label="end-turn"
             class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1ramel5-MuiButtonBase-root-MuiButton-root"
             tabindex="0"
@@ -734,11 +800,11 @@ exports[`Dashboard Main visual snapshots > tablet snapshot 1`] = `
         <div
           class="MuiBox-root css-1bom9at"
         >
-          <h6
+          <div
             class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
           >
             Gold
-          </h6>
+          </div>
           <h5
             class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
           >
@@ -748,11 +814,11 @@ exports[`Dashboard Main visual snapshots > tablet snapshot 1`] = `
         <div
           class="MuiBox-root css-1bom9at"
         >
-          <h6
+          <div
             class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
           >
             Science
-          </h6>
+          </div>
           <h5
             class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
           >
@@ -762,11 +828,11 @@ exports[`Dashboard Main visual snapshots > tablet snapshot 1`] = `
         <div
           class="MuiBox-root css-1bom9at"
         >
-          <h6
+          <div
             class="MuiTypography-root MuiTypography-subtitle2 css-1cfruj3-MuiTypography-root"
           >
             Seed
-          </h6>
+          </div>
           <h5
             class="MuiTypography-root MuiTypography-h5 css-vkdmif-MuiTypography-root"
           >
