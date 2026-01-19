@@ -112,7 +112,8 @@ Checkpoint: US3 functional and testable
 
 - [x] T050 [ ] Open PR with summary, tests, performance notes, constitution check, and request reviewers
 - Note: PR opened at https://github.com/paradoxinversion/eoe-2026/pull/7
-- [ ] T051 [ ] Update agent context if new tech (e.g., Web Worker) is added (`.specify/scripts/bash/update-agent-context.sh copilot`)
+- [x] T051 [ ] Update agent context if new tech (e.g., Web Worker) is added (`.specify/scripts/bash/update-agent-context.sh copilot`)
+- Note: agent context files updated (see `.github/agents/copilot-instructions.md`).
 
 ---
 
