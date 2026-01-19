@@ -11,9 +11,9 @@ Phase 1: Setup
 
 Phase 2: Foundational (blocking prerequisites)
 
-- [x] T005 [ ] Complete frontend service helpers in frontend/src/services/personnelService.ts (intelligenceToConfidence, computeCapacity, reassignment helpers)
-- [x] T006 [ ] Add persistence adapter for personnel reads/writes in frontend/src/services/personnelPersistence.ts (IndexedDB integration calling frontend/src/services/persistence.ts)
-- [ ] T007 [ ] Add AJV runtime validators for contracts in frontend/src/services/validation/personContracts.ts (use specs/003-personnel-tab/contracts/\*.json)
+- [x] T005 Complete frontend service helpers in frontend/src/services/personnelService.ts (intelligenceToConfidence, computeCapacity, reassignment helpers)
+- [x] T006 Add persistence adapter for personnel reads/writes in frontend/src/services/personnelPersistence.ts (IndexedDB integration calling frontend/src/services/persistence.ts)
+- [x] T007 Add AJV runtime validators for contracts in frontend/src/services/validation/personContracts.ts (use specs/003-personnel-tab/contracts/\*.json)
 
 Phase 3: User Stories (by priority)
 
@@ -21,9 +21,9 @@ US1 — View Personnel Overview (Priority: P1)
 
 - [x] T008 [P] [US1] Implement `CapacityWidgets` component in frontend/src/components/personnel/CapacityWidgets.tsx (shows current count, max capacity, capacity warning state)
 - [x] T009 [P] [US1] Implement `AgentTypeChart` component in frontend/src/components/personnel/AgentTypeChart.tsx (circular chart driven by agentTypeSummary service)
-- [ ] T010 [P] [US1] Wire widgets + chart into frontend/src/components/personnel/PersonnelTab.tsx and ensure data flow from personnelPersistence.ts
+- [x] T010 [P] [US1] Wire widgets + chart into frontend/src/components/personnel/PersonnelTab.tsx and ensure data flow from personnelPersistence.ts
 - [x] T011 [P] [US1] Unit test frontend/tests/unit/agentTypeSummary.test.ts and frontend/tests/unit/capacity.widgets.test.ts for widget logic and chart data
-- [ ] T012 [ ] [US1] Integration test frontend/tests/integration/personnel.overview.integration.test.ts validating widget values and chart segments render correctly (use mock/persisted fixture)
+- [x] T012 [P] [US1] Integration test frontend/tests/integration/personnel.overview.integration.test.ts validating widget values and chart segments render correctly (uses mocked/persisted fixture)
 
 US2 — Browse and Focus Agent (Priority: P1)
 
@@ -38,13 +38,13 @@ US3 — Profile for Agents and People (Priority: P2)
 - [x] T018 [P] [US3] Complete `Profile` component in frontend/src/components/personnel/Profile.tsx to display Agent fields first and person attributes with confidence indicators
 - [x] T019 [P] [US3] Implement confidence rendering using frontend/src/services/personnelService.ts (`intelligenceToConfidence`) and ensure Agents show 100% confidence where applicable
 - [ ] T020 [P] [US3] Unit tests frontend/tests/unit/profile.confidence.test.ts to validate confidence mapping and conditional field visibility
-- [ ] T021 [ ] [US3] Integration test frontend/tests/integration/personnel.profile.integration.test.ts verifying Agent profile vs non-agent profile rendering and data accuracy indicators
+- [ ] T021 [P] [US3] Integration test frontend/tests/integration/personnel.profile.integration.test.ts verifying Agent profile vs non-agent profile rendering and data accuracy indicators
 
 Final Phase: Polish & Cross-cutting Concerns
 
-- [x] T022 [ ] Update docs and quickstart: ensure specs/003-personnel-tab/quickstart.md references new commands and fixtures
-- [ ] T023 [ ] Add performance check script scripts/perf/personnel-warm-render.sh and document run steps in README
-- [ ] T024 [ ] Add CI matrix entry to run `frontend` unit tests and `frontend` a11y tests for this feature (modify .github/workflows/ci.yml or add job entry)
+- [ ] T022 Update docs and quickstart: ensure specs/003-personnel-tab/quickstart.md references new commands and fixtures
+- [ ] T023 Add performance check script scripts/perf/personnel-warm-render.sh and document run steps in README
+- [ ] T024 Add CI matrix entry to run `frontend` unit tests and `frontend` a11y tests for this feature (modify .github/workflows/ci.yml or add job entry)
 
 Dependencies
 
