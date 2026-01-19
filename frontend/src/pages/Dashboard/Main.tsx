@@ -159,23 +159,41 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
 
   return (
     <Box>
-      <Typography variant="h4">Main</Typography>
+      <Typography variant="h4" component="h1">
+        Main
+      </Typography>
       <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
         <Paper sx={{ p: 2, minWidth: 160 }}>
-          <Typography variant="subtitle2">Day</Typography>
-          <Typography variant="h6">{state.day}</Typography>
+          <Typography variant="subtitle2" component="div">
+            Day
+          </Typography>
+          <Typography variant="h6" component="div">
+            {state.day}
+          </Typography>
         </Paper>
         <Paper sx={{ p: 2, minWidth: 160 }}>
-          <Typography variant="subtitle2">Gold</Typography>
-          <Typography variant="h6">{state.resources.gold}</Typography>
+          <Typography variant="subtitle2" component="div">
+            Gold
+          </Typography>
+          <Typography variant="h6" component="div">
+            {state.resources.gold}
+          </Typography>
         </Paper>
         <Paper sx={{ p: 2, minWidth: 160 }}>
-          <Typography variant="subtitle2">Science</Typography>
-          <Typography variant="h6">{state.resources.science}</Typography>
+          <Typography variant="subtitle2" component="div">
+            Science
+          </Typography>
+          <Typography variant="h6" component="div">
+            {state.resources.science}
+          </Typography>
         </Paper>
         <Paper sx={{ p: 2, minWidth: 160 }}>
-          <Typography variant="subtitle2">Seed</Typography>
-          <Typography variant="h6">{String(startingSeed)}</Typography>
+          <Typography variant="subtitle2" component="div">
+            Seed
+          </Typography>
+          <Typography variant="h6" component="div">
+            {String(startingSeed)}
+          </Typography>
         </Paper>
       </Box>
 
@@ -207,7 +225,9 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
       </Box>
 
       <Box sx={{ mt: 2 }}>
-        <Typography variant="h6">Saved Games</Typography>
+        <Typography variant="h6" component="div">
+          Saved Games
+        </Typography>
         <Box>
           <ul>
             {savedGames.map((g) => (
@@ -227,14 +247,16 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
                 </Button>
               </li>
             ))}
-            {savedGames.length === 0 && <div>No saved games</div>}
+            {savedGames.length === 0 && <li>No saved games</li>}
           </ul>
         </Box>
       </Box>
 
       <Box sx={{ mt: 3, display: "flex", gap: 2 }}>
         <Paper sx={{ p: 2, minWidth: 240 }}>
-          <Typography variant="subtitle1">Agents</Typography>
+          <Typography variant="subtitle1" component="div">
+            Agents
+          </Typography>
           {state.agents && state.agents.length ? (
             state.agents.map((a: Agent) => (
               <Box
@@ -259,7 +281,9 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
           )}
         </Paper>
         <Paper sx={{ p: 2, minWidth: 360 }}>
-          <Typography variant="subtitle1">Projects</Typography>
+          <Typography variant="subtitle1" component="div">
+            Projects
+          </Typography>
           {state.projects && state.projects.length ? (
             state.projects.map((p: ScienceProject) => (
               <Box
@@ -296,7 +320,9 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
       </Box>
 
       <Box sx={{ mt: 3 }}>
-        <Typography variant="subtitle1">Log</Typography>
+        <Typography variant="subtitle1" component="div">
+          Log
+        </Typography>
         <Paper sx={{ p: 2, maxHeight: 240, overflow: "auto" }}>
           {state.log && state.log.length ? (
             state.log.map((l, i) => (
