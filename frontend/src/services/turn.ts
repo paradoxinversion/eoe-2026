@@ -222,3 +222,30 @@ export function resolveTurns(
 }
 
 export default { resolveTurn, resolveTurns };
+
+// --- Convenience runtime helpers for UI wiring
+import { createRng } from "../lib/rng";
+import { listGameStates, loadGameState, saveGameState } from "./persistence";
+
+export async function advanceTurn(name?: string) {
+  const states = await listGameStates();
+  const pick = name || states[0]?.name;
+  if (!pick) throw new Error("no game state to advance");
+  const state = (await loadGameState(pick)) as unknown as GameState | null;
+  if (!state) throw new Error("game state not found");
+
+  // determine RNG seed: prefer world.seed if present, else fallback to Date.now()
+  // state.player.world may not exist; attempt to read nested path if present
+  // This function assumes `state` may include a player/world shape produced by generation
+  const seed =
+    (state as any).world?.seed ||
+    (state.player as any)?.world?.seed ||
+    Date.now();
+  const rng = createRng(seed as any);
+
+  const next = resolveTurn(state, rng as unknown as RNG);
+
+  // save back the updated state under the same key name
+  await saveGameState(pick, next as unknown);
+  return next;
+}

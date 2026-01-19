@@ -11,12 +11,8 @@ export default function TitlePage() {
   const [openLoad, setOpenLoad] = useState(false);
 
   async function handleNewGame() {
-    const name = `quick-new-${Date.now()}`;
-    await saveConfig(name, defaultConfig);
-    // minimal behavior: notify user that new game saved; app should navigate to game view
-    // we keep this simple for now
-    // eslint-disable-next-line no-alert
-    alert(`New game created: ${name}`);
+    // Navigate to the character generation flow (will handle creation)
+    window.location.hash = "#/character-generation";
   }
 
   return (
