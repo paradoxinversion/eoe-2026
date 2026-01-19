@@ -30,7 +30,7 @@ User Story: People & Agent Lifecycle [US1] (Priority: P1)
 
 User Story: Backward Compatibility & Migration Safety [US3] (Priority: P3)
 
-- [ ] T014 [US3] Implement migration dry-run CLI/module that produces `specs/001-rework-data-models/migration-reports/<fixture>-report.json` and supports `apply=false|true` — frontend/src/services/migration.ts
+- [x] T014 [US3] Implement migration dry-run CLI/module that produces `specs/001-rework-data-models/migration-reports/<fixture>-report.json` and supports `apply=false|true` — scripts/migrate-fixtures.sh (Vitest exporter)
 - [ ] T015 [P] [US3] Add migration integration tests that run each fixture under `specs/001-rework-data-models/fixtures/` and assert report summary and quarantined item handling: `frontend/tests/integration/migration.integration.test.ts` (already scaffolded, extend with report assertions) — frontend/tests/integration/migration.integration.test.ts
 - [ ] T016 [P] [US3] Add UI component for manual import/export migration UX: `frontend/src/components/MigrationTool.tsx` with dry-run/readable report download — frontend/src/components/MigrationTool.tsx
 
