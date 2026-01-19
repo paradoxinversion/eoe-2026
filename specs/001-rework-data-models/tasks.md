@@ -2,16 +2,14 @@
 
 Phase 1: Setup
 
-- [ ] T001 Initialize feature branch and ensure working tree matches plan (create branch `001-rework-data-models` if missing) — repo root
-- [ ] T002 Install dev dependencies and verify test runner: run `npm ci` in `frontend/` and ensure `npm run test:unit` exits successfully — frontend/package.json
 - [x] T001 Initialize feature branch and ensure working tree matches plan (create branch `001-rework-data-models` if missing) — repo root
 - [x] T002 Install dev dependencies and verify test runner: run `npm ci` in `frontend/` and ensure `npm run test:unit` exits successfully — frontend/package.json
 
 Phase 2: Foundational
 
-- [ ] T003 [P] Add model stubs: create `frontend/src/models/person.ts`, `frontend/src/models/agent.ts`, `frontend/src/models/zone.ts`, `frontend/src/models/building.ts`, `frontend/src/models/governingOrganization.ts` using `specs/001-rework-data-models/data-model.md` as canonical shapes
-- [ ] T004 [P] Add id helper `frontend/src/lib/id.ts` with function to create `<type>-<uuidv4>` ids (use existing `uuid` dependency) — frontend/src/lib/id.ts
-- [ ] T005 [P] Add/verify JSON schema runtime validator usage in `frontend/src/services/persistence.ts` to persist `schemaVersion` alongside saves — frontend/src/services/persistence.ts
+- [x] T003 [P] Add model stubs: create `frontend/src/models/person.ts`, `frontend/src/models/agent.ts`, `frontend/src/models/zone.ts`, `frontend/src/models/building.ts`, `frontend/src/models/governingOrganization.ts` using `specs/001-rework-data-models/data-model.md` as canonical shapes
+- [x] T004 [P] Add id helper `frontend/src/lib/id.ts` with function to create `<type>-<uuidv4>` ids (use existing `uuid` dependency) — frontend/src/lib/id.ts
+- [x] T005 [P] Add/verify JSON schema runtime validator usage in `frontend/src/services/persistence.ts` to persist `schemaVersion` alongside saves — frontend/src/services/persistence.ts
 
 Phase 3: User Stories (priority order)
 
