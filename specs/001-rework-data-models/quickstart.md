@@ -35,3 +35,7 @@ Notes
 
 - The migration tool is designed to be non-destructive by default (dry-run). Always review the generated migration report before applying changes.
 - CI will run migration tests and performance benchmarks; ensure local runs pass before opening PRs.
+
+Repository rule: tasks.md validation
+
+- After completing any implementation task, update the feature `tasks.md` in the feature spec directory and ensure it is free of duplicates and correctly formatted. A pre-commit hook validates `specs/*/tasks.md` and will block commits if duplicate task IDs or formatting issues are found. Run `node scripts/validate-tasks.js` to check locally.
