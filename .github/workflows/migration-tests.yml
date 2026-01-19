@@ -1,0 +1,50 @@
+name: Migration Tests
+
+on:
+    push:
+        branches: ["**"]
+    pull_request:
+        branches: ["**"]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [18]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+
+            - name: Install dependencies (frontend)
+              working-directory: frontend
+              run: npm ci
+
+            - name: Run unit tests
+              working-directory: frontend
+              run: npm run test:unit
+
+            - name: Run integration tests
+              working-directory: frontend
+              run: npm run test:integration
+
+            - name: Run accessibility tests
+              working-directory: frontend
+              run: npm run test:a11y
+
+            - name: Run perf benchmark (migration 200 entities)
+              working-directory: frontend
+              run: npx vitest run tests/perf/load-200-entities.bench.ts --run
+
+            - name: Upload perf artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: perf-artifacts
+                  path: |
+                      tests_output/**
