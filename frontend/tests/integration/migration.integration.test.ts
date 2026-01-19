@@ -17,7 +17,10 @@ describe("migration integration: run fixtures through migrateFixture", () => {
 
     for (const file of files) {
       const raw = fs.readFileSync(path.join(fixturesDir, file), "utf8");
-      const fixture = JSON.parse(raw);
+      // strip simple JS-style comments from fixtures to be tolerant of human-edited JSON
+      const stripComments = (s: string) =>
+        s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:\\])\/\/.*$/gm, "$1");
+      const fixture = JSON.parse(stripComments(raw));
       const { transformed, report } = migrateFixture(fixture, { dryRun: true });
       expect(report).toBeTruthy();
       expect(typeof report.summary.processed).toBe("number");
