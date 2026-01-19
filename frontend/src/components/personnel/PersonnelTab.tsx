@@ -1,27 +1,63 @@
 import React from "react";
 import AgentList from "./AgentList";
 import Profile from "./Profile";
+import CapacityWidgets from "./CapacityWidgets";
+import AgentTypeChart from "./AgentTypeChart";
+import personnelPersistence from "../../services/personnelPersistence";
 
 type Agent = {
   id: string;
-  name: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
   intelligenceLevel?: number;
   agentType?: string;
 };
 
-const mockAgents: Agent[] = [
-  { id: "a1", name: "Astra", intelligenceLevel: 7, agentType: "Scientist" },
-  { id: "a2", name: "Borin", intelligenceLevel: 4, agentType: "Worker" },
-];
-
 export default function PersonnelTab() {
   const [selected, setSelected] = React.useState<Agent | null>(null);
+  const [agents, setAgents] = React.useState<Agent[]>([]);
+
+  React.useEffect(() => {
+    let mounted = true;
+    async function load() {
+      const list = await personnelPersistence.listAgents();
+      if (!mounted) return;
+      const a = list.map((l) => {
+        const ag = l.agent as any;
+        return {
+          id: ag.id || l.id,
+          name: ag.name || `${ag.firstName || ""} ${ag.lastName || ""}`.trim(),
+          intelligenceLevel: ag.intelligenceLevel,
+          agentType: ag.agentType,
+          ...ag,
+        } as Agent;
+      });
+      setAgents(a);
+      if (!selected && a.length > 0) setSelected(a[0]);
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <div style={{ display: "flex", gap: 24 }}>
       <div style={{ flex: 1 }}>
         <h2>Personnel</h2>
-        <AgentList agents={mockAgents} onFocus={setSelected} />
+        <div style={{ marginBottom: 16 }}>
+          <CapacityWidgets />
+        </div>
+        <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+          <AgentTypeChart agents={agents} size={140} />
+          <div style={{ flex: 1 }}>
+            <AgentList
+              agents={agents}
+              onFocus={(a) => setSelected(a as Agent)}
+            />
+          </div>
+        </div>
       </div>
       <div style={{ width: 360 }}>
         <h3>Profile</h3>

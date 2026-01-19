@@ -12,17 +12,17 @@ Phase 1: Setup
 Phase 2: Foundational (blocking prerequisites)
 
 - [x] T005 [ ] Complete frontend service helpers in frontend/src/services/personnelService.ts (intelligenceToConfidence, computeCapacity, reassignment helpers)
-- [ ] T006 [ ] Add persistence adapter for personnel reads/writes in frontend/src/services/personnelPersistence.ts (IndexedDB integration calling frontend/src/services/persistence.ts)
+- [x] T006 [ ] Add persistence adapter for personnel reads/writes in frontend/src/services/personnelPersistence.ts (IndexedDB integration calling frontend/src/services/persistence.ts)
 - [ ] T007 [ ] Add AJV runtime validators for contracts in frontend/src/services/validation/personContracts.ts (use specs/003-personnel-tab/contracts/\*.json)
 
 Phase 3: User Stories (by priority)
 
 US1 — View Personnel Overview (Priority: P1)
 
-- [ ] T008 [P] [US1] Implement `CapacityWidgets` component in frontend/src/components/personnel/CapacityWidgets.tsx (shows current count, max capacity, capacity warning state)
-- [ ] T009 [P] [US1] Implement `AgentTypeChart` component in frontend/src/components/personnel/AgentTypeChart.tsx (circular chart driven by agentTypeSummary service)
+- [x] T008 [P] [US1] Implement `CapacityWidgets` component in frontend/src/components/personnel/CapacityWidgets.tsx (shows current count, max capacity, capacity warning state)
+- [x] T009 [P] [US1] Implement `AgentTypeChart` component in frontend/src/components/personnel/AgentTypeChart.tsx (circular chart driven by agentTypeSummary service)
 - [ ] T010 [P] [US1] Wire widgets + chart into frontend/src/components/personnel/PersonnelTab.tsx and ensure data flow from personnelPersistence.ts
-- [ ] T011 [P] [US1] Unit test frontend/tests/unit/agentTypeSummary.test.ts and frontend/tests/unit/capacity.widgets.test.ts for widget logic and chart data
+- [x] T011 [P] [US1] Unit test frontend/tests/unit/agentTypeSummary.test.ts and frontend/tests/unit/capacity.widgets.test.ts for widget logic and chart data
 - [ ] T012 [ ] [US1] Integration test frontend/tests/integration/personnel.overview.integration.test.ts validating widget values and chart segments render correctly (use mock/persisted fixture)
 
 US2 — Browse and Focus Agent (Priority: P1)
