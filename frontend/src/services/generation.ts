@@ -350,5 +350,41 @@ export async function generateAndSaveWorld(
 
   const name = saveName || `generation-${String(seed)}`;
   await saveGameState(name, artifact);
+
+  // write a simple counts JSON file reporting the number of each entity created
+  const counts = {
+    zones: Array.isArray(artifact.zones) ? artifact.zones.length : 0,
+    people: Array.isArray(artifact.people) ? artifact.people.length : 0,
+    buildings: Array.isArray(artifact.buildings)
+      ? artifact.buildings.length
+      : 0,
+    organizations: Array.isArray(artifact.organizations)
+      ? artifact.organizations.length
+      : 0,
+  } as const;
+
+  try {
+    // Prefer writing to disk when running in Node (tests / dev scripts).
+    // Use dynamic import so bundlers won't include `fs` in browser builds.
+    const isNode =
+      typeof process !== "undefined" &&
+      !!(process.versions && process.versions.node);
+    if (isNode) {
+      const fs = await import("fs");
+      const fname = `${name}-counts.json`;
+      await fs.promises.writeFile(
+        fname,
+        JSON.stringify(counts, null, 2),
+        "utf8",
+      );
+    } else {
+      // Fallback for environments without filesystem: persist via saveGameState
+      await saveGameState(`${name}-counts`, counts as unknown as DebugArtifact);
+    }
+  } catch (e) {
+    // don't fail generation for inability to write counts; log for diagnosics
+    // eslint-disable-next-line no-console
+    console.warn("generateAndSaveWorld: failed to write counts file", e);
+  }
   return artifact;
 }
