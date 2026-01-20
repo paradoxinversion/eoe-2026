@@ -26,7 +26,18 @@ export type DebugArtifact = {
 function makeId(rng: ReturnType<typeof createRng>, prefix: string) {
   return `${prefix}-${rng.int(100000, 999999)}`;
 }
-
+type ZoneWithExtras = Zone & {
+  buildings?: string[];
+  people?: string[];
+  size?: number;
+  governingOrganization?: string;
+};
+type BuildingWithExtras = Building & {
+  zoneId?: string;
+  ownerOrgId?: string;
+  type?: string;
+  size?: number;
+};
 export function generateDebugWorld(
   seed: number | string,
   opts?: {
@@ -53,19 +64,6 @@ export function generateDebugWorld(
 
   const gridX = mapWidth;
   const gridY = mapHeight;
-
-  type ZoneWithExtras = Zone & {
-    buildings?: string[];
-    people?: string[];
-    size?: number;
-    governingOrganization?: string;
-  };
-  type BuildingWithExtras = Building & {
-    zoneId?: string;
-    ownerOrgId?: string;
-    type?: string;
-    size?: number;
-  };
 
   const zones: ZoneWithExtras[] = [];
   const buildings: BuildingWithExtras[] = [];
