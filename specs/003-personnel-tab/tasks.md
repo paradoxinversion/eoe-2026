@@ -24,6 +24,7 @@ US1 — View Personnel Overview (Priority: P1)
 - [x] T010 [P] [US1] Wire widgets + chart into frontend/src/components/personnel/PersonnelTab.tsx and ensure data flow from personnelPersistence.ts
 - [x] T011 [P] [US1] Unit test frontend/tests/unit/agentTypeSummary.test.ts and frontend/tests/unit/capacity.widgets.test.ts for widget logic and chart data
 - [x] T012 [P] [US1] Integration test frontend/tests/integration/personnel.overview.integration.test.ts validating widget values and chart segments render correctly (uses mocked/persisted fixture)
+- [ ] T025 [P] [US1] Smoke integration: verify `PersonnelTab` mounts via app navigation and renders CapacityWidgets, AgentTypeChart, and Profile when the Personnel tab is opened (add `frontend/tests/integration/personnel.open.integration.test.ts`)
 
 US2 — Browse and Focus Agent (Priority: P1)
 
