@@ -119,7 +119,13 @@ export function generateDebugWorld(
   }
 
   for (const z of zones) {
-    for (let i = 0; i < peoplePerZone; i++) {
+    // number of people scales with zone size (peoplePerZone is a multiplier)
+    const zoneSize = (z as any).size ?? 1;
+    const peopleCount = Math.max(
+      0,
+      Math.floor((peoplePerZone ?? 0) * zoneSize),
+    );
+    for (let i = 0; i < peopleCount; i++) {
       const id = makeId(rng, "p");
       const firstName = `P${rng.int(10, 99)}`;
       const lastName = `Z${z.id.split("-").slice(-2).join("")}`;
