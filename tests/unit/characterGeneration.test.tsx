@@ -4,7 +4,6 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 
 import CharacterGeneration from "../../frontend/src/pages/CharacterGeneration";
 import * as persistence from "../../frontend/src/services/persistence";
-import generateWorld from "../../frontend/src/services/generation";
 
 describe("CharacterGeneration component", () => {
     let saveGameSpy: any;
