@@ -8,12 +8,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import generateWorld from "../services/generation";
-import {
-  saveGameState,
-  saveConfig,
-  deleteConfig,
-} from "../services/persistence";
+import generateWorld, { generateAndSaveWorld } from "../services/generation";
+import { saveConfig, deleteConfig } from "../services/persistence";
 import { defaultConfig } from "../config/schema";
 
 export default function CharacterGeneration() {
@@ -32,7 +28,10 @@ export default function CharacterGeneration() {
     try {
       // choose or derive a seed; use timestamp-based number for determinism
       const seed = Date.now();
-      const world = generateWorld(seed);
+      // generate and persist the debug artifact as game state
+      const artifact = await generateAndSaveWorld(seed, undefined, name);
+
+      const world = artifact; // existing code expects `world` variable
 
       // remove any autosave left behind by dev helpers
       try {
@@ -42,7 +41,7 @@ export default function CharacterGeneration() {
       }
 
       // persist the generated world as a game state
-      await saveGameState(name, { playerName: name, world });
+      // saved via generateAndSaveWorld; ensure preferences saved
 
       // persist player preferences / starting seed so the app can recall it
       // merge with defaults to satisfy config shape

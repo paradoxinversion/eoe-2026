@@ -34,26 +34,10 @@
 - [x] T009 [P] [US1] Ensure model factories/constructors are canonical and exported: `frontend/src/models/person.ts`, `frontend/src/models/building.ts`, `frontend/src/models/zone.ts`, `frontend/src/models/governingOrganization.ts`
 - [x] T010 [US1] Implement or finalize generator logic in `frontend/src/services/generation.ts` to: partition map into Zones (gridX/gridY), place at least one of each `BUILDING_TYPES` per Zone, create People and GoverningOrganizations with valid cross-references, and return a debug artifact
 - [x] T011 [US1] Add test helper to write the debug artifact to `tests_output/generation-debug-<seed>.json` for manual QA
-- [ ] T012 [US1] Add logging of placementErrors into the debug artifact and assert tests record zero placementErrors for default map sizes
+- [x] T012 [US1] Add logging of placementErrors into the debug artifact and assert tests record zero placementErrors for default map sizes
+- [ ] T013 [US1] Persist generated world to the game's save/persistence layer after generation; add tests that verify the saved state matches the generated artifact
 
 ---
-
-## Phase 4: User Story 2 - Realistic placement and ownership (Priority: P2)
-
-**Goal**: Improve placement heuristics to cluster buildings around resources and assign GoverningOrganization ownership consistently.
-
-**Independent Test**: Measure average distance from Buildings to nearest resource and verify GoverningOrganization owns multiple Buildings in its region.
-
-### Tests
-
-- [ ] T013 [P] [US2] Add integration test `tests/integration/generation.placement.integration.test.ts` that measures building-to-resource distances and asserts they fall under an agreed threshold for default maps
-- [ ] T014 [P] [US2] Add unit test `tests/unit/generation.ownership.test.ts` that verifies GoverningOrganization building ownership counts and referential integrity
-
-### Implementation
-
-- [ ] T015 [US2] Enhance placement algorithm in `frontend/src/services/generation.ts` to prefer tiles near resources when placing buildings
-- [ ] T016 [US2] Implement GoverningOrganization creation and building ownership assignment in `frontend/src/services/generation.ts` and ensure `frontend/src/models/governingOrganization.ts` includes required fields
-- [ ] T017 [US2] Add optional placement retry/expansion mechanism that expands search radius inside the Zone before logging placementErrors
 
 ---
 

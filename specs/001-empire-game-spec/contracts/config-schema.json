@@ -26,7 +26,10 @@
                 },
                 "required": ["name"]
             }
-        }
+        },
+        "organizationCount": { "type": "integer", "minimum": 1, "default": 5 },
+        "mapWidth": { "type": "integer", "minimum": 1, "default": 10 },
+        "mapHeight": { "type": "integer", "minimum": 1, "default": 10 }
     },
     "required": ["playerName", "startingSeed", "autosaveIntervalSeconds"],
     "additionalProperties": false

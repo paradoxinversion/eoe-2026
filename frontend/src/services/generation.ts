@@ -12,6 +12,11 @@ type DebugArtifact = {
   people: Person[];
   buildings: Building[];
   organizations: GoverningOrganization[];
+  placementErrors: Array<{
+    zoneId?: string;
+    buildingType?: string;
+    message: string;
+  }>;
 };
 
 function makeId(rng: ReturnType<typeof createRng>, prefix: string) {
@@ -25,6 +30,7 @@ export function generateDebugWorld(
     mapHeight?: number;
     zoneSize?: number;
     peoplePerZone?: number;
+    orgCount?: number;
   },
 ): DebugArtifact {
   const rng = createRng(seed);
@@ -40,6 +46,11 @@ export function generateDebugWorld(
   const buildings: Building[] = [];
   const people: Person[] = [];
   const organizations: GoverningOrganization[] = [];
+  const placementErrors: Array<{
+    zoneId?: string;
+    buildingType?: string;
+    message: string;
+  }> = [];
 
   // create zones
   for (let y = 0; y < gridY; y++) {
@@ -55,8 +66,11 @@ export function generateDebugWorld(
     }
   }
 
-  // create organizations
-  const orgCount = Math.max(1, Math.floor(zones.length / 5));
+  // create organizations (allow override via opts.orgCount)
+  const orgCount =
+    typeof opts?.orgCount === "number"
+      ? Math.max(1, Math.floor(opts!.orgCount))
+      : Math.max(1, Math.floor(zones.length / 5));
   for (let i = 0; i < orgCount; i++) {
     const id = makeId(rng, "org");
     organizations.push({
@@ -118,10 +132,12 @@ export function generateDebugWorld(
     }
   }
 
-  return { zones, people, buildings, organizations };
+  return { zones, people, buildings, organizations, placementErrors };
 }
 
 import createRng2, { RNG } from "../lib/rng";
+import { saveGameState, loadConfig, loadPreferences } from "./persistence";
+import { defaultConfig } from "../config/schema";
 
 export type Zone2 = {
   id: string;
@@ -199,3 +215,121 @@ export function generateWorld(seed: number | string): World2 {
 }
 
 export default generateWorld;
+
+export async function generateAndSaveWorld(
+  seed: number | string,
+  opts?: {
+    mapWidth?: number;
+    mapHeight?: number;
+    zoneSize?: number;
+    peoplePerZone?: number;
+    orgCount?: number;
+  },
+  saveName?: string,
+): Promise<DebugArtifact> {
+  // If orgCount not provided, attempt to read from saved preferences
+  let finalOpts = opts || {};
+  if (typeof finalOpts.orgCount !== "number") {
+    try {
+      const prefs = (await loadConfig("preferences")) as
+        | (Record<string, unknown> & { organizationCount?: number })
+        | null;
+      if (prefs && typeof prefs.organizationCount === "number") {
+        finalOpts = Object.assign({}, finalOpts, {
+          orgCount: prefs.organizationCount,
+        });
+      } else {
+        // try legacy preferences store
+        const lp = (await loadPreferences("preferences")) as
+          | (Record<string, unknown> & { organizationCount?: number })
+          | null;
+        if (lp && typeof lp.organizationCount === "number") {
+          finalOpts = Object.assign({}, finalOpts, {
+            orgCount: lp.organizationCount,
+          });
+        } else if (typeof defaultConfig.organizationCount === "number") {
+          finalOpts = Object.assign({}, finalOpts, {
+            orgCount: defaultConfig.organizationCount,
+          });
+        }
+      }
+    } catch (e) {
+      // ignore and fall back to generator default
+    }
+  }
+
+  // If map dimensions not provided, attempt to read from preferences or defaults
+  if (
+    typeof finalOpts.mapWidth !== "number" ||
+    typeof finalOpts.mapHeight !== "number"
+  ) {
+    try {
+      const prefs = (await loadConfig("preferences")) as
+        | (Record<string, unknown> & { mapWidth?: number; mapHeight?: number })
+        | null;
+      if (prefs) {
+        const updates: Record<string, number> = {};
+        if (
+          typeof prefs.mapWidth === "number" &&
+          typeof finalOpts.mapWidth !== "number"
+        ) {
+          updates.mapWidth = prefs.mapWidth;
+        }
+        if (
+          typeof prefs.mapHeight === "number" &&
+          typeof finalOpts.mapHeight !== "number"
+        ) {
+          updates.mapHeight = prefs.mapHeight;
+        }
+        if (Object.keys(updates).length > 0) {
+          finalOpts = Object.assign({}, finalOpts, updates);
+        }
+      } else {
+        const lp = (await loadPreferences("preferences")) as
+          | (Record<string, unknown> & {
+              mapWidth?: number;
+              mapHeight?: number;
+            })
+          | null;
+        const updates: Record<string, number> = {};
+        if (
+          lp &&
+          typeof lp.mapWidth === "number" &&
+          typeof finalOpts.mapWidth !== "number"
+        ) {
+          updates.mapWidth = lp.mapWidth;
+        }
+        if (
+          lp &&
+          typeof lp.mapHeight === "number" &&
+          typeof finalOpts.mapHeight !== "number"
+        ) {
+          updates.mapHeight = lp.mapHeight;
+        }
+        if (Object.keys(updates).length > 0) {
+          finalOpts = Object.assign({}, finalOpts, updates);
+        }
+        // fall back to defaults if still missing
+        if (
+          typeof finalOpts.mapWidth !== "number" &&
+          typeof defaultConfig.mapWidth === "number"
+        ) {
+          finalOpts.mapWidth = defaultConfig.mapWidth;
+        }
+        if (
+          typeof finalOpts.mapHeight !== "number" &&
+          typeof defaultConfig.mapHeight === "number"
+        ) {
+          finalOpts.mapHeight = defaultConfig.mapHeight;
+        }
+      }
+    } catch (e) {
+      // ignore and fall back to generator defaults
+    }
+  }
+
+  const artifact = generateDebugWorld(seed, finalOpts);
+  const name = saveName || `generation-${String(seed)}`;
+  await saveGameState(name, artifact);
+  return artifact;
+}

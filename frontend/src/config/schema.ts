@@ -8,6 +8,9 @@ export interface PlayerConfig {
     blessing?: number;
     discovery?: number;
   };
+  organizationCount?: number;
+  mapWidth?: number;
+  mapHeight?: number;
 }
 
 export const defaultConfig: PlayerConfig = {
@@ -20,6 +23,9 @@ export const defaultConfig: PlayerConfig = {
     blessing: 0.08,
     discovery: 0.08,
   },
+  organizationCount: 1,
+  mapWidth: 100,
+  mapHeight: 100,
 };
 
 export type Config = PlayerConfig;

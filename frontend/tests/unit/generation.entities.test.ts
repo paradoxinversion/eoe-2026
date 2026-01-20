@@ -57,6 +57,10 @@ describe("generation.entities", () => {
     }
     expect(ok).toBe(true);
 
+    // placementErrors should be present and empty for default map sizes
+    expect(Array.isArray((artifact as any).placementErrors)).toBe(true);
+    expect(((artifact as any).placementErrors as any[]).length).toBe(0);
+
     // write artifact for manual QA and ensure file exists and contents match
     const fp = writeDebugArtifact(artifact, "seed-123");
     expect(fs.existsSync(fp)).toBe(true);

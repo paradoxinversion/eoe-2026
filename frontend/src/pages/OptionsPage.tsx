@@ -166,6 +166,32 @@ export default function OptionsPage() {
           helperText={errors.startingSeed}
         />
         <TextField
+          label="Map Width"
+          type="number"
+          value={form.mapWidth ?? 100}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              mapWidth: Math.max(1, Number(e.target.value)),
+            })
+          }
+          error={!!errors.mapWidth}
+          helperText={errors.mapWidth}
+        />
+        <TextField
+          label="Map Height"
+          type="number"
+          value={form.mapHeight ?? 100}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              mapHeight: Math.max(1, Number(e.target.value)),
+            })
+          }
+          error={!!errors.mapHeight}
+          helperText={errors.mapHeight}
+        />
+        <TextField
           label="Autosave Interval Seconds"
           type="number"
           value={form.autosaveIntervalSeconds}
@@ -178,6 +204,23 @@ export default function OptionsPage() {
           error={!!errors.autosaveIntervalSeconds}
           helperText={errors.autosaveIntervalSeconds}
         />
+        <TextField
+          label="Organization Count"
+          type="number"
+          value={form.organizationCount ?? 1}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              organizationCount: Math.max(1, Number(e.target.value)),
+            })
+          }
+          error={!!errors.organizationCount}
+          helperText={errors.organizationCount}
+        />
+        <Typography variant="body2" color="text.secondary">
+          Controls how many Governing Organizations are created during world
+          generation (minimum 1). Useful for tuning faction density in the map.
+        </Typography>
         <TextField
           label="Grace Period Days"
           type="number"
@@ -289,7 +332,11 @@ export default function OptionsPage() {
                   const probsStr = probs
                     ? `raid:${probs.raid ?? 0}, bless:${probs.blessing ?? 0}, disc:${probs.discovery ?? 0}`
                     : "";
-                  return `${cfg.playerName} — seed ${cfg.startingSeed} ${probsStr ? ` — ${probsStr}` : ""}`;
+                  const orgStr =
+                    typeof cfg.organizationCount === "number"
+                      ? ` — orgs:${cfg.organizationCount}`
+                      : "";
+                  return `${cfg.playerName} — seed ${cfg.startingSeed} ${probsStr ? ` — ${probsStr}` : ""}${orgStr}`;
                 })()}
               />
               <Button size="small" onClick={() => handleLoad(c.name)}>

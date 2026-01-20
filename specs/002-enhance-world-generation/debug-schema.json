@@ -134,6 +134,18 @@
                     "leaderId": { "type": "string" }
                 }
             }
+        },
+        "placementErrors": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["message"],
+                "properties": {
+                    "zoneId": { "type": "string" },
+                    "buildingType": { "type": "string" },
+                    "message": { "type": "string" }
+                }
+            }
         }
     },
     "required": ["zones", "people", "buildings", "organizations"]
