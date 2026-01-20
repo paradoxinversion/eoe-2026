@@ -27,17 +27,17 @@ US1 — View Personnel Overview (Priority: P1)
 
 US2 — Browse and Focus Agent (Priority: P1)
 
-- [ ] T013 [P] [US2] Finalize `AgentList` in frontend/src/components/personnel/AgentList.tsx: add Focus button, keyboard/ARIA support, and visual focus state
+- [x] T013 [P] [US2] Finalize `AgentList` in frontend/src/components/personnel/AgentList.tsx: add Focus button, keyboard/ARIA support, and visual focus state
 - [x] T014 [P] [US2] Add `Focus` action wiring in frontend/src/components/personnel/PersonnelTab.tsx to load Profile when an Agent is focused
-- [ ] T015 [P] [US2] Add unit tests frontend/tests/unit/agentList.focus.test.tsx and frontend/tests/unit/personnel.focus.state.test.tsx
-- [ ] T016 [ ] [US2] Integration test frontend/tests/integration/personnel.focus.integration.test.ts for clicking/keyboard focusing and Profile loading
-- [ ] T017 [ ] [US2] Accessibility tests frontend/tests/accessibility/personnel.a11y.test.tsx covering tab order and ARIA labels for rows and focus actions
+- [x] T015 [P] [US2] Add unit tests frontend/tests/unit/agentList.focus.test.tsx and frontend/tests/unit/personnel.focus.state.test.tsx
+- [x] T016 [P] [US2] Integration test frontend/tests/integration/personnel.focus.integration.test.ts for clicking/keyboard focusing and Profile loading
+- [x] T017 [P] [US2] Accessibility tests frontend/tests/accessibility/personnel.a11y.test.tsx covering tab order and ARIA labels for rows and focus actions
 
 US3 — Profile for Agents and People (Priority: P2)
 
 - [x] T018 [P] [US3] Complete `Profile` component in frontend/src/components/personnel/Profile.tsx to display Agent fields first and person attributes with confidence indicators
 - [x] T019 [P] [US3] Implement confidence rendering using frontend/src/services/personnelService.ts (`intelligenceToConfidence`) and ensure Agents show 100% confidence where applicable
-- [ ] T020 [P] [US3] Unit tests frontend/tests/unit/profile.confidence.test.ts to validate confidence mapping and conditional field visibility
+- [x] T020 [P] [US3] Unit tests frontend/tests/unit/profile.confidence.test.tsx to validate confidence mapping and conditional field visibility
 - [ ] T021 [P] [US3] Integration test frontend/tests/integration/personnel.profile.integration.test.ts verifying Agent profile vs non-agent profile rendering and data accuracy indicators
 
 Final Phase: Polish & Cross-cutting Concerns
