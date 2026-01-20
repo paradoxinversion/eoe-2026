@@ -47,6 +47,39 @@ export function validateConfig(data: unknown): ValidationResult {
           errors = errors ? errors.concat(err) : [err];
         }
       }
+      // zone size bounds validation: min >= 1, max >= min
+      const zMin =
+        typeof d.zoneSizeMin === "number"
+          ? Math.floor(d.zoneSizeMin)
+          : undefined;
+      const zMax =
+        typeof d.zoneSizeMax === "number"
+          ? Math.floor(d.zoneSizeMax)
+          : undefined;
+      if (typeof zMin === "number") {
+        if (zMin < 1) {
+          const err: Ajv.ErrorObject = {
+            instancePath: "/zoneSizeMin",
+            schemaPath: "#/properties/zoneSizeMin",
+            keyword: "minimum",
+            params: { comparison: ">=", limit: 1 },
+            message: `must be >= 1`,
+          } as Ajv.ErrorObject;
+          errors = errors ? errors.concat(err) : [err];
+        }
+      }
+      if (typeof zMax === "number" && typeof zMin === "number") {
+        if (zMax < zMin) {
+          const err: Ajv.ErrorObject = {
+            instancePath: "/zoneSizeMax",
+            schemaPath: "#/properties/zoneSizeMax",
+            keyword: "minimum",
+            params: { comparison: ">=", limit: zMin },
+            message: `must be >= zoneSizeMin (${zMin})`,
+          } as Ajv.ErrorObject;
+          errors = errors ? errors.concat(err) : [err];
+        }
+      }
     }
   } catch (e) {
     // swallow and return existing validation result

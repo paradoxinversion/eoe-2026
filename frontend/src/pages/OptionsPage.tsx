@@ -494,7 +494,12 @@ export default function OptionsPage() {
                     typeof cfg.organizationCount === "number"
                       ? ` — orgs:${cfg.organizationCount}`
                       : "";
-                  return `${cfg.playerName} — seed ${cfg.startingSeed} ${probsStr ? ` — ${probsStr}` : ""}${orgStr}`;
+                  const zoneStr =
+                    typeof cfg.zoneSizeMin === "number" ||
+                    typeof cfg.zoneSizeMax === "number"
+                      ? ` — zoneSize:${cfg.zoneSizeMin ?? "?"}-${cfg.zoneSizeMax ?? "?"}`
+                      : "";
+                  return `${cfg.playerName} — seed ${cfg.startingSeed} ${probsStr ? ` — ${probsStr}` : ""}${orgStr}${zoneStr}`;
                 })()}
               />
               <Button size="small" onClick={() => handleLoad(c.name)}>
