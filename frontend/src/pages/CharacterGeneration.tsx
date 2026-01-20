@@ -9,7 +9,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import generateWorld, { generateAndSaveWorld } from "../services/generation";
-import { saveConfig, deleteConfig } from "../services/persistence";
+import {
+  saveConfig,
+  deleteConfig,
+  saveGameState,
+} from "../services/persistence";
 import { defaultConfig } from "../config/schema";
 
 export default function CharacterGeneration() {
@@ -38,6 +42,16 @@ export default function CharacterGeneration() {
         await deleteConfig("game:autosave");
       } catch (e) {
         // ignore delete failures
+      }
+
+      // Also save a wrapper that includes the playerName so UI/tests can load both
+      try {
+        await saveGameState(name, {
+          playerName: name,
+          world: { seed, artifact },
+        });
+      } catch (e) {
+        // ignore save wrapper failures
       }
 
       // persist the generated world as a game state

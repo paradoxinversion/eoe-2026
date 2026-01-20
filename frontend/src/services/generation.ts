@@ -17,6 +17,8 @@ type DebugArtifact = {
     buildingType?: string;
     message: string;
   }>;
+  playerCharacterId?: string;
+  playerOrgId?: string;
 };
 
 function makeId(rng: ReturnType<typeof createRng>, prefix: string) {
@@ -329,6 +331,68 @@ export async function generateAndSaveWorld(
   }
 
   const artifact = generateDebugWorld(seed, finalOpts);
+  // Create player character and player's governing organization
+  try {
+    const rng = createRng(seed);
+
+    // determine player name from preferences or defaults
+    let playerName = defaultConfig.playerName || "Player";
+    try {
+      const prefs = (await loadConfig("preferences")) as
+        | (Record<string, unknown> & { playerName?: string })
+        | null;
+      if (prefs && typeof prefs.playerName === "string") {
+        playerName = prefs.playerName as string;
+      } else {
+        const lp = (await loadPreferences("preferences")) as
+          | (Record<string, unknown> & { playerName?: string })
+          | null;
+        if (lp && typeof lp.playerName === "string") playerName = lp.playerName;
+      }
+    } catch (e) {
+      // ignore and use default
+    }
+
+    const [firstName, ...rest] = String(playerName).split(/\s+/);
+    const lastName = rest.length > 0 ? rest.join(" ") : "Player";
+    const playerId = makeId(rng, "player");
+    const player = createPerson(playerId, firstName || "Player", lastName, {
+      intelligenceLevel: rng.int(30, 90),
+    });
+    artifact.people.push(player);
+
+    // create player's organization and set leaderId
+    const orgId = makeId(rng, "org-player");
+    const playerOrg: GoverningOrganization = {
+      id: orgId,
+      name: `${firstName || "Player"}'s Organization`,
+      type: "player",
+      leaderId: playerId,
+    } as GoverningOrganization;
+    artifact.organizations.push(playerOrg);
+
+    // choose a random zone and assign it (and its buildings) to player's org
+    if (Array.isArray(artifact.zones) && artifact.zones.length > 0) {
+      const zi = rng.int(0, artifact.zones.length - 1);
+      const zone = artifact.zones[zi] as any;
+      zone.governingOrganization = orgId;
+      // ensure player's person homeZoneId is set
+      player.homeZoneId = zone.id;
+      if (Array.isArray(zone.people)) zone.people.push(player.id);
+      // assign buildings in that zone to player's org
+      for (const b of artifact.buildings) {
+        if ((b as any).zoneId === zone.id) {
+          (b as any).ownerOrgId = orgId;
+        }
+      }
+    }
+
+    artifact.playerCharacterId = player.id;
+    artifact.playerOrgId = playerOrg.id;
+  } catch (e) {
+    // non-fatal: generation should still return artifact even if player/org couldn't be created
+    console.warn("generateAndSaveWorld: failed to create player/org", e);
+  }
   const name = saveName || `generation-${String(seed)}`;
   await saveGameState(name, artifact);
   return artifact;

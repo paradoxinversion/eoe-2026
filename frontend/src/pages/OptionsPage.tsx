@@ -73,9 +73,17 @@ export default function OptionsPage() {
       setStatusMessage("Please fix validation errors before saving.");
       return;
     }
-    await saveConfig(saveName || `save-${Date.now()}`, form);
+    // Merge with defaults so saved config always contains expected fields
+    const toSave = Object.assign({}, defaultConfig, form);
+    await saveConfig(saveName || `save-${Date.now()}`, toSave);
+    setForm(toSave);
     await refreshList();
     setStatusMessage("Saved configuration.");
+  }
+
+  function handleResetDefaults() {
+    setForm(defaultConfig);
+    setStatusMessage("Reset to default options.");
   }
 
   async function handleDelete(name: string) {
@@ -140,6 +148,9 @@ export default function OptionsPage() {
           disabled={Object.keys(errors).length > 0}
         >
           Save
+        </Button>
+        <Button variant="outlined" onClick={handleResetDefaults}>
+          Reset to Defaults
         </Button>
       </Box>
 

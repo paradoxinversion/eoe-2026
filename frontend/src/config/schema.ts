@@ -23,9 +23,9 @@ export const defaultConfig: PlayerConfig = {
     blessing: 0.08,
     discovery: 0.08,
   },
-  organizationCount: 1,
-  mapWidth: 100,
-  mapHeight: 100,
+  organizationCount: 5,
+  mapWidth: 10,
+  mapHeight: 10,
 };
 
 export type Config = PlayerConfig;
