@@ -99,7 +99,7 @@ export function generateDebugWorld(
       const id = makeId(rng, "p");
       const firstName = `P${rng.int(10, 99)}`;
       const lastName = `Z${z.id.split("-").slice(-2).join("")}`;
-      const p = createPerson(id, firstName, lastName, {
+      const p = createPerson(id, firstName + " " + lastName, 0, {
         homeZoneId: (z as any).id,
         intelligenceLevel: rng.int(0, 100),
       });
@@ -121,81 +121,4 @@ export function generateDebugWorld(
   return { zones, people, buildings, organizations };
 }
 
-import createRng2, { RNG } from "../lib/rng";
-
-export type Zone2 = {
-  id: string;
-  name: string;
-  intelligence_level: number; // 0-100
-};
-
-export type PlayerEmpire2 = {
-  id: string;
-  name: string;
-  resources: {
-    evil: number;
-    money: number;
-    infrastructure: number;
-    science: number;
-  };
-  zones: Zone2[];
-};
-
-export type World2 = {
-  seed: number | string;
-  player: PlayerEmpire2;
-};
-
-function makeId2(prefix: string, rng: RNG) {
-  return `${prefix}-${rng.serialize()}`;
-}
-
-const ZONE_NAMES = [
-  "Central City",
-  "Iron Vale",
-  "Blackwater",
-  "New Arcadia",
-  "Highspire",
-  "Lower Hollow",
-  "Eastwatch",
-];
-
-export function generateWorld(seed: number | string): World2 {
-  const rng = createRng2(seed);
-
-  const numZones = rng.int(3, 6);
-  const zones: Zone2[] = [];
-  const usedNames: Set<string> = new Set();
-
-  for (let i = 0; i < numZones; i++) {
-    // pick a name deterministically, avoid duplicates by sampling shuffled list
-    const choices = rng.shuffle(ZONE_NAMES).filter((n) => !usedNames.has(n));
-    const name = choices.length > 0 ? choices[0] : `Zone ${i + 1}`;
-    usedNames.add(name);
-
-    zones.push({
-      id: makeId2("zone", rng.split(i)),
-      name,
-      intelligence_level: rng.int(0, 100),
-    });
-  }
-
-  const player: PlayerEmpire2 = {
-    id: makeId2("player", rng),
-    name: `The Empire of ${String(seed)}`,
-    resources: {
-      evil: rng.int(0, 10),
-      money: rng.int(500, 2000),
-      infrastructure: rng.int(1, 5),
-      science: rng.int(0, 100),
-    },
-    zones,
-  };
-
-  return {
-    seed,
-    player,
-  };
-}
-
-export default generateWorld;
+export default generateDebugWorld;

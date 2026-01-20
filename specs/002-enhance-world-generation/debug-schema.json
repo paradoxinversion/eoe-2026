@@ -10,13 +10,16 @@
                 "required": [
                     "id",
                     "name",
-                    "size",
+                    "gridX",
+                    "gridY",
                     "wealth",
                     "intelligenceLevel"
                 ],
                 "properties": {
                     "id": { "type": "string" },
                     "name": { "type": "string" },
+                    "gridX": { "type": "number" },
+                    "gridY": { "type": "number" },
                     "size": { "type": "number" },
                     "wealth": { "type": "number" },
                     "intelligenceLevel": { "type": "number" },
@@ -34,41 +37,63 @@
             "type": "array",
             "items": {
                 "type": "object",
-                "anyOf": [
-                    {
+                "required": [
+                    "id",
+                    "firstName",
+                    "lastName",
+                    "intelligenceLevel",
+                    "attributes",
+                    "skills"
+                ],
+                "properties": {
+                    "id": { "type": "string" },
+                    "firstName": { "type": "string" },
+                    "lastName": { "type": "string" },
+                    "homeZoneId": { "type": "string" },
+                    "governingOrganizationSentiments": { "type": "object" },
+                    "intelligenceLevel": { "type": "number" },
+                    "occupation": { "type": "string" },
+                    "attributes": {
+                        "type": "object",
                         "required": [
-                            "id",
-                            "firstName",
-                            "lastName",
-                            "intelligenceLevel",
-                            "attributes",
-                            "skills"
+                            "health",
+                            "intelligence",
+                            "strength",
+                            "agility",
+                            "endurance",
+                            "empathy",
+                            "charisma"
                         ],
                         "properties": {
-                            "id": { "type": "string" },
-                            "firstName": { "type": "string" },
-                            "lastName": { "type": "string" },
-                            "homeZoneId": { "type": "string" },
-                            "governingOrganizationSentiments": {
-                                "type": "object"
-                            },
-                            "intelligenceLevel": { "type": "number" },
-                            "occupation": { "type": "string" },
-                            "attributes": { "type": "object" },
-                            "skills": { "type": "object" }
+                            "health": { "type": "number" },
+                            "intelligence": { "type": "number" },
+                            "strength": { "type": "number" },
+                            "agility": { "type": "number" },
+                            "endurance": { "type": "number" },
+                            "empathy": { "type": "number" },
+                            "charisma": { "type": "number" }
                         }
                     },
-                    {
-                        "required": ["id", "name", "pay"],
+                    "skills": {
+                        "type": "object",
+                        "required": [
+                            "fighting",
+                            "medicine",
+                            "business",
+                            "finance",
+                            "publicPlanning",
+                            "science"
+                        ],
                         "properties": {
-                            "id": { "type": "string" },
-                            "name": { "type": "string" },
-                            "role": { "type": "string" },
-                            "pay": { "type": "number" },
-                            "attributes": { "type": "object" }
+                            "fighting": { "type": "number" },
+                            "medicine": { "type": "number" },
+                            "business": { "type": "number" },
+                            "finance": { "type": "number" },
+                            "publicPlanning": { "type": "number" },
+                            "science": { "type": "number" }
                         }
                     }
-                ]
+                }
             }
         },
         "buildings": {
@@ -79,7 +104,16 @@
                 "properties": {
                     "id": { "type": "string" },
                     "name": { "type": "string" },
-                    "type": { "type": "string" },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "Residence",
+                            "Office",
+                            "Lab",
+                            "Bank",
+                            "Hospital"
+                        ]
+                    },
                     "size": { "type": "number" },
                     "zoneId": { "type": "string" },
                     "intelligenceLevel": { "type": "number" },

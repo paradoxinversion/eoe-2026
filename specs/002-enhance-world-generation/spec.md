@@ -67,7 +67,7 @@ Acceptance Scenarios:
 
 ### Functional Requirements
 
-- **FR-001**: Generation MUST create `Zone` entities that partition the map into fixed-size square Zones (e.g., NxN tiles per Zone) and include metadata (id, name, gridX/gridY, bounding tiles).
+- **FR-001**: Generation MUST create `Zone` entities that partition the map into fixed-size square Zones (e.g., NxN tiles per Zone) and include metadata (id, name, gridX/gridY).
 - **FR-002**: Generation MUST instantiate `Person` model instances using the canonical frontend model (`frontend/src/models/person.ts`). Created Person instances MUST conform to the attributes and validation rules defined by that model and be associated with a Zone and optionally a Building (home/workplace) via model references.
 - **FR-003**: Generation MUST instantiate `Building` model instances using the canonical frontend model (`frontend/src/models/building.ts`). Created Building instances MUST conform to the attributes and type definitions in that model file and MUST be placed on valid non-water tiles.
 - **FR-004**: Generation MUST instantiate `GoverningOrganization` model instances using the canonical frontend model (`frontend/src/models/governingOrganization.ts`). Organization instances MUST conform to the attributes and validation rules defined by that model, and ownership assignments of Buildings/People MUST reference those model instances.

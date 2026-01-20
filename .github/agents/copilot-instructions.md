@@ -27,9 +27,9 @@ tests/
 : Follow standard conventions
 
 ## Recent Changes
+- 002-enhance-world-generation: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 - 003-personnel-tab: Added TypeScript (as configured in `tsconfig.json`) + React, Vite, Material-UI (existing in project), AJV (for fixtures/contracts), `idb`/IndexedDB persistence helpers.
 - 001-rework-data-models: Added TypeScript (frontend); Node 18+ for tooling where applicable. + React 18, Vite, Material-UI (MUI) for components, uuid for ids; test deps: Vitest, @testing-library/react, axe-core for a11y.
-- 002-ui-refresh-dashboard: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 
 
 <!-- MANUAL ADDITIONS START -->
