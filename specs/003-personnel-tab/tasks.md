@@ -24,7 +24,9 @@ US1 — View Personnel Overview (Priority: P1)
 - [x] T010 [P] [US1] Wire widgets + chart into frontend/src/components/personnel/PersonnelTab.tsx and ensure data flow from personnelPersistence.ts
 - [x] T011 [P] [US1] Unit test frontend/tests/unit/agentTypeSummary.test.ts and frontend/tests/unit/capacity.widgets.test.ts for widget logic and chart data
 - [x] T012 [P] [US1] Integration test frontend/tests/integration/personnel.overview.integration.test.ts validating widget values and chart segments render correctly (uses mocked/persisted fixture)
-- [ ] T025 [P] [US1] Smoke integration: verify `PersonnelTab` mounts via app navigation and renders CapacityWidgets, AgentTypeChart, and Profile when the Personnel tab is opened (add `frontend/tests/integration/personnel.open.integration.test.ts`)
+- [x] T025 [P] [US1] Smoke integration: verify `PersonnelTab` mounts via app navigation and renders CapacityWidgets, AgentTypeChart, and Profile when the Personnel tab is opened (add `frontend/tests/integration/personnel.open.integration.test.ts`)
+
+- [x] T026 [P] [US1] Add temporary `Hire Agent` button on the main page to instantly create and persist a default agent (implementation in `frontend/src/pages/TitlePage.tsx` or `frontend/src/pages/Dashboard/Main.tsx`, call `frontend/src/services/personnelPersistence.saveAgent`) for manual QA and smoke testing
 
 US2 — Browse and Focus Agent (Priority: P1)
 
@@ -39,7 +41,7 @@ US3 — Profile for Agents and People (Priority: P2)
 - [x] T018 [P] [US3] Complete `Profile` component in frontend/src/components/personnel/Profile.tsx to display Agent fields first and person attributes with confidence indicators
 - [x] T019 [P] [US3] Implement confidence rendering using frontend/src/services/personnelService.ts (`intelligenceToConfidence`) and ensure Agents show 100% confidence where applicable
 - [x] T020 [P] [US3] Unit tests frontend/tests/unit/profile.confidence.test.tsx to validate confidence mapping and conditional field visibility
-- [ ] T021 [P] [US3] Integration test frontend/tests/integration/personnel.profile.integration.test.ts verifying Agent profile vs non-agent profile rendering and data accuracy indicators
+- [x] T021 [P] [US3] Integration test frontend/tests/integration/personnel.profile.integration.test.ts verifying Agent profile vs non-agent profile rendering and data accuracy indicators
 
 Final Phase: Polish & Cross-cutting Concerns
 

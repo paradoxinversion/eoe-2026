@@ -9,7 +9,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import generateWorld from "../services/generation";
-import { saveGameState, saveConfig } from "../services/persistence";
+import {
+  saveGameState,
+  saveConfig,
+  deleteConfig,
+} from "../services/persistence";
 import { defaultConfig } from "../config/schema";
 
 export default function CharacterGeneration() {
@@ -29,6 +33,13 @@ export default function CharacterGeneration() {
       // choose or derive a seed; use timestamp-based number for determinism
       const seed = Date.now();
       const world = generateWorld(seed);
+
+      // remove any autosave left behind by dev helpers
+      try {
+        await deleteConfig("game:autosave");
+      } catch (e) {
+        // ignore delete failures
+      }
 
       // persist the generated world as a game state
       await saveGameState(name, { playerName: name, world });

@@ -9,9 +9,13 @@ type Agent = {
 export default function AgentList({
   agents,
   onFocus,
+  onActivate,
 }: {
   agents: Agent[];
-  onFocus: (a: Agent) => void;
+  // kept for backwards compatibility
+  onFocus?: (a: Agent) => void;
+  // preferred explicit handler for activation
+  onActivate?: (a: Agent) => void;
 }) {
   const listRef = React.useRef<HTMLDivElement | null>(null);
   const [focusedIndex, setFocusedIndex] = React.useState<number | null>(null);
@@ -34,7 +38,8 @@ export default function AgentList({
   function handleKeyDown(e: React.KeyboardEvent, i: number, a: Agent) {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      onFocus(a);
+      if (onFocus) onFocus(a);
+      if (onActivate) onActivate(a);
       return;
     }
     if (e.key === "ArrowDown") {
@@ -74,7 +79,10 @@ export default function AgentList({
               justifyContent: "space-between",
               alignItems: "center",
             }}
-            onClick={() => onFocus(a)}
+            onClick={() => {
+              if (onFocus) onFocus(a);
+              if (onActivate) onActivate(a);
+            }}
           >
             <div>
               <div style={{ fontWeight: 600 }}>{a.name}</div>
@@ -85,13 +93,15 @@ export default function AgentList({
                 aria-label={`Focus ${a.name}`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  onFocus(a);
+                  if (onFocus) onFocus(a);
+                  if (onActivate) onActivate(a);
                 }}
                 onKeyDown={(e) => {
                   // keep keyboard behaviour simple: Enter on button also focuses
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    onFocus(a);
+                    if (onFocus) onFocus(a);
+                    if (onActivate) onActivate(a);
                   }
                 }}
                 style={{
