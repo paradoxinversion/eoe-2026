@@ -32,7 +32,8 @@ export function generateDebugWorld(
   opts?: {
     mapWidth?: number;
     mapHeight?: number;
-    zoneSize?: number;
+    zoneSizeMin?: number;
+    zoneSizeMax?: number;
     peoplePerZone?: number;
     orgCount?: number;
   },
@@ -41,6 +42,14 @@ export function generateDebugWorld(
   const mapWidth = Math.max(1, Math.floor(opts?.mapWidth ?? 100));
   const mapHeight = Math.max(1, Math.floor(opts?.mapHeight ?? 100));
   const peoplePerZone = opts?.peoplePerZone ?? 2;
+  const zoneSizeMin = Math.max(
+    1,
+    Math.floor(opts?.zoneSizeMin ?? defaultConfig.zoneSizeMin ?? 1),
+  );
+  const zoneSizeMax = Math.max(
+    zoneSizeMin,
+    Math.floor(opts?.zoneSizeMax ?? defaultConfig.zoneSizeMax ?? zoneSizeMin),
+  );
 
   const gridX = mapWidth;
   const gridY = mapHeight;
@@ -60,9 +69,11 @@ export function generateDebugWorld(
       const id = `zone-${x}-${y}`;
       const name = `Zone ${x},${y}`;
       const intelligence = rng.int(0, 100);
+      const size = rng.int(zoneSizeMin, zoneSizeMax);
       const z = createZone(id, x, y, name, intelligence, {
         buildings: [],
         people: [],
+        size,
       });
       zones.push(z as Zone);
     }
@@ -198,7 +209,8 @@ export async function generateAndSaveWorld(
   opts?: {
     mapWidth?: number;
     mapHeight?: number;
-    zoneSize?: number;
+    zoneSizeMin?: number;
+    zoneSizeMax?: number;
     peoplePerZone?: number;
     orgCount?: number;
   },
@@ -207,7 +219,8 @@ export async function generateAndSaveWorld(
   const finalOpts: {
     mapWidth?: number;
     mapHeight?: number;
-    zoneSize?: number;
+    zoneSizeMin?: number;
+    zoneSizeMax?: number;
     peoplePerZone?: number;
     orgCount?: number;
   } = Object.assign({}, opts || {});

@@ -11,6 +11,8 @@ export interface PlayerConfig {
   organizationCount?: number;
   mapWidth?: number;
   mapHeight?: number;
+  zoneSizeMin?: number;
+  zoneSizeMax?: number;
 }
 
 export const defaultConfig: PlayerConfig = {
@@ -26,6 +28,8 @@ export const defaultConfig: PlayerConfig = {
   organizationCount: 5,
   mapWidth: 10,
   mapHeight: 10,
+  zoneSizeMin: 1,
+  zoneSizeMax: 5,
 };
 
 export type Config = PlayerConfig;
