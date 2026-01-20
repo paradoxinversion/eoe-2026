@@ -54,8 +54,21 @@ export function generateDebugWorld(
   const gridX = mapWidth;
   const gridY = mapHeight;
 
-  const zones: Zone[] = [];
-  const buildings: Building[] = [];
+  type ZoneWithExtras = Zone & {
+    buildings?: string[];
+    people?: string[];
+    size?: number;
+    governingOrganization?: string;
+  };
+  type BuildingWithExtras = Building & {
+    zoneId?: string;
+    ownerOrgId?: string;
+    type?: string;
+    size?: number;
+  };
+
+  const zones: ZoneWithExtras[] = [];
+  const buildings: BuildingWithExtras[] = [];
   const people: Person[] = [];
   const organizations: GoverningOrganization[] = [];
   const placementErrors: Array<{
@@ -74,8 +87,11 @@ export function generateDebugWorld(
         buildings: [],
         people: [],
         size,
-      });
-      zones.push(z as Zone);
+      }) as ZoneWithExtras;
+      z.size = size;
+      z.buildings = z.buildings ?? [];
+      z.people = z.people ?? [];
+      zones.push(z);
     }
   }
 
@@ -101,30 +117,30 @@ export function generateDebugWorld(
       const intelligenceLevel = rng.int(0, 100);
       const upkeepCost = rng.int(1, 50);
       const infrastructureLoad = rng.int(0, 10);
-      const b: Building = {
+      const b: BuildingWithExtras = {
         id,
         name,
         type: t,
         size,
-        zoneId: (z as any).id,
+        zoneId: z.id,
         intelligenceLevel,
         upkeepCost,
         infrastructureLoad,
-      } as Building;
+      } as BuildingWithExtras;
       buildings.push(b);
-      if ((z as any).buildings && Array.isArray((z as any).buildings)) {
-        (z as any).buildings.push(id);
+      if (Array.isArray(z.buildings)) {
+        z.buildings.push(id);
       }
     }
   }
 
   for (const z of zones) {
     // base people derived from non-Residence building sizes in this zone
-    const zoneSize = (z as any).size ?? 1;
+    const zoneSize = z.size ?? 1;
     const basePeople = buildings
-      .filter((b) => (b as any).zoneId === (z as any).id)
-      .filter((b) => (b as any).type !== "Residence")
-      .reduce((acc, b) => acc + ((b as any).size || 0), 0);
+      .filter((b) => b.zoneId === z.id)
+      .filter((b) => b.type !== "Residence")
+      .reduce((acc, b) => acc + (b.size ?? 0), 0);
     // number of people scales with zone size (peoplePerZone is a multiplier) plus base
     const peopleCount = Math.max(
       0,
@@ -135,12 +151,12 @@ export function generateDebugWorld(
       const firstName = `P${rng.int(10, 99)}`;
       const lastName = `Z${z.id.split("-").slice(-2).join("")}`;
       const p = createPerson(id, firstName, lastName, {
-        homeZoneId: (z as any).id,
+        homeZoneId: z.id,
         intelligenceLevel: rng.int(0, 100),
       });
       people.push(p);
-      if ((z as any).people && Array.isArray((z as any).people)) {
-        (z as any).people.push(p.id);
+      if (Array.isArray(z.people)) {
+        z.people.push(p.id);
       }
     }
   }
@@ -148,7 +164,7 @@ export function generateDebugWorld(
   for (const b of buildings) {
     if (organizations.length > 0 && rng.int(0, 4) === 0) {
       const org = organizations[rng.int(0, organizations.length - 1)];
-      (b as any).ownerOrgId = org.id;
+      b.ownerOrgId = org.id;
     }
   }
 
@@ -333,12 +349,13 @@ export async function generateAndSaveWorld(
 
     if (Array.isArray(artifact.zones) && artifact.zones.length > 0) {
       const zi = rng.int(0, artifact.zones.length - 1);
-      const zone = artifact.zones[zi] as any;
+      const zone = artifact.zones[zi] as ZoneWithExtras;
       zone.governingOrganization = orgId;
       player.homeZoneId = zone.id;
-      if (Array.isArray(zone.people)) zone.people.push(player.id);
-      for (const b of artifact.buildings) {
-        if ((b as any).zoneId === zone.id) (b as any).ownerOrgId = orgId;
+      if (!Array.isArray(zone.people)) zone.people = [];
+      zone.people.push(player.id);
+      for (const b of artifact.buildings as BuildingWithExtras[]) {
+        if (b.zoneId === zone.id) b.ownerOrgId = orgId;
       }
     }
 
