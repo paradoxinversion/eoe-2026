@@ -26,6 +26,7 @@ import validateConfig from "../config/validator";
 
 export default function OptionsPage() {
   const [form, setForm] = useState(defaultConfig);
+  const [orgInputError, setOrgInputError] = useState<string | null>(null);
   const [configs, setConfigs] = useState<
     Array<{ name: string; updatedAt: number }>
   >([]);
@@ -94,6 +95,10 @@ export default function OptionsPage() {
     const valid = validateForm();
     if (!valid) {
       setStatusMessage("Please fix validation errors before saving.");
+      return;
+    }
+    if (orgInputError) {
+      setStatusMessage(orgInputError);
       return;
     }
     // Merge with defaults so saved config always contains expected fields
@@ -249,24 +254,35 @@ export default function OptionsPage() {
           );
           const maxOrgs = Math.max(0, w * h - 1);
           return (
-            <TextField
-              label="Organization Count"
-              type="number"
-              value={form.organizationCount ?? 0}
-              onChange={(e) => {
-                const raw = Number(e.target.value);
-                const v = Number.isFinite(raw) ? Math.floor(raw) : 0;
-                const clamped = Math.max(0, Math.min(maxOrgs, v));
-                setForm({ ...form, organizationCount: clamped });
-              }}
-              error={!!errors.organizationCount}
-              helperText={
-                (errors.organizationCount
-                  ? errors.organizationCount + ". "
-                  : "") + `Maximum is ${maxOrgs} (map ${w}x${h}).`
-              }
-              inputProps={{ min: 0, max: maxOrgs }}
-            />
+            <div>
+              <TextField
+                label="Organization Count"
+                type="number"
+                value={form.organizationCount ?? 0}
+                onChange={(e) => {
+                  const raw = Number(e.target.value);
+                  const v = Number.isFinite(raw) ? Math.floor(raw) : 0;
+                  if (v > maxOrgs) {
+                    setOrgInputError(
+                      `Organization count must be less than total map cells (${w}x${h} = ${w * h}).`,
+                    );
+                  } else {
+                    setOrgInputError(null);
+                  }
+                  const clamped = Math.max(0, Math.min(maxOrgs, v));
+                  setForm({ ...form, organizationCount: clamped });
+                }}
+                error={!!errors.organizationCount || Boolean(orgInputError)}
+                helperText={
+                  (errors.organizationCount
+                    ? errors.organizationCount + ". "
+                    : "") +
+                  (orgInputError ? orgInputError + " " : "") +
+                  `Maximum is ${maxOrgs} (map ${w}x${h}).`
+                }
+                inputProps={{ min: 0, max: maxOrgs }}
+              />
+            </div>
           );
         })()}
         <Typography variant="body2" color="text.secondary">
