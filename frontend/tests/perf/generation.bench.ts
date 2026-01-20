@@ -4,7 +4,7 @@ import path from "path";
 import { generateDebugWorld } from "../../src/services/generation";
 
 describe("perf: generation latency", () => {
-  it("measures generateWorld latency for many runs and records artifacts", () => {
+  it("measures generation latency for many runs and records artifacts", () => {
     const seed = 2026;
     const runs = 2000; // stress test many generations
 
