@@ -119,11 +119,16 @@ export function generateDebugWorld(
   }
 
   for (const z of zones) {
-    // number of people scales with zone size (peoplePerZone is a multiplier)
+    // base people derived from non-Residence building sizes in this zone
     const zoneSize = (z as any).size ?? 1;
+    const basePeople = buildings
+      .filter((b) => (b as any).zoneId === (z as any).id)
+      .filter((b) => (b as any).type !== "Residence")
+      .reduce((acc, b) => acc + ((b as any).size || 0), 0);
+    // number of people scales with zone size (peoplePerZone is a multiplier) plus base
     const peopleCount = Math.max(
       0,
-      Math.floor((peoplePerZone ?? 0) * zoneSize),
+      Math.floor((peoplePerZone ?? 0) * zoneSize) + Math.floor(basePeople),
     );
     for (let i = 0; i < peopleCount; i++) {
       const id = makeId(rng, "p");
