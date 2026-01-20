@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "fs";
 import path from "path";
-import generateWorld from "../../src/services/generation";
+import { generateDebugWorld } from "../../src/services/generation";
 
 describe("perf: generation latency", () => {
   it("measures generateWorld latency for many runs and records artifacts", () => {
@@ -11,7 +11,7 @@ describe("perf: generation latency", () => {
     const start = process.hrtime.bigint();
     for (let i = 0; i < runs; i++) {
       // vary seed slightly to exercise RNG but keep deterministic pattern
-      generateWorld((seed + i) % 1_000_000);
+      generateDebugWorld((seed + i) % 1_000_000, { mapWidth: 2, mapHeight: 2 });
     }
     const end = process.hrtime.bigint();
     const durationMs = Number(end - start) / 1_000_000;

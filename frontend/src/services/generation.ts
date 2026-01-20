@@ -156,8 +156,9 @@ export function generateDebugWorld(
 }
 
 // lightweight gameplay generator kept for compatibility
-export type Zone2 = { id: string; name: string; intelligence_level: number };
-export type PlayerEmpire2 = {
+// Legacy gameplay player type kept for compatibility with services that
+// operate on a `player` object. Tests should prefer using `generateDebugWorld`.
+export type PlayerEmpire = {
   id: string;
   name: string;
   resources: {
@@ -166,54 +167,13 @@ export type PlayerEmpire2 = {
     infrastructure: number;
     science: number;
   };
-  zones: Zone2[];
+  zones: Array<{ id: string; name: string; intelligence_level: number }>;
 };
-export type World2 = { seed: number | string; player: PlayerEmpire2 };
 
-function makeId2(prefix: string, rng: ReturnType<typeof createRng>) {
-  return `${prefix}-${rng.serialize()}`;
-}
-
-const ZONE_NAMES = [
-  "Central City",
-  "Iron Vale",
-  "Blackwater",
-  "New Arcadia",
-  "Highspire",
-  "Lower Hollow",
-  "Eastwatch",
-];
-
-export function generateWorld(seed: number | string): World2 {
-  const rng = createRng(seed);
-  const numZones = rng.int(3, 6);
-  const zones: Zone2[] = [];
-  const used = new Set<string>();
-  for (let i = 0; i < numZones; i++) {
-    const choices = rng.shuffle(ZONE_NAMES).filter((n) => !used.has(n));
-    const name = choices.length > 0 ? choices[0] : `Zone ${i + 1}`;
-    used.add(name);
-    zones.push({
-      id: makeId2("zone", rng.split(i)),
-      name,
-      intelligence_level: rng.int(0, 100),
-    });
-  }
-  const player: PlayerEmpire2 = {
-    id: makeId2("player", rng),
-    name: `The Empire of ${String(seed)}`,
-    resources: {
-      evil: rng.int(0, 10),
-      money: rng.int(500, 2000),
-      infrastructure: rng.int(1, 5),
-      science: rng.int(0, 100),
-    },
-    zones,
-  };
-  return { seed, player };
-}
-
-export default generateWorld;
+// NOTE: `generateWorld` (gameplay lightweight generator) removed in favor of
+// `generateDebugWorld`. Consumers should use `generateDebugWorld` or construct
+// minimal `PlayerEmpire` objects in tests. Keeping the `PlayerEmpire` type
+// exported for typing compatibility.
 
 export async function generateAndSaveWorld(
   seed: number | string,

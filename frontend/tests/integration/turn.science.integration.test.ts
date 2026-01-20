@@ -1,23 +1,31 @@
 import { describe, it, expect } from "vitest";
 import createRng from "../../src/lib/rng";
 import { resolveTurn, resolveTurns } from "../../src/services/turn";
-import generateWorld from "../../src/services/generation";
+import { generateDebugWorld } from "../../src/services/generation";
 import { createScienceProject } from "../../src/models/scienceProject";
 
 describe("turn + science integration", () => {
   it("reserves science for queued project on resolveTurn when player has enough", () => {
     const rng = createRng(42);
-    const world = generateWorld("int-1");
+    const art = generateDebugWorld("int-1", { mapWidth: 3, mapHeight: 2 });
+    const player = {
+      id: "p1",
+      name: "Int1",
+      resources: { evil: 0, money: 0, infrastructure: 1, science: 0 },
+      zones: art.zones.map((z) => ({
+        id: z.id,
+        name: z.name,
+        intelligence_level: (z as any).intelligenceLevel || 0,
+      })),
+    } as any;
     // give player enough science
-    (world as any).player = world.player;
-    world.player.resources.science = 30;
+    player.resources.science = 30;
     const proj = createScienceProject("ip1", "Integration Reserve", 15, 3);
-    (world as any).projects = [proj];
 
     const state = {
       day: 0,
-      resources: { gold: 0, science: world.player.resources.science },
-      player: world.player,
+      resources: { gold: 0, science: player.resources.science },
+      player: player,
       projects: [proj],
     } as any;
 
@@ -32,16 +40,24 @@ describe("turn + science integration", () => {
 
   it("advances and completes project across multiple turns and consumes reserved science", () => {
     const rng = createRng(123);
-    const world = generateWorld("int-2");
-    (world as any).player = world.player;
-    world.player.resources.science = 50;
+    const art2 = generateDebugWorld("int-2", { mapWidth: 3, mapHeight: 2 });
+    const player = {
+      id: "p2",
+      name: "Int2",
+      resources: { evil: 0, money: 0, infrastructure: 1, science: 0 },
+      zones: art2.zones.map((z) => ({
+        id: z.id,
+        name: z.name,
+        intelligence_level: (z as any).intelligenceLevel || 0,
+      })),
+    } as any;
+    player.resources.science = 50;
     const proj = createScienceProject("ip2", "Integration Progress", 10, 2);
-    (world as any).projects = [proj];
 
     const state = {
       day: 0,
-      resources: { gold: 0, science: world.player.resources.science },
-      player: world.player,
+      resources: { gold: 0, science: player.resources.science },
+      player: player,
       projects: [proj],
     } as any;
     // add a scientist agent and assign to the project so it can progress
@@ -60,16 +76,24 @@ describe("turn + science integration", () => {
 
   it("does not reserve when player lacks science", () => {
     const rng = createRng("lowseed");
-    const world = generateWorld("int-3");
-    (world as any).player = world.player;
-    world.player.resources.science = 1; // insufficient
+    const art3 = generateDebugWorld("int-3", { mapWidth: 3, mapHeight: 2 });
+    const player = {
+      id: "p3",
+      name: "Int3",
+      resources: { evil: 0, money: 0, infrastructure: 1, science: 0 },
+      zones: art3.zones.map((z) => ({
+        id: z.id,
+        name: z.name,
+        intelligence_level: (z as any).intelligenceLevel || 0,
+      })),
+    } as any;
+    player.resources.science = 1; // insufficient
     const proj = createScienceProject("ip3", "Integration Fail", 10, 4);
-    (world as any).projects = [proj];
 
     const state = {
       day: 0,
-      resources: { gold: 0, science: world.player.resources.science },
-      player: world.player,
+      resources: { gold: 0, science: player.resources.science },
+      player: player,
       projects: [proj],
     } as any;
 
