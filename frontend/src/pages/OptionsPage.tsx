@@ -45,6 +45,29 @@ export default function OptionsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form]);
 
+  // clamp organizationCount when map dimensions change
+  useEffect(() => {
+    const w = Math.max(
+      1,
+      Math.floor(form.mapWidth ?? defaultConfig.mapWidth ?? 10),
+    );
+    const h = Math.max(
+      1,
+      Math.floor(form.mapHeight ?? defaultConfig.mapHeight ?? 10),
+    );
+    const maxOrgs = Math.max(0, w * h - 1);
+    if (
+      typeof form.organizationCount === "number" &&
+      form.organizationCount > maxOrgs
+    ) {
+      setForm((prev) => ({ ...prev, organizationCount: maxOrgs }));
+      setStatusMessage(
+        `Organization count reduced to max ${maxOrgs} for current map size.`,
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.mapWidth, form.mapHeight]);
+
   async function refreshList() {
     const list = await listConfigs();
     setConfigs(list);
@@ -215,19 +238,37 @@ export default function OptionsPage() {
           error={!!errors.autosaveIntervalSeconds}
           helperText={errors.autosaveIntervalSeconds}
         />
-        <TextField
-          label="Organization Count"
-          type="number"
-          value={form.organizationCount ?? 1}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              organizationCount: Math.max(1, Number(e.target.value)),
-            })
-          }
-          error={!!errors.organizationCount}
-          helperText={errors.organizationCount}
-        />
+        {(() => {
+          const w = Math.max(
+            1,
+            Math.floor(form.mapWidth ?? defaultConfig.mapWidth ?? 10),
+          );
+          const h = Math.max(
+            1,
+            Math.floor(form.mapHeight ?? defaultConfig.mapHeight ?? 10),
+          );
+          const maxOrgs = Math.max(0, w * h - 1);
+          return (
+            <TextField
+              label="Organization Count"
+              type="number"
+              value={form.organizationCount ?? 0}
+              onChange={(e) => {
+                const raw = Number(e.target.value);
+                const v = Number.isFinite(raw) ? Math.floor(raw) : 0;
+                const clamped = Math.max(0, Math.min(maxOrgs, v));
+                setForm({ ...form, organizationCount: clamped });
+              }}
+              error={!!errors.organizationCount}
+              helperText={
+                (errors.organizationCount
+                  ? errors.organizationCount + ". "
+                  : "") + `Maximum is ${maxOrgs} (map ${w}x${h}).`
+              }
+              inputProps={{ min: 0, max: maxOrgs }}
+            />
+          );
+        })()}
         <Typography variant="body2" color="text.secondary">
           Controls how many Governing Organizations are created during world
           generation (minimum 1). Useful for tuning faction density in the map.
