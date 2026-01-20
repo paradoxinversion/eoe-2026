@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
 import { intelligenceToConfidence } from "../../../frontend/src/services/personnelService";
@@ -25,12 +25,20 @@ describe("personnelService.intelligenceToConfidence", () => {
 
 describe("Profile confidence rendering", () => {
   it("shows 100% when intelligenceLevel is undefined", () => {
-    render(<Profile person={{ id: "p1", name: "Test" }} />);
-    expect(screen.getByText(/Confidence:/).textContent).toContain("100");
+    const { container } = render(
+      <Profile person={{ id: "p1", name: "Test" }} />,
+    );
+    expect(within(container).getByText(/Confidence:/).textContent).toContain(
+      "100",
+    );
   });
 
   it("renders mapped confidence when intelligenceLevel is provided", () => {
-    render(<Profile person={{ id: "p2", name: "A", intelligenceLevel: 7 }} />);
-    expect(screen.getByText(/Confidence:/).textContent).toContain("70");
+    const { container } = render(
+      <Profile person={{ id: "p2", name: "A", intelligenceLevel: 7 }} />,
+    );
+    expect(within(container).getByText(/Confidence:/).textContent).toContain(
+      "70",
+    );
   });
 });
