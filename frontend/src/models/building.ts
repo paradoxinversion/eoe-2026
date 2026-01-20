@@ -2,6 +2,14 @@ import type { UUID } from "./person";
 
 export type BuildingType = "Residence" | "Office" | "Lab" | "Bank" | "Hospital";
 
+export const BUILDING_TYPES: BuildingType[] = [
+  "Residence",
+  "Office",
+  "Lab",
+  "Bank",
+  "Hospital",
+];
+
 export interface Building {
   id: UUID;
   name: string;

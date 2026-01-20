@@ -1,0 +1,106 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "World Generation Debug Schema",
+    "type": "object",
+    "properties": {
+        "zones": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "size",
+                    "wealth",
+                    "intelligenceLevel"
+                ],
+                "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "size": { "type": "number" },
+                    "wealth": { "type": "number" },
+                    "intelligenceLevel": { "type": "number" },
+                    "capacity": { "type": ["string", "null"] },
+                    "governingOrganization": { "type": "string" },
+                    "buildings": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                    },
+                    "people": { "type": "array", "items": { "type": "string" } }
+                }
+            }
+        },
+        "people": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "anyOf": [
+                    {
+                        "required": [
+                            "id",
+                            "firstName",
+                            "lastName",
+                            "intelligenceLevel",
+                            "attributes",
+                            "skills"
+                        ],
+                        "properties": {
+                            "id": { "type": "string" },
+                            "firstName": { "type": "string" },
+                            "lastName": { "type": "string" },
+                            "homeZoneId": { "type": "string" },
+                            "governingOrganizationSentiments": {
+                                "type": "object"
+                            },
+                            "intelligenceLevel": { "type": "number" },
+                            "occupation": { "type": "string" },
+                            "attributes": { "type": "object" },
+                            "skills": { "type": "object" }
+                        }
+                    },
+                    {
+                        "required": ["id", "name", "pay"],
+                        "properties": {
+                            "id": { "type": "string" },
+                            "name": { "type": "string" },
+                            "role": { "type": "string" },
+                            "pay": { "type": "number" },
+                            "attributes": { "type": "object" }
+                        }
+                    }
+                ]
+            }
+        },
+        "buildings": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["id", "name", "type", "size", "zoneId"],
+                "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "type": { "type": "string" },
+                    "size": { "type": "number" },
+                    "zoneId": { "type": "string" },
+                    "intelligenceLevel": { "type": "number" },
+                    "upkeepCost": { "type": "number" },
+                    "infrastructureLoad": { "type": "number" }
+                }
+            }
+        },
+        "organizations": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["id", "name"],
+                "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "type": { "type": "string" },
+                    "leaderId": { "type": "string" }
+                }
+            }
+        }
+    },
+    "required": ["zones", "people", "buildings", "organizations"]
+}
