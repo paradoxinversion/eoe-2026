@@ -6,8 +6,10 @@ import type { Person } from "../models/person";
 import type Building from "../models/building";
 import { BUILDING_TYPES } from "../models/building";
 import type GoverningOrganization from "../models/governingOrganization";
+import { saveGameState, loadConfig, loadPreferences } from "./persistence";
+import { defaultConfig } from "../config/schema";
 
-type DebugArtifact = {
+export type DebugArtifact = {
   zones: Zone[];
   people: Person[];
   buildings: Building[];
@@ -36,13 +38,12 @@ export function generateDebugWorld(
   },
 ): DebugArtifact {
   const rng = createRng(seed);
-  const mapWidth = opts?.mapWidth ?? 100;
-  const mapHeight = opts?.mapHeight ?? 100;
-  const zoneSize = opts?.zoneSize ?? 10;
+  const mapWidth = Math.max(1, Math.floor(opts?.mapWidth ?? 100));
+  const mapHeight = Math.max(1, Math.floor(opts?.mapHeight ?? 100));
   const peoplePerZone = opts?.peoplePerZone ?? 2;
 
-  const gridX = Math.max(1, Math.ceil(mapWidth / zoneSize));
-  const gridY = Math.max(1, Math.ceil(mapHeight / zoneSize));
+  const gridX = mapWidth;
+  const gridY = mapHeight;
 
   const zones: Zone[] = [];
   const buildings: Building[] = [];
@@ -54,7 +55,6 @@ export function generateDebugWorld(
     message: string;
   }> = [];
 
-  // create zones
   for (let y = 0; y < gridY; y++) {
     for (let x = 0; x < gridX; x++) {
       const id = `zone-${x}-${y}`;
@@ -68,7 +68,6 @@ export function generateDebugWorld(
     }
   }
 
-  // create organizations (allow override via opts.orgCount)
   const orgCount =
     typeof opts?.orgCount === "number"
       ? Math.max(1, Math.floor(opts!.orgCount))
@@ -83,7 +82,6 @@ export function generateDebugWorld(
     } as GoverningOrganization);
   }
 
-  // place buildings: ensure each zone has at least one of each building type
   for (const z of zones) {
     for (const t of BUILDING_TYPES) {
       const id = makeId(rng, "b");
@@ -109,7 +107,6 @@ export function generateDebugWorld(
     }
   }
 
-  // create people per zone
   for (const z of zones) {
     for (let i = 0; i < peoplePerZone; i++) {
       const id = makeId(rng, "p");
@@ -126,7 +123,6 @@ export function generateDebugWorld(
     }
   }
 
-  // assign some buildings to organizations
   for (const b of buildings) {
     if (organizations.length > 0 && rng.int(0, 4) === 0) {
       const org = organizations[rng.int(0, organizations.length - 1)];
@@ -137,16 +133,8 @@ export function generateDebugWorld(
   return { zones, people, buildings, organizations, placementErrors };
 }
 
-import createRng2, { RNG } from "../lib/rng";
-import { saveGameState, loadConfig, loadPreferences } from "./persistence";
-import { defaultConfig } from "../config/schema";
-
-export type Zone2 = {
-  id: string;
-  name: string;
-  intelligence_level: number; // 0-100
-};
-
+// lightweight gameplay generator kept for compatibility
+export type Zone2 = { id: string; name: string; intelligence_level: number };
 export type PlayerEmpire2 = {
   id: string;
   name: string;
@@ -158,13 +146,9 @@ export type PlayerEmpire2 = {
   };
   zones: Zone2[];
 };
+export type World2 = { seed: number | string; player: PlayerEmpire2 };
 
-export type World2 = {
-  seed: number | string;
-  player: PlayerEmpire2;
-};
-
-function makeId2(prefix: string, rng: RNG) {
+function makeId2(prefix: string, rng: ReturnType<typeof createRng>) {
   return `${prefix}-${rng.serialize()}`;
 }
 
@@ -179,25 +163,20 @@ const ZONE_NAMES = [
 ];
 
 export function generateWorld(seed: number | string): World2 {
-  const rng = createRng2(seed);
-
+  const rng = createRng(seed);
   const numZones = rng.int(3, 6);
   const zones: Zone2[] = [];
-  const usedNames: Set<string> = new Set();
-
+  const used = new Set<string>();
   for (let i = 0; i < numZones; i++) {
-    // pick a name deterministically, avoid duplicates by sampling shuffled list
-    const choices = rng.shuffle(ZONE_NAMES).filter((n) => !usedNames.has(n));
+    const choices = rng.shuffle(ZONE_NAMES).filter((n) => !used.has(n));
     const name = choices.length > 0 ? choices[0] : `Zone ${i + 1}`;
-    usedNames.add(name);
-
+    used.add(name);
     zones.push({
       id: makeId2("zone", rng.split(i)),
       name,
       intelligence_level: rng.int(0, 100),
     });
   }
-
   const player: PlayerEmpire2 = {
     id: makeId2("player", rng),
     name: `The Empire of ${String(seed)}`,
@@ -209,11 +188,7 @@ export function generateWorld(seed: number | string): World2 {
     },
     zones,
   };
-
-  return {
-    seed,
-    player,
-  };
+  return { seed, player };
 }
 
 export default generateWorld;
@@ -229,63 +204,50 @@ export async function generateAndSaveWorld(
   },
   saveName?: string,
 ): Promise<DebugArtifact> {
-  // If orgCount not provided, attempt to read from saved preferences
-  let finalOpts = opts || {};
-  if (typeof finalOpts.orgCount !== "number") {
-    try {
+  const finalOpts: {
+    mapWidth?: number;
+    mapHeight?: number;
+    zoneSize?: number;
+    peoplePerZone?: number;
+    orgCount?: number;
+  } = Object.assign({}, opts || {});
+
+  try {
+    if (typeof finalOpts.orgCount !== "number") {
       const prefs = (await loadConfig("preferences")) as
         | (Record<string, unknown> & { organizationCount?: number })
         | null;
-      if (prefs && typeof prefs.organizationCount === "number") {
-        finalOpts = Object.assign({}, finalOpts, {
-          orgCount: prefs.organizationCount,
-        });
-      } else {
-        // try legacy preferences store
+      if (prefs && typeof prefs.organizationCount === "number")
+        finalOpts.orgCount = prefs.organizationCount;
+      else {
         const lp = (await loadPreferences("preferences")) as
           | (Record<string, unknown> & { organizationCount?: number })
           | null;
-        if (lp && typeof lp.organizationCount === "number") {
-          finalOpts = Object.assign({}, finalOpts, {
-            orgCount: lp.organizationCount,
-          });
-        } else if (typeof defaultConfig.organizationCount === "number") {
-          finalOpts = Object.assign({}, finalOpts, {
-            orgCount: defaultConfig.organizationCount,
-          });
-        }
+        if (lp && typeof lp.organizationCount === "number")
+          finalOpts.orgCount = lp.organizationCount;
+        else if (typeof defaultConfig.organizationCount === "number")
+          finalOpts.orgCount = defaultConfig.organizationCount;
       }
-    } catch (e) {
-      // ignore and fall back to generator default
     }
-  }
 
-  // If map dimensions not provided, attempt to read from preferences or defaults
-  if (
-    typeof finalOpts.mapWidth !== "number" ||
-    typeof finalOpts.mapHeight !== "number"
-  ) {
-    try {
+    if (
+      typeof finalOpts.mapWidth !== "number" ||
+      typeof finalOpts.mapHeight !== "number"
+    ) {
       const prefs = (await loadConfig("preferences")) as
         | (Record<string, unknown> & { mapWidth?: number; mapHeight?: number })
         | null;
       if (prefs) {
-        const updates: Record<string, number> = {};
         if (
           typeof prefs.mapWidth === "number" &&
           typeof finalOpts.mapWidth !== "number"
-        ) {
-          updates.mapWidth = prefs.mapWidth;
-        }
+        )
+          finalOpts.mapWidth = prefs.mapWidth;
         if (
           typeof prefs.mapHeight === "number" &&
           typeof finalOpts.mapHeight !== "number"
-        ) {
-          updates.mapHeight = prefs.mapHeight;
-        }
-        if (Object.keys(updates).length > 0) {
-          finalOpts = Object.assign({}, finalOpts, updates);
-        }
+        )
+          finalOpts.mapHeight = prefs.mapHeight;
       } else {
         const lp = (await loadPreferences("preferences")) as
           | (Record<string, unknown> & {
@@ -293,64 +255,79 @@ export async function generateAndSaveWorld(
               mapHeight?: number;
             })
           | null;
-        const updates: Record<string, number> = {};
-        if (
-          lp &&
-          typeof lp.mapWidth === "number" &&
-          typeof finalOpts.mapWidth !== "number"
-        ) {
-          updates.mapWidth = lp.mapWidth;
+        if (lp) {
+          if (
+            typeof lp.mapWidth === "number" &&
+            typeof finalOpts.mapWidth !== "number"
+          )
+            finalOpts.mapWidth = lp.mapWidth;
+          if (
+            typeof lp.mapHeight === "number" &&
+            typeof finalOpts.mapHeight !== "number"
+          )
+            finalOpts.mapHeight = lp.mapHeight;
         }
-        if (
-          lp &&
-          typeof lp.mapHeight === "number" &&
-          typeof finalOpts.mapHeight !== "number"
-        ) {
-          updates.mapHeight = lp.mapHeight;
-        }
-        if (Object.keys(updates).length > 0) {
-          finalOpts = Object.assign({}, finalOpts, updates);
-        }
-        // fall back to defaults if still missing
         if (
           typeof finalOpts.mapWidth !== "number" &&
           typeof defaultConfig.mapWidth === "number"
-        ) {
+        )
           finalOpts.mapWidth = defaultConfig.mapWidth;
-        }
         if (
           typeof finalOpts.mapHeight !== "number" &&
           typeof defaultConfig.mapHeight === "number"
-        ) {
+        )
           finalOpts.mapHeight = defaultConfig.mapHeight;
-        }
       }
-    } catch (e) {
-      // ignore and fall back to generator defaults
     }
+  } catch (e) {
+    // ignore and fall back to generator defaults
   }
 
   const artifact = generateDebugWorld(seed, finalOpts);
-  // Create player character and player's governing organization
+
+  try {
+    const expectedX = Math.max(1, Math.floor(finalOpts.mapWidth ?? 100));
+    const expectedY = Math.max(1, Math.floor(finalOpts.mapHeight ?? 100));
+    const expectedCount = expectedX * expectedY;
+    if (
+      !Array.isArray(artifact.zones) ||
+      artifact.zones.length < expectedCount
+    ) {
+      const full = generateDebugWorld(
+        seed,
+        Object.assign({}, finalOpts, {
+          mapWidth: expectedX,
+          mapHeight: expectedY,
+        }),
+      );
+      artifact.zones = full.zones;
+      artifact.people = full.people;
+      artifact.buildings = full.buildings;
+      artifact.organizations = full.organizations;
+      artifact.placementErrors = full.placementErrors;
+    }
+  } catch (e) {
+    // continue with what we have
+  }
+
   try {
     const rng = createRng(seed);
-
-    // determine player name from preferences or defaults
     let playerName = defaultConfig.playerName || "Player";
     try {
       const prefs = (await loadConfig("preferences")) as
         | (Record<string, unknown> & { playerName?: string })
         | null;
-      if (prefs && typeof prefs.playerName === "string") {
+      if (prefs && typeof prefs.playerName === "string")
         playerName = prefs.playerName as string;
-      } else {
+      else {
         const lp = (await loadPreferences("preferences")) as
           | (Record<string, unknown> & { playerName?: string })
           | null;
-        if (lp && typeof lp.playerName === "string") playerName = lp.playerName;
+        if (lp && typeof lp.playerName === "string")
+          playerName = lp.playerName as string;
       }
     } catch (e) {
-      // ignore and use default
+      // ignore
     }
 
     const [firstName, ...rest] = String(playerName).split(/\s+/);
@@ -361,7 +338,6 @@ export async function generateAndSaveWorld(
     });
     artifact.people.push(player);
 
-    // create player's organization and set leaderId
     const orgId = makeId(rng, "org-player");
     const playerOrg: GoverningOrganization = {
       id: orgId,
@@ -371,28 +347,23 @@ export async function generateAndSaveWorld(
     } as GoverningOrganization;
     artifact.organizations.push(playerOrg);
 
-    // choose a random zone and assign it (and its buildings) to player's org
     if (Array.isArray(artifact.zones) && artifact.zones.length > 0) {
       const zi = rng.int(0, artifact.zones.length - 1);
       const zone = artifact.zones[zi] as any;
       zone.governingOrganization = orgId;
-      // ensure player's person homeZoneId is set
       player.homeZoneId = zone.id;
       if (Array.isArray(zone.people)) zone.people.push(player.id);
-      // assign buildings in that zone to player's org
       for (const b of artifact.buildings) {
-        if ((b as any).zoneId === zone.id) {
-          (b as any).ownerOrgId = orgId;
-        }
+        if ((b as any).zoneId === zone.id) (b as any).ownerOrgId = orgId;
       }
     }
 
     artifact.playerCharacterId = player.id;
     artifact.playerOrgId = playerOrg.id;
   } catch (e) {
-    // non-fatal: generation should still return artifact even if player/org couldn't be created
     console.warn("generateAndSaveWorld: failed to create player/org", e);
   }
+
   const name = saveName || `generation-${String(seed)}`;
   await saveGameState(name, artifact);
   return artifact;
