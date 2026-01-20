@@ -7,6 +7,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Main from "./Dashboard/Main";
 import Settings from "./Dashboard/Settings";
+import PersonnelTab from "../components/personnel/PersonnelTab";
 // persistence helpers not needed in this view
 
 export default function Dashboard() {
@@ -19,6 +20,23 @@ export default function Dashboard() {
     // keep minimal and safe for tests
     // eslint-disable-next-line no-console
     console.log("Dashboard mounted");
+  }, []);
+
+  React.useEffect(() => {
+    const onNav = (e: Event) => {
+      try {
+        const d = (e as CustomEvent).detail as { tab?: string } | undefined;
+        if (d && d.tab === "personnel") setTab(2);
+      } catch (err) {
+        // ignore
+      }
+    };
+    window.addEventListener("navigate:dashboardTab", onNav as EventListener);
+    return () =>
+      window.removeEventListener(
+        "navigate:dashboardTab",
+        onNav as EventListener,
+      );
   }, []);
 
   return (
@@ -74,7 +92,7 @@ export default function Dashboard() {
             </Box>
           )}
           {tab === 1 && <div>Intel (stub)</div>}
-          {tab === 2 && <div>Personnel (stub)</div>}
+          {tab === 2 && <PersonnelTab />}
           {tab === 3 && <div>Economy (stub)</div>}
           {tab === 4 && <div>Infirmary (stub)</div>}
           {tab === 5 && <div>Captives (stub)</div>}

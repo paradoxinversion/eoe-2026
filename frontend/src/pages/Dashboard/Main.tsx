@@ -110,6 +110,56 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
     });
   }
 
+  async function handleHireAgent() {
+    const id = `p-${Date.now()}`;
+    const agent = {
+      id,
+      firstName: "Temp",
+      lastName: `Agent${id.slice(-4)}`,
+      name: `Temp Agent${id.slice(-4)}`,
+      agentType: "Worker",
+      leadership: 1,
+      role: "operative",
+    } as const;
+
+    // add to current game state (non-persistent helper)
+    setState((s) => {
+      const next = {
+        ...s,
+        agents: [...(s.agents || []), agent as any],
+      } as GameState;
+      return next;
+    });
+
+    // notify UI to open Personnel tab and select this agent (local only)
+    try {
+      window.dispatchEvent(
+        new CustomEvent("navigate:dashboardTab", {
+          detail: { tab: "personnel" },
+        }),
+      );
+      // store pending local agent so the Personnel tab can pick it up even
+      // if it mounts after this dispatch (avoids lost event race)
+      try {
+        sessionStorage.setItem("personnel:pendingLocal", JSON.stringify(agent));
+      } catch (e) {
+        // ignore storage failures
+      }
+      // dispatch the event slightly later to give the tab time to mount
+      setTimeout(() => {
+        try {
+          window.dispatchEvent(
+            new CustomEvent("personnel:created:local", { detail: agent }),
+          );
+        } catch (err) {
+          // ignore
+        }
+      }, 50);
+    } catch (e) {
+      // ignore
+    }
+  }
+
   function handleAddProject() {
     const id = `pr-${Date.now()}`;
     const p = createScienceProject(id, `Project ${id.slice(-4)}`, 10, 3);
@@ -182,6 +232,9 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
       <Box sx={{ mt: 3, display: "flex", gap: 2 }}>
         <Button variant="outlined" onClick={handleHireScientist}>
           Hire Scientist
+        </Button>
+        <Button variant="outlined" onClick={() => void handleHireAgent()}>
+          Hire Agent
         </Button>
         <Button variant="outlined" onClick={handleAddProject}>
           Add Project
