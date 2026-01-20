@@ -27,6 +27,7 @@ import validateConfig from "../config/validator";
 export default function OptionsPage() {
   const [form, setForm] = useState(defaultConfig);
   const [orgInputError, setOrgInputError] = useState<string | null>(null);
+  const [zoneSizeError, setZoneSizeError] = useState<string | null>(null);
   const [configs, setConfigs] = useState<
     Array<{ name: string; updatedAt: number }>
   >([]);
@@ -241,6 +242,74 @@ export default function OptionsPage() {
           }}
           error={!!errors.mapHeight}
           helperText={errors.mapHeight}
+        />
+        <TextField
+          label="Zone Size Min"
+          type="number"
+          value={form.zoneSizeMin ?? defaultConfig.zoneSizeMin ?? 1}
+          onChange={(e) => {
+            const raw = Number(e.target.value);
+            const v = Number.isFinite(raw) ? Math.max(1, Math.floor(raw)) : 1;
+            const currentMax =
+              form.zoneSizeMax ?? defaultConfig.zoneSizeMax ?? v;
+            if (v > currentMax) {
+              setZoneSizeError(
+                `Minimum cannot be greater than current maximum (${currentMax}); adjusting maximum to ${v}.`,
+              );
+              setForm({ ...form, zoneSizeMin: v, zoneSizeMax: v });
+            } else {
+              setZoneSizeError(null);
+              setForm({ ...form, zoneSizeMin: v });
+            }
+          }}
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+            min: 1,
+          }}
+          error={!!errors.zoneSizeMin || Boolean(zoneSizeError)}
+          helperText={
+            (errors.zoneSizeMin ? errors.zoneSizeMin + ". " : "") +
+            (zoneSizeError ? zoneSizeError + " " : "") +
+            `Minimum is 1.`
+          }
+        />
+        <TextField
+          label="Zone Size Max"
+          type="number"
+          value={
+            form.zoneSizeMax ??
+            defaultConfig.zoneSizeMax ??
+            form.zoneSizeMin ??
+            defaultConfig.zoneSizeMin ??
+            1
+          }
+          onChange={(e) => {
+            const raw = Number(e.target.value);
+            const v = Number.isFinite(raw) ? Math.max(1, Math.floor(raw)) : 1;
+            const currentMin =
+              form.zoneSizeMin ?? defaultConfig.zoneSizeMin ?? 1;
+            if (v < currentMin) {
+              setZoneSizeError(
+                `Maximum cannot be less than minimum (${currentMin}); adjusting maximum to ${currentMin}.`,
+              );
+              setForm({ ...form, zoneSizeMax: currentMin });
+            } else {
+              setZoneSizeError(null);
+              setForm({ ...form, zoneSizeMax: v });
+            }
+          }}
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+            min: 1,
+          }}
+          error={!!errors.zoneSizeMax || Boolean(zoneSizeError)}
+          helperText={
+            (errors.zoneSizeMax ? errors.zoneSizeMax + ". " : "") +
+            (zoneSizeError ? zoneSizeError + " " : "") +
+            `Maximum must be >= minimum.`
+          }
         />
         <TextField
           label="Autosave Interval Seconds"
