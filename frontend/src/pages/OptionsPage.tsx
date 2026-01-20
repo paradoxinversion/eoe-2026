@@ -201,6 +201,10 @@ export default function OptionsPage() {
               startingSeed: Number(e.target.value),
             })
           }
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+          }}
           error={!!errors.startingSeed}
           helperText={errors.startingSeed}
         />
@@ -214,6 +218,10 @@ export default function OptionsPage() {
               mapWidth: Math.max(1, Number(e.target.value)),
             })
           }
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+          }}
           error={!!errors.mapWidth}
           helperText={errors.mapWidth}
         />
@@ -227,6 +235,10 @@ export default function OptionsPage() {
               mapHeight: Math.max(1, Number(e.target.value)),
             })
           }
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+          }}
           error={!!errors.mapHeight}
           helperText={errors.mapHeight}
         />
@@ -240,6 +252,10 @@ export default function OptionsPage() {
               autosaveIntervalSeconds: Number(e.target.value),
             })
           }
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+          }}
           error={!!errors.autosaveIntervalSeconds}
           helperText={errors.autosaveIntervalSeconds}
         />
@@ -280,7 +296,12 @@ export default function OptionsPage() {
                   (orgInputError ? orgInputError + " " : "") +
                   `Maximum is ${maxOrgs} (map ${w}x${h}).`
                 }
-                inputProps={{ min: 0, max: maxOrgs }}
+                inputProps={{
+                  min: 0,
+                  max: maxOrgs,
+                  onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+                    e.currentTarget.blur(),
+                }}
               />
             </div>
           );
