@@ -8,7 +8,7 @@ description: "Generated task list for Initial Agents & Personnel Screen feature"
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-- [ ] T001 Create this tasks file at specs/004-initial-agents/tasks.md (repository)
+- [x] T001 Create this tasks file at specs/004-initial-agents/tasks.md (repository)
 - [ ] T002 [P] Ensure linting and formatting run in CI; update `.github/workflows` or frontend config if missing (frontend/.github or frontend/package.json)
 - [ ] T003 [P] Add CI job snippet to run Vitest + Playwright for this feature (frontend/.github/workflows/test.yml)
 
@@ -19,7 +19,7 @@ description: "Generated task list for Initial Agents & Personnel Screen feature"
 - [ ] T004 Implement PRNG wrapper accepting a seed in `frontend/src/lib/rng.ts` and add unit tests in `frontend/tests/unit/rng.test.ts`
 - [ ] T005 [P] Implement `NameGenerator` utility in `frontend/src/services/nameGenerator.ts` and unit tests in `frontend/tests/unit/nameGenerator.test.ts`
 - [ ] T006 Update `frontend/src/services/generation.ts` to accept an explicit RNG/seed parameter and add unit tests in `frontend/tests/unit/generation.seed.test.ts`
-- [ ] T007 [P] Validate canonical frontend models used by this feature: review `frontend/src/models/person.ts`, `frontend/src/models/agent.ts`, and `frontend/src/models/zone.ts` and add any lightweight adapters in `frontend/src/models/adapters/` if necessary (add tests in `frontend/tests/unit/models.spec.ts`)
+- [x] T007 [P] Validate canonical frontend models used by this feature: review `frontend/src/models/person.ts`, `frontend/src/models/agent.ts`, and `frontend/src/models/zone.ts` and add any lightweight adapters in `frontend/src/models/adapters/` if necessary (add tests in `frontend/tests/unit/models.spec.ts`)
 
 Note: Test-first requirement — all implementation tasks MUST be preceded by authored failing tests (Red). The following test-authoring tasks must be completed before implementing the corresponding modules.
 
