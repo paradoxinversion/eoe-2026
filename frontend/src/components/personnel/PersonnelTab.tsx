@@ -1,5 +1,5 @@
 import React from "react";
-import AgentList from "./AgentList";
+import PersonnelList from "./PersonnelList";
 import Profile from "./Profile";
 import CapacityWidgets from "./CapacityWidgets";
 import AgentTypeChart from "./AgentTypeChart";
@@ -173,7 +173,7 @@ export default function PersonnelTab() {
         <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
           <AgentTypeChart agents={agents} size={140} />
           <div style={{ flex: 1 }}>
-            <AgentList
+            <PersonnelList
               agents={agents}
               onActivate={(a) => setSelected(a as Agent)}
               onFocus={(a) => setSelected(a as Agent)}
