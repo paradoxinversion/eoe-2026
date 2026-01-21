@@ -2,6 +2,7 @@ node_modules/
 frontend/node_modules/
 frontend/.vite
 frontend/tests_output
+frontend/generation-*
 dist/
 tests_output/
 build/
