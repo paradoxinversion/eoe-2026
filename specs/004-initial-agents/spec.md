@@ -5,6 +5,14 @@
 **Status**: Draft  
 **Input**: User description: "The game will now be updated so that the Player's Governing Organizations starts with an initial set of 10 Agents. The Agents will be ten randomly chosen people from the Player's starting zone. The personnel screen will also be update to be more fully featured. The layout will be improved for a more professional feel, and the Profile will be updated to surface more information about selected Agents. A name generator will also be added, so people have more realistic and varied names."
 
+## Clarifications
+
+### Session 2026-01-21
+
+- Q: Which population should Agents be selected from and are there age/assignment constraints? → A: People in the Player's starting zone have no age field (all are treated as adults) and it must be impossible for those People to be Agents of any other Governing Organization at game start. Selection therefore only considers unassigned People in the starting zone.
+
+- Q: Where do the Agent/Governing Organization/Zone data shapes come from and how should the Profile obtain display fields? → A: The `Agent`, `Governing Organization`, and `Zone` canonical data models are the ones in `frontend/src/models`. When viewing an Agent's Profile on the Personnel screen, the UI MUST obtain the Agent's actual `name`, `homeZone`/`originZone`, `skills`, `attributes`, etc., from the associated `Person` entity referenced by the `Agent` object in those canonical models.
+
 ## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Start a new game (Priority: P1)
@@ -33,7 +41,7 @@ As a Player, I can open the Personnel screen to see the list of Agents, access a
 
 **Acceptance Scenarios**:
 
-1. **Given** a Player with Agents, **When** they open the Personnel screen, **Then** the screen displays a list of Agents (>=1) with name, age (if available), role, and a selectable entry for Profile.
+1. **Given** a Player with Agents, **When** they open the Personnel screen, **Then** the screen displays a list of Agents (>=1) with name, role, and a selectable entry for Profile.
 2. **Given** an Agent selected in the list, **When** the Player opens the Profile pane, **Then** additional fields (biography snippet, skills summary, origin zone) are visible.
 3. **Given** many Agents, **When** Player sorts or filters by role/zone/name, **Then** the list updates accordingly and remains usable.
 
@@ -67,17 +75,19 @@ When new People are created during world generation, they should have realistic 
 - **FR-001**: On a new game, the Player's Governing Organization MUST be initialized with exactly 10 Agent slots; filled slots must reference unique Agent entities when available.
 - **FR-002**: The 10 Agents MUST be selected from the Player's starting zone population (no Agents from other zones), chosen randomly unless deterministic seeding is used for testing.
 - **FR-003**: The Personnel screen MUST display a list of the Player's Agents including at minimum: full name, role/title, and origin zone.
-- **FR-004**: Selecting an Agent in the list MUST open a Profile pane that displays additional details: biography snippet, skills summary, age (if available), and any assigned roles.
+**FR-004**: Selecting an Agent in the list MUST open a Profile pane that displays additional details sourced from the associated `Person` record: biography snippet, skills summary, attributes, `homeZone`/origin, and any assigned roles. The Profile MUST read these fields via the canonical models in `frontend/src/models`.
 - **FR-005**: The Personnel screen MUST support sorting by name, role, and origin zone, and simple filtering by role/zone.
 - **FR-006**: The name generator MUST produce plausible full names (given + family) for People created during world generation and be callable during person/Agent creation and for display purposes.
 - **FR-007**: When the starting population is insufficient to supply 10 unique Agents, the system MUST fill as many unique Agent slots as possible and expose remaining slots as empty (no silent failures).
+- **FR-008**: People located in the Player's starting zone MUST NOT be assigned as Agents of any other Governing Organization at game initialization; they are considered unassigned for the purposes of initial Agent selection.
 
 ### Key Entities
 
-- **Agent**: Represents a person who can be assigned to an Organization. Key attributes: unique ID, full name, origin zone, role/title, skills summary, biography snippet, age (optional).
-- **Governing Organization**: Player-owned entity that has a roster of Agent slots (initially 10) and references to Agent entities.
-- **Zone**: Geographical or logical area used as the selection pool for initial Agent assignment.
-- **NameGenerator**: Responsible for synthesizing realistic names given optional cultural/seed inputs.
+**Agent**: Represents a person assignment record that references a `Person` entity from the canonical models. Key attributes: unique ID, reference to `Person` (source of `full name`, `homeZone`, `skills`, `attributes`), role/title, biography snippet. Note: People currently have no age field and are treated as adults.
+
+- **Governing Organization**: Player-owned entity that has a roster of Agent slots (initially 10) and references to Agent entities; see canonical models in `frontend/src/models`.
+- **Zone**: Geographical or logical area used as the selection pool for initial Agent assignment; canonical `Zone` model is in `frontend/src/models`.
+- **NameGenerator**: Responsible for synthesizing realistic names given optional cultural/seed inputs; can be implemented as a service referenced by frontend or shared utility.
 
 ## Success Criteria _(mandatory)_
 
