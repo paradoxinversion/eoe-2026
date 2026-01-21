@@ -402,11 +402,17 @@ export async function generateAndSaveWorld(
     if (isNode) {
       const fs = await import("fs");
       const fname = `${artifactSaveName}-counts.json`;
-      await fs.promises.writeFile(
-        fname,
-        JSON.stringify(counts, null, 2),
-        "utf8",
-      );
+      // Write counts to disk but do not await completion so generation
+      // returns promptly for tests and callers. Log errors if write fails.
+      fs.promises
+        .writeFile(fname, JSON.stringify(counts, null, 2), "utf8")
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn(
+            "generateAndSaveWorld: failed to write counts file",
+            err,
+          );
+        });
     } else {
       // Fallback for environments without filesystem: persist via saveGameState
       await saveGameState(
