@@ -27,6 +27,6 @@ jobs:
               run: pnpm install
 
             - name: Run frontend integration tests for generator
-              run: pnpm --filter frontend test:integration --run
+              run: pnpm --filter frontend run test:integration
               env:
                   CI: true
