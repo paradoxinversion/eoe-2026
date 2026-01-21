@@ -14,7 +14,7 @@ export async function generateDebugArtifactToFile(
   opts?: DebugGenerateOpts,
   outPath?: string,
 ): Promise<DebugArtifact> {
-  const artifact = generateDebugWorld(seed, opts as any);
+  const artifact = generateDebugWorld(seed, opts);
 
   // write to disk only when running in Node (developer script)
   const isNode =
