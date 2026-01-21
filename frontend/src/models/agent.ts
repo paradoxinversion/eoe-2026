@@ -30,19 +30,21 @@ export type AgentStatus = "active" | "idle" | "unavailable" | "dead";
 
 export function createAgent(
   id: string,
-  name: string,
+  personId: string,
+  codeName = "",
   pay = 0,
   opts?: Partial<Pick<Agent, "role" | "hired_at">>,
 ): Agent {
   return {
     id,
-    name,
+    personId,
+    codeName,
     pay: Math.max(0, Math.floor(pay)),
     status: "idle",
-    role: opts?.role,
+    role: (opts?.role as AgentRole) || ("Recruit" as AgentRole),
     assigned_project_ids: [],
     hired_at: opts?.hired_at,
-  };
+  } as Agent;
 }
 
 export function assignAgentToProject(agent: Agent, projectId: string) {

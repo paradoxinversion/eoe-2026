@@ -30,12 +30,14 @@ export default function Profile({ person }: { person: Person }) {
     { label: "Leadership", value: person.leadership ?? "—" },
     { label: "Pay", value: person.pay ?? "—" },
     { label: "Status", value: person.status || "—" },
+    { label: "Origin", value: (person as any).homeZoneId || "—" },
   ];
 
   return (
     <div style={{ padding: 12, border: "1px solid #ddd", borderRadius: 6 }}>
       <div style={{ fontSize: 18, fontWeight: 700 }}>
-        {person.name || person.id}
+        {`${person.firstName || ""} ${person.lastName || ""}`.trim() ||
+          person.id}
       </div>
       <div style={{ marginTop: 8 }}>
         <div style={{ marginBottom: 8 }}>Confidence: {confidence}%</div>
