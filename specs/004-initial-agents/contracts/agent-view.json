@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "AgentView",
+    "type": "object",
+    "required": ["agentId", "person"],
+    "properties": {
+        "agentId": { "type": "string" },
+        "role": { "type": ["string", "null"] },
+        "person": {
+            "type": "object",
+            "required": ["id", "fullName", "homeZone"],
+            "properties": {
+                "id": { "type": "string" },
+                "fullName": { "type": "string" },
+                "homeZone": { "type": "string" },
+                "skills": { "type": ["object", "array", "null"] },
+                "attributes": { "type": ["object", "null"] }
+            }
+        }
+    }
+}
