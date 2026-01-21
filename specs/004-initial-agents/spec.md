@@ -13,6 +13,8 @@
 
 - Q: Where do the Agent/Governing Organization/Zone data shapes come from and how should the Profile obtain display fields? → A: The `Agent`, `Governing Organization`, and `Zone` canonical data models are the ones in `frontend/src/models`. When viewing an Agent's Profile on the Personnel screen, the UI MUST obtain the Agent's actual `name`, `homeZone`/`originZone`, `skills`, `attributes`, etc., from the associated `Person` entity referenced by the `Agent` object in those canonical models.
 
+- Q: Which canonical `Person` fields should the Profile read? → A: Use canonical `Person` fields: `id`, `fullName`, `homeZone`/`originZone`, `skills`, `attributes`, `biography`. The Profile MUST read these directly from the `Person` referenced by the `Agent`.
+
 ## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Start a new game (Priority: P1)
@@ -88,6 +90,17 @@ When new People are created during world generation, they should have realistic 
 - **Governing Organization**: Player-owned entity that has a roster of Agent slots (initially 10) and references to Agent entities; see canonical models in `frontend/src/models`.
 - **Zone**: Geographical or logical area used as the selection pool for initial Agent assignment; canonical `Zone` model is in `frontend/src/models`.
 - **NameGenerator**: Responsible for synthesizing realistic names given optional cultural/seed inputs; can be implemented as a service referenced by frontend or shared utility.
+
+**Person (canonical model fields)**: The `Person` entity in `frontend/src/models` should expose at minimum the following fields for the Personnel Profile view:
+
+- `id` — unique identifier for the Person
+- `fullName` — the displayed full name (given + family)
+- `homeZone` / `originZone` — reference to the Person's zone
+- `skills` — summary or structured skills data used in Profile
+- `attributes` — key attributes (traits, stats) relevant to the UI
+- `biography` — short biography snippet for display
+
+The Profile view MUST read these fields from the referenced `Person` rather than duplicating them on the `Agent` record.
 
 ## Success Criteria _(mandatory)_
 
