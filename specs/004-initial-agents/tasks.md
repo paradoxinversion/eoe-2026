@@ -9,8 +9,8 @@ description: "Generated task list for Initial Agents & Personnel Screen feature"
 ## Phase 1: Setup (Shared Infrastructure)
 
 - [x] T001 Create this tasks file at specs/004-initial-agents/tasks.md (repository)
-- [ ] T002 [P] Ensure linting and formatting run in CI; update `.github/workflows` or frontend config if missing (frontend/.github or frontend/package.json)
-- [ ] T003 [P] Add CI job snippet to run Vitest + Playwright for this feature (frontend/.github/workflows/test.yml)
+- [x] T002 [P] Ensure linting and formatting run in CI; update `.github/workflows` or frontend config if missing (frontend/.github or frontend/package.json)
+- [x] T003 [P] Add CI job snippet to run Vitest + Playwright for this feature (frontend/.github/workflows/test.yml)
 
 ---
 
@@ -74,7 +74,7 @@ Note: Test-first requirement — all implementation tasks MUST be preceded by au
 
 - [ ] T020 [P] Update `specs/004-initial-agents/quickstart.md` with exact commands to run deterministic generation and the new tests
 - [ ] T021 [P] Add documentation/comments in `frontend/src/services/generation.ts` and `frontend/src/services/nameGenerator.ts` describing RNG/seed usage and determinism guarantees
-- [ ] T022 [P] Run `eslint`/`prettier` over changed files and fix issues (frontend/)
+- [x] T022 [P] Run `eslint`/`prettier` over changed files and fix issues (frontend/)
 - [ ] T023 [P] Update draft PR with test run artifacts and evidence (screenshot or test output) in the PR description
 
 - [ ] T024 [P] Add performance measurement: create `frontend/tests/perf/world-gen.bench.ts` to measure world-generation timings (p95/p99) and add a CI job to record timings and alert on regressions beyond thresholds
