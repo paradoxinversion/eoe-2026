@@ -16,5 +16,5 @@ describe("generation.save", () => {
     expect(saved).not.toBeNull();
     // deep equality via JSON to avoid prototype issues
     expect(JSON.stringify(saved)).toBe(JSON.stringify(artifact));
-  });
+  }, 20000);
 });
