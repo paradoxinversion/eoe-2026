@@ -35,12 +35,6 @@ Note: Test-first requirement — all implementation tasks MUST be preceded by au
 
 **Independent Test**: Deterministic generation reproduces the same Agent IDs given the same seed; integration test at `frontend/tests/integration/initial-agents.integration.test.tsx` should verify roster size, uniqueness, and source zone.
 
-- [ ] T008 [US1] Implement sampling algorithm in `frontend/src/services/generation.ts` to select up to 10 unique `Person` ids from the starting zone using the injected RNG
-- [ ] T008a Write failing integration test `frontend/tests/integration/initial-agents.integration.test.tsx` asserting roster size, uniqueness, and source zone given a seed (must fail before implementation).
-- [ ] T009 [US1] Implement Agent creation in `frontend/src/services/generation.ts` (create `Agent` records with `personId` and `affiliationId` set to the Player's GoverningOrganization id) and persist via existing storage layer (IndexedDB wrappers under `frontend/src/lib/` or `frontend/src/services/`)
-- [ ] T010 [US1] Add bounded-retry uniqueness handling in `frontend/src/services/generation.ts` with a clear retry limit and fallback behavior when population <10
-- [ ] T011 [US1] Integration test: `frontend/tests/integration/initial-agents.integration.test.tsx` — seed-in/seed-out reproducibility and correct zone scoping (uses deterministic RNG)
-- [ ] T012 [US1] Add edge-case test: `frontend/tests/unit/initial-agents.edge.test.ts` for low-population behavior (fewer than 10 people)
 - [x] T008 [US1] Implement sampling algorithm in `frontend/src/services/generation.ts` to select up to 10 unique `Person` ids from the starting zone using the injected RNG
 - [x] T008a Write failing integration test `frontend/tests/integration/initial-agents.integration.test.tsx` asserting roster size, uniqueness, and source zone given a seed (must fail before implementation).
 - [x] T009 [US1] Implement Agent creation in `frontend/src/services/generation.ts` (create `Agent` records with `personId` and `affiliationId` set to the Player's GoverningOrganization id) and persist via existing storage layer (IndexedDB wrappers under `frontend/src/lib/` or `frontend/src/services/`)
