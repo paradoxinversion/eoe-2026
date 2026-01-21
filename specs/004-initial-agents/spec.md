@@ -102,7 +102,6 @@ When new People are created during world generation, they should have realistic 
 - `homeZone` / `originZone` — reference to the Person's zone
 - `skills` — summary or structured skills data used in Profile
 - `attributes` — key attributes (traits, stats) relevant to the UI
-- `attributes` — key attributes (traits, stats) relevant to the UI
 
 The Profile view MUST read these fields from the referenced `Person` rather than duplicating them on the `Agent` record.
 
