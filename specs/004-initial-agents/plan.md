@@ -49,7 +49,7 @@ Source Code (selected layout)
 ``text
 frontend/
 ├── src/
-│ ├── components/personnel/ # UI changes and Profile pane
+│ ├── components/personnel/ (refactor `frontend/src/components/personnel/Profile.tsx`) # UI changes and Profile pane
 │ ├── services/generation.ts # Add RNG/seed param and NameGenerator integration
 
 - │ └── models/ # Use canonical Person, Agent, Zone models
@@ -69,7 +69,7 @@ No constitution violations requiring exception. No additional project-level comp
 1. Add `NameGenerator` utility (local lists + templating) and unit tests.
 2. Update `frontend/src/services/generation.ts` to accept an explicit RNG/seed and use it when sampling `Person` ids for initial Agent creation; implement bounded retry and uniqueness checks.
 3. Implement Agent creation flow: create `Agent` records with `personId` and set `affiliationId` to the player's GoverningOrganization `id`.
-4. Update Personnel UI (`components/personnel`) to display list, sorting/filtering, and Profile pane reading `Person` canonical fields.
+4. Update Personnel UI (`frontend/src/components/personnel`) to display list, sorting/filtering, and refactor `frontend/src/components/personnel/Profile.tsx` so the Profile pane reads canonical `Person` fields (`firstName`, `lastName`, `homeZoneId`, `skills`, `attributes`), preserves accessibility, and supports the updated Agent view contract.
 5. Add integration tests: deterministic generation (seed), Agent selection correctness, and UI acceptance tests (Vitest + Playwright).
 6. Add `specs/004-initial-agents/tasks.md` with detailed work items, owners, and timeboxes.
 7. Run linters, formatters, and CI checks; update draft PR with testing evidence.
