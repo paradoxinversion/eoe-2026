@@ -35,7 +35,7 @@
 - [x] T010 [US1] Implement or finalize generator logic in `frontend/src/services/generation.ts` to: partition map into Zones (gridX/gridY), place at least one of each `BUILDING_TYPES` per Zone, create People and GoverningOrganizations with valid cross-references, and return a debug artifact
 - [x] T011 [US1] Add test helper to write the debug artifact to `tests_output/generation-debug-<seed>.json` for manual QA
 - [x] T012 [US1] Add logging of placementErrors into the debug artifact and assert tests record zero placementErrors for default map sizes
-- [ ] T013 [US1] Persist generated world to the game's save/persistence layer after generation; add tests that verify the saved state matches the generated artifact
+- [x] T013 [US1] Persist generated world to the game's save/persistence layer after generation; add tests that verify the saved state matches the generated artifact
 
 ---
 
@@ -54,7 +54,7 @@
 
 ### Implementation
 
-- [ ] T020 [US3] Add a developer-facing QA hook (export or small CLI) in `frontend/src/services/generationDebug.ts` or augment `frontend/src/services/generation.ts` to support `debug: true` and returning the artifact to callers
+- [x] T020 [US3] Add a developer-facing QA hook (export or small CLI) in `frontend/src/services/generationDebug.ts` or augment `frontend/src/services/generation.ts` to support `debug: true` and returning the artifact to callers
 - [ ] T021 [US3] Update `specs/002-enhance-world-generation/quickstart.md` with exact commands to run the generator and capture artifacts (already present; verify accuracy)
 
 ---
