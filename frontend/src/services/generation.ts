@@ -363,8 +363,8 @@ export async function generateAndSaveWorld(
     console.warn("generateAndSaveWorld: failed to create player/org", e);
   }
 
-  const name = saveName || `generation-${String(seed)}`;
-  await saveGameState(name, artifact);
+  const artifactSaveName = `generation-${String(seed)}`;
+  await saveGameState(artifactSaveName, artifact);
 
   // write a simple counts JSON file reporting the number of each entity created
   const counts = {
@@ -386,7 +386,7 @@ export async function generateAndSaveWorld(
       !!(process.versions && process.versions.node);
     if (isNode) {
       const fs = await import("fs");
-      const fname = `${name}-counts.json`;
+      const fname = `${artifactSaveName}-counts.json`;
       await fs.promises.writeFile(
         fname,
         JSON.stringify(counts, null, 2),
@@ -394,7 +394,10 @@ export async function generateAndSaveWorld(
       );
     } else {
       // Fallback for environments without filesystem: persist via saveGameState
-      await saveGameState(`${name}-counts`, counts as unknown as DebugArtifact);
+      await saveGameState(
+        `${artifactSaveName}-counts`,
+        counts as unknown as DebugArtifact,
+      );
     }
   } catch (e) {
     // don't fail generation for inability to write counts; log for diagnosics
