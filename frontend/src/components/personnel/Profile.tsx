@@ -6,6 +6,7 @@ type Person = {
   name?: string;
   firstName?: string;
   lastName?: string;
+  homeZoneId?: string;
   intelligenceLevel?: number;
   agentType?: string;
   role?: string;
@@ -30,7 +31,7 @@ export default function Profile({ person }: { person: Person }) {
     { label: "Leadership", value: person.leadership ?? "—" },
     { label: "Pay", value: person.pay ?? "—" },
     { label: "Status", value: person.status || "—" },
-    { label: "Origin", value: (person as any).homeZoneId || "—" },
+    { label: "Origin", value: person.homeZoneId || "—" },
   ];
 
   return (
