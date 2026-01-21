@@ -7,7 +7,13 @@ import type { Person } from "../models/person";
 import type Building from "../models/building";
 import { BUILDING_TYPES } from "../models/building";
 import type GoverningOrganization from "../models/governingOrganization";
-import { saveGameState, loadConfig, loadPreferences } from "./persistence";
+import {
+  saveGameState,
+  loadConfig,
+  loadPreferences,
+  listConfigs,
+  deleteConfig,
+} from "./persistence";
 import { defaultConfig } from "../config/schema";
 
 export type DebugArtifact = {
@@ -286,6 +292,30 @@ export async function generateAndSaveWorld(
     // ignore and fall back to generator defaults
   }
 
+  // Clear persisted world data (game states and agents) when starting a new game
+  try {
+    const isNode =
+      typeof process !== "undefined" &&
+      !!(process.versions && process.versions.node);
+    if (!isNode) {
+      const configs = await listConfigs();
+      for (const c of configs) {
+        if (
+          typeof c.name === "string" &&
+          (c.name.startsWith("game:") || c.name.startsWith("agent:"))
+        ) {
+          try {
+            await deleteConfig(c.name);
+          } catch (err) {
+            // ignore individual deletion failures
+          }
+        }
+      }
+    }
+  } catch (e) {
+    // ignore clearing failures
+  }
+
   const artifact = generateDebugWorld(seed, finalOpts);
 
   try {
@@ -383,9 +413,27 @@ export async function generateAndSaveWorld(
     // Initialize agents array in artifact
     artifact.agents = artifact.agents || [];
 
+    // When running in the browser, clear any previously persisted agents
+    // so a fresh game starts with a clean personnel store.
+    try {
+      const isNode =
+        typeof process !== "undefined" &&
+        !!(process.versions && process.versions.node);
+      if (!isNode) {
+        const pers = await import("./personnelPersistence");
+        const existing = await pers.listAgents();
+        if (Array.isArray(existing) && existing.length > 0) {
+          await Promise.all(
+            existing.map((e) => pers.deleteAgent(e.id).catch(() => {})),
+          );
+        }
+      }
+    } catch (e) {
+      // ignore persistence cleanup failures
+    }
+
     // Initial Agent selection: up to 10 unique Agents sampled from the
     // player's starting zone population. Use bounded retries per slot.
-    const persistPromises: Array<Promise<unknown>> = [];
     try {
       const RETRY_LIMIT = 50;
       const TARGET_SLOTS = 10;
@@ -418,38 +466,8 @@ export async function generateAndSaveWorld(
             });
             ag.affiliationId = playerOrg.id;
             artifact.agents.push(ag as import("../models/agent").Agent);
-            // persist agent record for UI consumption when possible
-            try {
-              const isNode =
-                typeof process !== "undefined" &&
-                !!(process.versions && process.versions.node);
-              if (!isNode) {
-                const pers = await import("./personnelPersistence");
-                // try to enrich agent record with linked person fields
-                const personObj = (artifact.people || []).find(
-                  (pp: any) => pp.id === picked,
-                ) as import("../models/person").Person | undefined;
-                const rec = {
-                  id: ag.id,
-                  personId: picked,
-                  codename: (ag.codeName as string) || ag.id,
-                  firstName: (personObj && personObj.firstName) || undefined,
-                  lastName: (personObj && personObj.lastName) || undefined,
-                  intelligenceLevel:
-                    (personObj && (personObj.intelligenceLevel as number)) ||
-                    undefined,
-                  agentType:
-                    (ag.agentType as string) ||
-                    personObj?.occupation ||
-                    undefined,
-                  role: (ag.role as string) || undefined,
-                  affiliationId: ag.affiliationId,
-                } as import("../services/personnelPersistence").AgentRecord;
-                persistPromises.push(pers.saveAgent(rec).catch(() => {}));
-              }
-            } catch (e) {
-              // ignore persistence failures
-            }
+            // do not persist agents as top-level configs; agents belong
+            // inside the generated artifact (saved via `saveGameState`).
           } else {
             // leave slot empty
           }

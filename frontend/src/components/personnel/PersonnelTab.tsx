@@ -6,6 +6,7 @@ import AgentTypeChart from "./AgentTypeChart";
 import personnelPersistence, {
   AgentRecord,
 } from "../../services/personnelPersistence";
+import { listGameStates, loadGameState } from "../../services/persistence";
 
 type Agent = {
   id: string;
@@ -23,6 +24,51 @@ export default function PersonnelTab() {
   React.useEffect(() => {
     let mounted = true;
     async function load() {
+      // Prefer loading agents from the most recent game state so agents
+      // live only inside game artifacts. Fall back to legacy `personnelPersistence`.
+      try {
+        const games = await listGameStates();
+        if (Array.isArray(games) && games.length > 0) {
+          // pick most recently updated
+          games.sort((x, y) => (y.updatedAt || 0) - (x.updatedAt || 0));
+          const latest = games[0];
+          const gameState = await loadGameState(latest.name);
+          if (gameState) {
+            // gameState may be the artifact directly or a wrapper with .world.artifact
+            const art =
+              (gameState as any).world?.artifact || (gameState as any);
+            if (art && Array.isArray(art.agents) && art.agents.length > 0) {
+              const a = (art.agents as any[]).map((ag: any) => {
+                // find linked person
+                const person =
+                  (art.people || []).find((p: any) => p.id === ag.personId) ||
+                  null;
+                const name =
+                  ag.codeName ||
+                  `${person?.firstName || ""} ${person?.lastName || ""}`.trim();
+                return {
+                  id: ag.id,
+                  name,
+                  firstName: person?.firstName,
+                  lastName: person?.lastName,
+                  intelligenceLevel: person?.intelligenceLevel,
+                  agentType: ag.agentType || person?.occupation,
+                  attributes: person?.attributes || ag.attributes,
+                  skills: person?.skills || ag.skills,
+                  ...ag,
+                } as Agent;
+              });
+              setAgents(a);
+              setSelected((prev) => (prev ? prev : a.length > 0 ? a[0] : prev));
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        // ignore game-state read failures and fall back
+      }
+
+      // legacy fallback: list top-level agent configs
       const list = await personnelPersistence.listAgents();
       // DEBUG: log raw persistence entries for diagnostics
       try {
@@ -51,6 +97,8 @@ export default function PersonnelTab() {
           name,
           intelligenceLevel,
           agentType,
+          attributes: (ag as any).attributes,
+          skills: (ag as any).skills,
           ...ag,
         } as Agent;
       });
@@ -75,6 +123,8 @@ export default function PersonnelTab() {
               : undefined,
           agentType:
             typeof ag.agentType === "string" ? ag.agentType : undefined,
+          attributes: (ag as any).attributes,
+          skills: (ag as any).skills,
           ...ag,
         };
         setAgents((prev) => {
@@ -127,6 +177,8 @@ export default function PersonnelTab() {
               name,
               intelligenceLevel,
               agentType,
+              attributes: (ag as any).attributes,
+              skills: (ag as any).skills,
               ...ag,
             } as Agent;
           });
