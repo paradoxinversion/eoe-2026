@@ -55,14 +55,15 @@
 ### Implementation
 
 - [x] T020 [US3] Add a developer-facing QA hook (export or small CLI) in `frontend/src/services/generationDebug.ts` or augment `frontend/src/services/generation.ts` to support `debug: true` and returning the artifact to callers
-- [ ] T021 [US3] Update `specs/002-enhance-world-generation/quickstart.md` with exact commands to run the generator and capture artifacts (already present; verify accuracy)
+- [x] T021 [US3] Update `specs/002-enhance-world-generation/quickstart.md` with exact commands to run the generator and capture artifacts (already present; verify accuracy)
 
 ---
 
 ## Phase N: Polish & Cross-Cutting Concerns
 
-- [ ] T022 [P] Documentation update: add usage notes to `specs/002-enhance-world-generation/quickstart.md` and inline README in `frontend/src/services/`
+- [x] T022 [P] Documentation update: add usage notes to `specs/002-enhance-world-generation/quickstart.md` and inline README in `frontend/src/services/`
 - [ ] T023 [P] Add CI job entry to run new generator tests: update `.github/workflows/` with a job that runs `pnpm test -- tests/integration/generation.*` and schema validation
+- [x] T023 [P] Add CI job entry to run new generator tests: update `.github/workflows/` with a job that runs `pnpm test -- tests/integration/generation.*` and schema validation
 - [ ] T024 [P] Code cleanup and ensure linting passes for modified files: run project lint configuration and fix issues
 
 ---
