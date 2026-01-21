@@ -8,11 +8,12 @@
         "role": { "type": ["string", "null"] },
         "person": {
             "type": "object",
-            "required": ["id", "fullName", "homeZone"],
+            "required": ["id", "firstName", "lastName", "homeZoneId"],
             "properties": {
                 "id": { "type": "string" },
-                "fullName": { "type": "string" },
-                "homeZone": { "type": "string" },
+                "firstName": { "type": "string" },
+                "lastName": { "type": "string" },
+                "homeZoneId": { "type": "string" },
                 "skills": { "type": ["object", "array", "null"] },
                 "attributes": { "type": ["object", "null"] }
             }

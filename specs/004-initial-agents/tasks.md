@@ -43,7 +43,7 @@ description: "Generated task list for Initial Agents & Personnel Screen feature"
 
 **Independent Test**: UI integration tests verify list rendering, sort/filter behavior, and that Profile contents match the `Person` data for a selected Agent.
 
-- [ ] T013 [US2] Refactor `frontend/src/components/personnel/Profile.tsx` to read `Person` fields (`firstName`, `lastName`/`fullName`, `homeZoneId`/`homeZone`, `skills`, `attributes`) from the canonical `Person` model and render accessible placeholders for missing data
+- [ ] T013 [US2] Refactor `frontend/src/components/personnel/Profile.tsx` to read `Person` fields (`firstName`, `lastName`, `homeZoneId`, `skills`, `attributes`) from the canonical `Person` model and render accessible placeholders for missing data
 - [ ] T014 [US2] Implement or update `frontend/src/components/personnel/PersonnelList.tsx` (or equivalent) to include sorting by name/role/zone and filtering UI; add unit tests in `frontend/tests/unit/personnel.list.test.tsx`
 - [ ] T015 [US2] Add integration Playwright test `frontend/tests/playwright/personnel.spec.ts` that opens Personnel screen, selects an Agent, and asserts Profile shows Person fields and accessibility checks
 - [ ] T016 [US2] Ensure Profile changes conform to `specs/004-initial-agents/contracts/agent-view.json` and add a contract test in `frontend/tests/unit/agent-view.contract.test.ts`
@@ -56,7 +56,7 @@ description: "Generated task list for Initial Agents & Personnel Screen feature"
 
 **Independent Test**: Unit tests for `NameGenerator` (format/uniqueness) and integration test verifying names are assigned during generation when invoked.
 
-- [ ] T017 [US3] Integrate `NameGenerator` into `frontend/src/services/generation.ts` so newly created `Person` records receive a `fullName`/`firstName`+`lastName` when generated
+- [ ] T017 [US3] Integrate `NameGenerator` into `frontend/src/services/generation.ts` so newly created `Person` records receive `firstName` and `lastName` when generated
 - [ ] T018 [US3] Unit test `frontend/tests/unit/nameGenerator.uniqueness.test.ts` sampling 1,000 names and asserting uniqueness/format metrics per spec
 - [ ] T019 [US3] Integration test `frontend/tests/integration/namegen.integration.test.tsx` to verify deterministic outputs when seeding name generation
 
@@ -68,6 +68,8 @@ description: "Generated task list for Initial Agents & Personnel Screen feature"
 - [ ] T021 [P] Add documentation/comments in `frontend/src/services/generation.ts` and `frontend/src/services/nameGenerator.ts` describing RNG/seed usage and determinism guarantees
 - [ ] T022 [P] Run `eslint`/`prettier` over changed files and fix issues (frontend/)
 - [ ] T023 [P] Update draft PR with test run artifacts and evidence (screenshot or test output) in the PR description
+
+- [ ] T024 [P] Add performance measurement: create `frontend/tests/perf/world-gen.bench.ts` to measure world-generation timings (p95/p99) and add a CI job to record timings and alert on regressions beyond thresholds
 
 ---
 

@@ -16,6 +16,7 @@ Initialize the Player's Governing Organization with up to 10 Agents sampled from
 **Target Platform**: Web (desktop-first, responsive) implemented in `frontend/`
 **Project Type**: Web application (frontend-only changes for UI + local world-generation)
 **Performance Goals**: Personnel screen primary view becomes interactive <1s on a typical development machine; world-generation including name-gen and agent selection <100ms for small worlds, <500ms for larger test fixtures.
+Add a benchmarking task and CI job to record world-generation timings (p95/p99) and fail or flag regressions beyond defined thresholds.
 **Constraints**: Local-first; no runtime network dependencies required for name generation or initial assignment; deterministic RNG/seed must be supported for tests.
 **Scale/Scope**: Feature affects world-generation, frontend models, and Personnel UI only.
 
@@ -67,7 +68,7 @@ No constitution violations requiring exception. No additional project-level comp
 ## Phase 2: Implementation Tasks (high level)
 
 1. Add `NameGenerator` utility (local lists + templating) and unit tests.
-2. Update `frontend/src/services/generation.ts` to accept an explicit RNG/seed and use it when sampling `Person` ids for initial Agent creation; implement bounded retry and uniqueness checks.
+2. Update `frontend/src/services/generation.ts` to accept an explicit RNG/seed and use it when sampling `Person` ids for initial Agent creation; implement bounded retry (per-slot retry limit, recommend 50 attempts) and uniqueness checks.
 3. Implement Agent creation flow: create `Agent` records with `personId` and set `affiliationId` to the player's GoverningOrganization `id`.
 4. Update Personnel UI (`frontend/src/components/personnel`) to display list, sorting/filtering, and refactor `frontend/src/components/personnel/Profile.tsx` so the Profile pane reads canonical `Person` fields (`firstName`, `lastName`, `homeZoneId`, `skills`, `attributes`), preserves accessibility, and supports the updated Agent view contract.
 5. Add integration tests: deterministic generation (seed), Agent selection correctness, and UI acceptance tests (Vitest + Playwright).
