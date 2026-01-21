@@ -23,12 +23,40 @@ export async function generateDebugArtifactToFile(
   if (isNode) {
     try {
       const fs = await import("fs");
-      const path = outPath || `generation-${String(seed)}-artifact.json`;
+      const path = await import("path");
+      const writePath = outPath || `generation-${String(seed)}-artifact.json`;
       await fs.promises.writeFile(
-        path,
+        writePath,
         JSON.stringify(artifact, null, 2),
         "utf8",
       );
+
+      // also write a simple counts file next to the artifact for quick checks
+      try {
+        const counts = {
+          zones: Array.isArray(artifact.zones) ? artifact.zones.length : 0,
+          people: Array.isArray(artifact.people) ? artifact.people.length : 0,
+          buildings: Array.isArray(artifact.buildings)
+            ? artifact.buildings.length
+            : 0,
+          organizations: Array.isArray(artifact.organizations)
+            ? artifact.organizations.length
+            : 0,
+        } as const;
+        const countsName = `generation-${String(seed)}-counts.json`;
+        const countsPath = path.join(path.dirname(writePath), countsName);
+        await fs.promises.writeFile(
+          countsPath,
+          JSON.stringify(counts, null, 2),
+          "utf8",
+        );
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          "generateDebugArtifactToFile: failed to write counts file",
+          e,
+        );
+      }
     } catch (e) {
       // eslint-disable-next-line no-console
       console.warn("generateDebugArtifactToFile: failed to write artifact", e);
