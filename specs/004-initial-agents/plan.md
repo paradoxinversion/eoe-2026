@@ -76,3 +76,11 @@ No constitution violations requiring exception. No additional project-level comp
 7. Run linters, formatters, and CI checks; update draft PR with testing evidence.
 
 Estimated effort: 3–5 engineer-days (implementation + tests + review).
+
+Determinism & RNG API contract
+
+- The world-generation API SHOULD expose a simple signature such as `generateWorld(opts?: { seed?: string | number, rng?: RNG })` where `RNG` is an injected pseudo-random generator implementing at minimum a `next()` or `uniform()` method used for sampling. Example: `generateWorld({ seed: 'abcd-1234' })` or `generateWorld({ rng: myRng })`.
+
+Retry policy (implementation guidance)
+
+- The sampling algorithm MUST use a per-slot bounded retry loop with a configurable limit. Implementations MUST default to 50 attempts per slot. If a unique person cannot be selected after the retry limit, leave the slot empty and emit a deterministic report/log entry (persisted to migration/reporting surface or returned to the caller). Implement this logic in `frontend/src/services/generation.ts` and add unit tests that assert behavior under low-population and high-duplication scenarios.

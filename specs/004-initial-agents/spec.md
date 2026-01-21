@@ -11,7 +11,7 @@
 
 - Q: Which population should Agents be selected from and are there age/assignment constraints? → A: People in the Player's starting zone have no age field (all are treated as adults) and it must be impossible for those People to be Agents of any other Governing Organization at game start. Selection therefore only considers unassigned People in the starting zone.
 
-- Q: Where do the Agent/Governing Organization/Zone data shapes come from and how should the Profile obtain display fields? → A: The `Agent`, `Governing Organization`, and `Zone` canonical data models are the ones in `frontend/src/models`. When viewing an Agent's Profile on the Personnel screen, the UI MUST obtain the Agent's `firstName`/`lastName`, `homeZoneId`/`originZone`, `skills`, `attributes`, etc., from the associated `Person` entity referenced by the `Agent` object in those canonical models.
+- Q: Where do the Agent/Governing Organization/Zone data shapes come from and how should the Profile obtain display fields? → A: The `Agent`, `Governing Organization`, and `Zone` canonical data models are the ones in `frontend/src/models`. When viewing an Agent's Profile on the Personnel screen, the UI MUST obtain the Agent's `firstName`/`lastName`, `homeZoneId` (displayed in the UI as "Origin"), `skills`, `attributes`, etc., from the associated `Person` entity referenced by the `Agent` object in those canonical models.
 
 - Q: Which canonical `Person` fields should the Profile read? → A: Use canonical `Person` fields: `id`, `firstName`, `lastName`, `homeZoneId`, `skills`, `attributes`. The Profile MUST read these directly from the `Person` referenced by the `Agent`.
 
@@ -61,8 +61,13 @@ When new People are created during world generation, they should have realistic 
 
 **Acceptance Scenarios**:
 
-1. **Given** world generation is creating People, **When** the name generator is invoked, **Then** each created `Person` receives non-empty `firstName` and `lastName` strings that are culturally plausible.
-2. **Given** multiple world-generation runs, **When** 1,000 People names are sampled, **Then** at least 95% are unique (as `firstName`+`lastName` pairs) and match a simple name-pattern sanity check (letters, typical separators).
+1. **Given** world generation is creating People, **When** the name generator is invoked, **Then** each created `Person` receives non-empty `firstName` and `lastName` strings that meet the name-pattern sanity check defined below.
+2. **Given** multiple world-generation runs, **When** 1,000 People names are sampled, **Then** at least 95% are unique (as `firstName`+`lastName` pairs) and at least 99% conform to the name-pattern sanity check.
+
+Name-generator sanity check (precise validation):
+
+- Each `firstName` and `lastName` MUST be a non-empty string matching the regex: `/^[A-Za-z][A-Za-z'\- ]{0,40}$/` (starts with a letter, allows letters, spaces, apostrophes and hyphens, max length 41).
+- Uniqueness expectation: in a 1,000-sample run, the fraction of unique `firstName`+`lastName` pairs MUST be >= 0.95 to satisfy SC-005. Tests for uniqueness MUST be included in unit tests for `NameGenerator`.
 
 ---
 
@@ -77,14 +82,13 @@ When new People are created during world generation, they should have realistic 
 ### Functional Requirements
 
 - **FR-001**: On a new game, the Player's Governing Organization MUST be initialized with exactly 10 Agent slots; filled slots must reference unique Agent entities when available.
-- **FR-002**: The 10 Agents MUST be selected from the Player's starting zone population (no Agents from other zones), chosen randomly unless deterministic seeding is used for testing.
-  -- **FR-003**: The Personnel screen MUST display a list of the Player's Agents including at minimum: displayed name (`firstName` + `lastName`), role/title, and origin zone.
-  **FR-004**: Selecting an Agent in the list MUST open a Profile pane that displays additional details sourced from the associated `Person` record: skills summary, attributes, `homeZoneId`/origin, and any assigned roles. The Profile MUST read these fields via the canonical models in `frontend/src/models`.
+- **FR-002**: The 10 Agents MUST be selected from the Player's starting zone population (no Agents from other zones), chosen randomly unless deterministic seeding is used for testing. Implementations MUST only consider unassigned `Person` records whose `homeZoneId` equals the player's starting zone.
+- **FR-003**: The Personnel screen MUST display a list of the Player's Agents including at minimum: displayed name (concatenate `firstName` + `lastName`), role/title, and `homeZoneId` (displayed as "Origin"). UI text may use the label "Origin" but the canonical field is `homeZoneId`.
+- **FR-004**: Selecting an Agent in the list MUST open a Profile pane that displays additional details sourced from the associated `Person` record: skills summary, attributes, `homeZoneId`, and any assigned roles. The Profile MUST read these fields via the canonical models in `frontend/src/models`.
 - **FR-005**: The Personnel screen MUST support sorting by name, role, and origin zone, and simple filtering by role/zone.
-  -- **FR-006**: The name generator MUST produce plausible `firstName` + `lastName` pairs for People created during world generation and be callable during person/Agent creation and for display purposes.
+- **FR-006**: The name generator MUST produce plausible `firstName` + `lastName` pairs for People created during world generation and be callable during person/Agent creation and for display purposes.
 - **FR-007**: When the starting population is insufficient to supply 10 unique Agents, the system MUST fill as many unique Agent slots as possible and expose remaining slots as empty (no silent failures).
 - **FR-008**: People located in the Player's starting zone MUST NOT be assigned as Agents of any other Governing Organization at game initialization; they are considered unassigned for the purposes of initial Agent selection.
-
 - **FR-009**: World-generation MUST accept an explicit RNG/seed parameter; when provided, all random selection performed during world-generation (including initial Agent selection) MUST use this RNG/seed to ensure deterministic, reproducible outputs for testing.
 
 ### Key Entities

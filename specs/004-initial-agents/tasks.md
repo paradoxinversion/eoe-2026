@@ -21,6 +21,12 @@ description: "Generated task list for Initial Agents & Personnel Screen feature"
 - [ ] T006 Update `frontend/src/services/generation.ts` to accept an explicit RNG/seed parameter and add unit tests in `frontend/tests/unit/generation.seed.test.ts`
 - [ ] T007 [P] Validate canonical frontend models used by this feature: review `frontend/src/models/person.ts`, `frontend/src/models/agent.ts`, and `frontend/src/models/zone.ts` and add any lightweight adapters in `frontend/src/models/adapters/` if necessary (add tests in `frontend/tests/unit/models.spec.ts`)
 
+Note: Test-first requirement — all implementation tasks MUST be preceded by authored failing tests (Red). The following test-authoring tasks must be completed before implementing the corresponding modules.
+
+- [ ] T004a Write failing unit tests for the PRNG wrapper in `frontend/tests/unit/rng.test.ts` (these tests should assert deterministic sampling behavior and fail until `frontend/src/lib/rng.ts` is implemented).
+- [ ] T005a Write failing unit tests for `NameGenerator` in `frontend/tests/unit/nameGenerator.test.ts` (format + uniqueness tests per spec) and ensure they fail initially.
+- [ ] T006a Write failing generation/seed unit tests in `frontend/tests/unit/generation.seed.test.ts` that assert deterministic sampling and seeded reproducibility and fail until `frontend/src/services/generation.ts` is implemented.
+
 ---
 
 ## Phase 3: User Story 1 - Initialize Player's Agents (Priority: P1) 🎯 MVP
@@ -29,6 +35,8 @@ description: "Generated task list for Initial Agents & Personnel Screen feature"
 
 **Independent Test**: Deterministic generation reproduces the same Agent IDs given the same seed; integration test at `frontend/tests/integration/initial-agents.integration.test.tsx` should verify roster size, uniqueness, and source zone.
 
+- [ ] T008 [US1] Implement sampling algorithm in `frontend/src/services/generation.ts` to select up to 10 unique `Person` ids from the starting zone using the injected RNG
+- [ ] T008a Write failing integration test `frontend/tests/integration/initial-agents.integration.test.tsx` asserting roster size, uniqueness, and source zone given a seed (must fail before implementation).
 - [ ] T008 [US1] Implement sampling algorithm in `frontend/src/services/generation.ts` to select up to 10 unique `Person` ids from the starting zone using the injected RNG
 - [ ] T009 [US1] Implement Agent creation in `frontend/src/services/generation.ts` (create `Agent` records with `personId` and `affiliationId` set to the Player's GoverningOrganization id) and persist via existing storage layer (IndexedDB wrappers under `frontend/src/lib/` or `frontend/src/services/`)
 - [ ] T010 [US1] Add bounded-retry uniqueness handling in `frontend/src/services/generation.ts` with a clear retry limit and fallback behavior when population <10
