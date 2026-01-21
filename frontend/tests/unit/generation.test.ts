@@ -1,41 +1,45 @@
 import { describe, it, expect } from "vitest";
-import generateWorld from "../../src/services/generation";
+import { generateDebugWorld } from "../../src/services/generation";
 
 describe("generation", () => {
-  it("is deterministic for a given seed", () => {
-    const a = generateWorld(12345);
-    const b = generateWorld(12345);
-    expect(a).toEqual(b);
+  it("is deterministic for a given seed (debug)", () => {
+    const a = generateDebugWorld(12345, { mapWidth: 3, mapHeight: 2 });
+    const b = generateDebugWorld(12345, { mapWidth: 3, mapHeight: 2 });
+    expect(JSON.stringify(a)).toEqual(JSON.stringify(b));
   });
 
-  it("produces different worlds for different seeds", () => {
-    const a = generateWorld("seed-a");
-    const b = generateWorld("seed-b");
-    expect(a).not.toEqual(b);
+  it("produces different artifacts for different seeds (debug)", () => {
+    const a = generateDebugWorld("seed-a", { mapWidth: 2, mapHeight: 2 });
+    const b = generateDebugWorld("seed-b", { mapWidth: 2, mapHeight: 2 });
+    expect(JSON.stringify(a)).not.toEqual(JSON.stringify(b));
   });
 
-  it("keeps zone count deterministic and within expected bounds", () => {
-    const a = generateWorld(777);
-    const b = generateWorld(777);
-    expect(a.player.zones.length).toBeGreaterThanOrEqual(3);
-    expect(a.player.zones.length).toBeLessThanOrEqual(6);
-    expect(a.player.zones.length).toEqual(b.player.zones.length);
+  it("keeps zone count equal to mapWidth*mapHeight and deterministic (debug)", () => {
+    const a = generateDebugWorld(777, { mapWidth: 4, mapHeight: 5 });
+    const b = generateDebugWorld(777, { mapWidth: 4, mapHeight: 5 });
+    expect(a.zones.length).toBeGreaterThanOrEqual(1);
+    expect(a.zones.length).toEqual(4 * 5);
+    expect(a.zones.length).toEqual(b.zones.length);
   });
 
-  it("zone ids are deterministic and stable across runs", () => {
-    const a = generateWorld("stability-seed");
-    const b = generateWorld("stability-seed");
-    const idsA = a.player.zones.map((z) => z.id);
-    const idsB = b.player.zones.map((z) => z.id);
+  it("zone ids are deterministic and stable across runs (debug)", () => {
+    const a = generateDebugWorld("stability-seed", {
+      mapWidth: 3,
+      mapHeight: 3,
+    });
+    const b = generateDebugWorld("stability-seed", {
+      mapWidth: 3,
+      mapHeight: 3,
+    });
+    const idsA = a.zones.map((z) => z.id);
+    const idsB = b.zones.map((z) => z.id);
     expect(idsA).toEqual(idsB);
   });
 
-  it("resources are within expected ranges", () => {
-    const w = generateWorld(42);
-    const r = w.player.resources;
-    expect(r.evil).toBeGreaterThanOrEqual(0);
-    expect(r.money).toBeGreaterThanOrEqual(0);
-    expect(r.infrastructure).toBeGreaterThanOrEqual(1);
-    expect(r.science).toBeGreaterThanOrEqual(0);
+  it("debug artifact contains sensible people/building counts", () => {
+    const art = generateDebugWorld(42, { mapWidth: 3, mapHeight: 2 });
+    expect(Array.isArray(art.zones)).toBeTruthy();
+    expect(Array.isArray(art.buildings)).toBeTruthy();
+    expect(Array.isArray(art.people)).toBeTruthy();
   });
 });

@@ -1,47 +1,45 @@
-import type { UUID } from "./person";
-
-export interface Zone {
-  id: UUID;
-  name: string;
-  size: number;
-  wealth: number;
-  intelligenceLevel: number;
-  capacity?: number;
-  currentOccupants: UUID[];
-}
-
 export type Zone = {
   id: string;
+  gridX: number;
+  gridY: number;
   name: string;
-  governing_org?: string;
+  size?: number;
+  wealth: number;
+  intelligenceLevel: number;
+  capacity?: string;
+  governingOrganization?: string;
   buildings?: string[];
   people?: string[];
-  intelligence_level: number; // 0-100
-  surveillance_profile?: Record<string, unknown>;
 };
 
 export function createZone(
   id: string,
+  gridX: number,
+  gridY: number,
   name: string,
-  intelligence_level = 0,
+  intelligenceLevel = 0,
   opts?: Partial<
     Pick<
       Zone,
-      "governing_org" | "buildings" | "people" | "surveillance_profile"
+      "governingOrganization" | "buildings" | "people" | "size" | "wealth"
     >
   >,
 ): Zone {
   return {
     id,
+    gridX,
+    gridY,
     name,
-    intelligence_level: Math.max(
+    size: opts?.size ?? 1,
+    wealth: opts?.wealth ?? 0,
+    intelligenceLevel: Math.max(
       0,
-      Math.min(100, Math.floor(intelligence_level)),
+      Math.min(100, Math.floor(intelligenceLevel)),
     ),
-    governing_org: opts?.governing_org,
+    capacity: opts?.capacity,
+    governingOrganization: opts?.governingOrganization,
     buildings: opts?.buildings ?? [],
     people: opts?.people ?? [],
-    surveillance_profile: opts?.surveillance_profile ?? {},
   };
 }
 

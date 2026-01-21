@@ -3,7 +3,9 @@ import AgentList from "./AgentList";
 import Profile from "./Profile";
 import CapacityWidgets from "./CapacityWidgets";
 import AgentTypeChart from "./AgentTypeChart";
-import personnelPersistence from "../../services/personnelPersistence";
+import personnelPersistence, {
+  AgentRecord,
+} from "../../services/personnelPersistence";
 
 type Agent = {
   id: string;
@@ -24,29 +26,46 @@ export default function PersonnelTab() {
       const list = await personnelPersistence.listAgents();
       if (!mounted) return;
       const a = list.map((l) => {
-        const ag = l.agent as any;
+        const ag = l.agent as AgentRecord;
+        const name =
+          typeof ag.name === "string"
+            ? ag.name
+            : `${ag.firstName || ""} ${ag.lastName || ""}`.trim();
+        const intelligenceLevel =
+          typeof ag.intelligenceLevel === "number"
+            ? ag.intelligenceLevel
+            : undefined;
+        const agentType =
+          typeof ag.agentType === "string" ? ag.agentType : undefined;
         return {
-          id: ag.id || l.id,
-          name: ag.name || `${ag.firstName || ""} ${ag.lastName || ""}`.trim(),
-          intelligenceLevel: ag.intelligenceLevel,
-          agentType: ag.agentType,
+          id: typeof ag.id === "string" ? ag.id : l.id,
+          name,
+          intelligenceLevel,
+          agentType,
           ...ag,
         } as Agent;
       });
       setAgents(a);
-      if (!selected && a.length > 0) setSelected(a[0]);
+      setSelected((prev) => (prev ? prev : a.length > 0 ? a[0] : prev));
     }
     load();
     // pickup any pending local agent stored by Main before this tab mounted
     try {
       const pending = sessionStorage.getItem("personnel:pendingLocal");
       if (pending) {
-        const ag = JSON.parse(pending) as any;
+        const ag = JSON.parse(pending) as AgentRecord;
         const newAgent: Agent = {
           id: ag.id,
-          name: ag.name || `${ag.firstName || ""} ${ag.lastName || ""}`.trim(),
-          intelligenceLevel: ag.intelligenceLevel,
-          agentType: ag.agentType,
+          name:
+            typeof ag.name === "string"
+              ? ag.name
+              : `${ag.firstName || ""} ${ag.lastName || ""}`.trim(),
+          intelligenceLevel:
+            typeof ag.intelligenceLevel === "number"
+              ? ag.intelligenceLevel
+              : undefined,
+          agentType:
+            typeof ag.agentType === "string" ? ag.agentType : undefined,
           ...ag,
         };
         setAgents((prev) => {
@@ -65,20 +84,29 @@ export default function PersonnelTab() {
     }
     const onCreated = (e: Event) => {
       try {
-        const d = (e as CustomEvent).detail as { id?: string } | undefined;
+        const d = (e as CustomEvent<{ id?: string }>).detail;
         if (!d || !d.id) return;
         // reload and set selected to the created id
         (async () => {
           const list = await personnelPersistence.listAgents();
           if (!mounted) return;
           const a = list.map((l) => {
-            const ag = l.agent as any;
+            const ag = l.agent as AgentRecord;
+            const name =
+              typeof ag.name === "string"
+                ? ag.name
+                : `${ag.firstName || ""} ${ag.lastName || ""}`.trim();
+            const intelligenceLevel =
+              typeof ag.intelligenceLevel === "number"
+                ? ag.intelligenceLevel
+                : undefined;
+            const agentType =
+              typeof ag.agentType === "string" ? ag.agentType : undefined;
             return {
-              id: ag.id || l.id,
-              name:
-                ag.name || `${ag.firstName || ""} ${ag.lastName || ""}`.trim(),
-              intelligenceLevel: ag.intelligenceLevel,
-              agentType: ag.agentType,
+              id: typeof ag.id === "string" ? ag.id : l.id,
+              name,
+              intelligenceLevel,
+              agentType,
               ...ag,
             } as Agent;
           });
@@ -93,13 +121,20 @@ export default function PersonnelTab() {
     window.addEventListener("personnel:created", onCreated as EventListener);
     const onLocalCreated = (e: Event) => {
       try {
-        const ag = (e as CustomEvent).detail as any;
+        const ag = (e as CustomEvent<AgentRecord>).detail;
         if (!ag || !ag.id) return;
         const newAgent = {
           id: ag.id,
-          name: ag.name || `${ag.firstName || ""} ${ag.lastName || ""}`.trim(),
-          intelligenceLevel: ag.intelligenceLevel,
-          agentType: ag.agentType,
+          name:
+            typeof ag.name === "string"
+              ? ag.name
+              : `${ag.firstName || ""} ${ag.lastName || ""}`.trim(),
+          intelligenceLevel:
+            typeof ag.intelligenceLevel === "number"
+              ? ag.intelligenceLevel
+              : undefined,
+          agentType:
+            typeof ag.agentType === "string" ? ag.agentType : undefined,
           ...ag,
         } as Agent;
         setAgents((prev) => {

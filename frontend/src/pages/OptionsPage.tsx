@@ -26,6 +26,8 @@ import validateConfig from "../config/validator";
 
 export default function OptionsPage() {
   const [form, setForm] = useState(defaultConfig);
+  const [orgInputError, setOrgInputError] = useState<string | null>(null);
+  const [zoneSizeError, setZoneSizeError] = useState<string | null>(null);
   const [configs, setConfigs] = useState<
     Array<{ name: string; updatedAt: number }>
   >([]);
@@ -44,6 +46,29 @@ export default function OptionsPage() {
     validateForm();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form]);
+
+  // clamp organizationCount when map dimensions change
+  useEffect(() => {
+    const w = Math.max(
+      1,
+      Math.floor(form.mapWidth ?? defaultConfig.mapWidth ?? 10),
+    );
+    const h = Math.max(
+      1,
+      Math.floor(form.mapHeight ?? defaultConfig.mapHeight ?? 10),
+    );
+    const maxOrgs = Math.max(0, w * h - 1);
+    if (
+      typeof form.organizationCount === "number" &&
+      form.organizationCount > maxOrgs
+    ) {
+      setForm((prev) => ({ ...prev, organizationCount: maxOrgs }));
+      setStatusMessage(
+        `Organization count reduced to max ${maxOrgs} for current map size.`,
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.mapWidth, form.mapHeight]);
 
   async function refreshList() {
     const list = await listConfigs();
@@ -73,9 +98,21 @@ export default function OptionsPage() {
       setStatusMessage("Please fix validation errors before saving.");
       return;
     }
-    await saveConfig(saveName || `save-${Date.now()}`, form);
+    if (orgInputError) {
+      setStatusMessage(orgInputError);
+      return;
+    }
+    // Merge with defaults so saved config always contains expected fields
+    const toSave = Object.assign({}, defaultConfig, form);
+    await saveConfig(saveName || `save-${Date.now()}`, toSave);
+    setForm(toSave);
     await refreshList();
     setStatusMessage("Saved configuration.");
+  }
+
+  function handleResetDefaults() {
+    setForm(defaultConfig);
+    setStatusMessage("Reset to default options.");
   }
 
   async function handleDelete(name: string) {
@@ -141,6 +178,9 @@ export default function OptionsPage() {
         >
           Save
         </Button>
+        <Button variant="outlined" onClick={handleResetDefaults}>
+          Reset to Defaults
+        </Button>
       </Box>
 
       <Box component="form" sx={{ display: "grid", gap: 2, maxWidth: 480 }}>
@@ -162,8 +202,114 @@ export default function OptionsPage() {
               startingSeed: Number(e.target.value),
             })
           }
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+          }}
           error={!!errors.startingSeed}
           helperText={errors.startingSeed}
+        />
+        <TextField
+          label="Map Width"
+          type="number"
+          value={form.mapWidth ?? 100}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              mapWidth: Math.max(1, Number(e.target.value)),
+            })
+          }
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+          }}
+          error={!!errors.mapWidth}
+          helperText={errors.mapWidth}
+        />
+        <TextField
+          label="Map Height"
+          type="number"
+          value={form.mapHeight ?? 100}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              mapHeight: Math.max(1, Number(e.target.value)),
+            })
+          }
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+          }}
+          error={!!errors.mapHeight}
+          helperText={errors.mapHeight}
+        />
+        <TextField
+          label="Zone Size Min"
+          type="number"
+          value={form.zoneSizeMin ?? defaultConfig.zoneSizeMin ?? 1}
+          onChange={(e) => {
+            const raw = Number(e.target.value);
+            const v = Number.isFinite(raw) ? Math.max(1, Math.floor(raw)) : 1;
+            const currentMax =
+              form.zoneSizeMax ?? defaultConfig.zoneSizeMax ?? v;
+            if (v > currentMax) {
+              setZoneSizeError(
+                `Minimum cannot be greater than current maximum (${currentMax}); adjusting maximum to ${v}.`,
+              );
+              setForm({ ...form, zoneSizeMin: v, zoneSizeMax: v });
+            } else {
+              setZoneSizeError(null);
+              setForm({ ...form, zoneSizeMin: v });
+            }
+          }}
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+            min: 1,
+          }}
+          error={!!errors.zoneSizeMin || Boolean(zoneSizeError)}
+          helperText={
+            (errors.zoneSizeMin ? errors.zoneSizeMin + ". " : "") +
+            (zoneSizeError ? zoneSizeError + " " : "") +
+            `Minimum is 1.`
+          }
+        />
+        <TextField
+          label="Zone Size Max"
+          type="number"
+          value={
+            form.zoneSizeMax ??
+            defaultConfig.zoneSizeMax ??
+            form.zoneSizeMin ??
+            defaultConfig.zoneSizeMin ??
+            1
+          }
+          onChange={(e) => {
+            const raw = Number(e.target.value);
+            const v = Number.isFinite(raw) ? Math.max(1, Math.floor(raw)) : 1;
+            const currentMin =
+              form.zoneSizeMin ?? defaultConfig.zoneSizeMin ?? 1;
+            if (v < currentMin) {
+              setZoneSizeError(
+                `Maximum cannot be less than minimum (${currentMin}); adjusting maximum to ${currentMin}.`,
+              );
+              setForm({ ...form, zoneSizeMax: currentMin });
+            } else {
+              setZoneSizeError(null);
+              setForm({ ...form, zoneSizeMax: v });
+            }
+          }}
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+            min: 1,
+          }}
+          error={!!errors.zoneSizeMax || Boolean(zoneSizeError)}
+          helperText={
+            (errors.zoneSizeMax ? errors.zoneSizeMax + ". " : "") +
+            (zoneSizeError ? zoneSizeError + " " : "") +
+            `Maximum must be >= minimum.`
+          }
         />
         <TextField
           label="Autosave Interval Seconds"
@@ -175,9 +321,64 @@ export default function OptionsPage() {
               autosaveIntervalSeconds: Number(e.target.value),
             })
           }
+          inputProps={{
+            onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+              e.currentTarget.blur(),
+          }}
           error={!!errors.autosaveIntervalSeconds}
           helperText={errors.autosaveIntervalSeconds}
         />
+        {(() => {
+          const w = Math.max(
+            1,
+            Math.floor(form.mapWidth ?? defaultConfig.mapWidth ?? 10),
+          );
+          const h = Math.max(
+            1,
+            Math.floor(form.mapHeight ?? defaultConfig.mapHeight ?? 10),
+          );
+          const maxOrgs = Math.max(0, w * h - 1);
+          return (
+            <div>
+              <TextField
+                label="Organization Count"
+                type="number"
+                value={form.organizationCount ?? 0}
+                onChange={(e) => {
+                  const raw = Number(e.target.value);
+                  const v = Number.isFinite(raw) ? Math.floor(raw) : 0;
+                  if (v > maxOrgs) {
+                    setOrgInputError(
+                      `Organization count must be less than total map cells (${w}x${h} = ${w * h}).`,
+                    );
+                  } else {
+                    setOrgInputError(null);
+                  }
+                  const clamped = Math.max(0, Math.min(maxOrgs, v));
+                  setForm({ ...form, organizationCount: clamped });
+                }}
+                error={!!errors.organizationCount || Boolean(orgInputError)}
+                helperText={
+                  (errors.organizationCount
+                    ? errors.organizationCount + ". "
+                    : "") +
+                  (orgInputError ? orgInputError + " " : "") +
+                  `Maximum is ${maxOrgs} (map ${w}x${h}).`
+                }
+                inputProps={{
+                  min: 0,
+                  max: maxOrgs,
+                  onWheel: (e: React.WheelEvent<HTMLInputElement>) =>
+                    e.currentTarget.blur(),
+                }}
+              />
+            </div>
+          );
+        })()}
+        <Typography variant="body2" color="text.secondary">
+          Controls how many Governing Organizations are created during world
+          generation (minimum 1). Useful for tuning faction density in the map.
+        </Typography>
         <TextField
           label="Grace Period Days"
           type="number"
@@ -289,7 +490,16 @@ export default function OptionsPage() {
                   const probsStr = probs
                     ? `raid:${probs.raid ?? 0}, bless:${probs.blessing ?? 0}, disc:${probs.discovery ?? 0}`
                     : "";
-                  return `${cfg.playerName} — seed ${cfg.startingSeed} ${probsStr ? ` — ${probsStr}` : ""}`;
+                  const orgStr =
+                    typeof cfg.organizationCount === "number"
+                      ? ` — orgs:${cfg.organizationCount}`
+                      : "";
+                  const zoneStr =
+                    typeof cfg.zoneSizeMin === "number" ||
+                    typeof cfg.zoneSizeMax === "number"
+                      ? ` — zoneSize:${cfg.zoneSizeMin ?? "?"}-${cfg.zoneSizeMax ?? "?"}`
+                      : "";
+                  return `${cfg.playerName} — seed ${cfg.startingSeed} ${probsStr ? ` — ${probsStr}` : ""}${orgStr}${zoneStr}`;
                 })()}
               />
               <Button size="small" onClick={() => handleLoad(c.name)}>

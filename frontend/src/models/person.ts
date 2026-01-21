@@ -33,27 +33,56 @@ export interface Person {
   skills: PersonSkills;
 }
 
-export type Person = {
-  id: string;
-  name: string;
-  role?: string;
-  pay: number;
-  attributes?: Record<string, unknown>;
-};
-
 export function createPerson(
   id: string,
-  name: string,
-  pay = 0,
-  opts?: Partial<Pick<Person, "role" | "attributes">>,
+  firstName: string,
+  lastName: string,
+  opts?: Partial<
+    Pick<
+      Person,
+      | "attributes"
+      | "homeZoneId"
+      | "governingOrganizationSentiments"
+      | "intelligenceLevel"
+      | "occupation"
+      | "skills"
+    >
+  >,
 ): Person {
   return {
     id,
-    name,
-    pay: Math.max(0, Math.floor(pay)),
-    role: opts?.role,
-    attributes: opts?.attributes ?? {},
+    firstName,
+    lastName,
+    homeZoneId: opts?.homeZoneId,
+    governingOrganizationSentiments:
+      opts?.governingOrganizationSentiments ?? {},
+    intelligenceLevel:
+      typeof opts?.intelligenceLevel === "number"
+        ? opts!.intelligenceLevel!
+        : 50,
+    occupation: opts?.occupation,
+    attributes: (opts?.attributes as PersonAttributes) ?? defaultAttributes,
+    skills: (opts?.skills as PersonSkills) ?? defaultSkills,
   };
 }
+
+const defaultAttributes: PersonAttributes = {
+  health: 50,
+  intelligence: 50,
+  strength: 50,
+  agility: 50,
+  endurance: 50,
+  empathy: 50,
+  charisma: 50,
+};
+
+const defaultSkills: PersonSkills = {
+  fighting: 0,
+  medicine: 0,
+  business: 0,
+  finance: 0,
+  publicPlanning: 0,
+  science: 0,
+};
 
 export default Person;

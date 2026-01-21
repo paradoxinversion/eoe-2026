@@ -17,6 +17,13 @@ jobs:
               with:
                   node-version: "22"
 
+            - name: Cache npm
+              uses: actions/cache@v4
+              with:
+                  path: ~/.npm
+                  key: npm-${{ runner.os }}-${{ hashFiles('frontend/package-lock.json') }}
+                  restore-keys: npm-${{ runner.os }}-
+
             - name: Install frontend dependencies
               working-directory: frontend
               run: |
@@ -42,26 +49,21 @@ jobs:
                   npm run test:a11y
 
             - name: Ensure artifact directory exists
-              if: always()
               run: |
                   mkdir -p frontend/tests_output
 
-            - name: Create CI marker artifact
-              if: always()
-              working-directory: frontend
-              run: |
-                  mkdir -p tests_output
-                  echo "ci: $(date -u)" > tests_output/ci-marker.txt
-
-            - name: Upload test artifacts
-              if: always()
+            - name: Upload targeted artifacts on failure
+              if: failure()
               uses: actions/upload-artifact@v4
               with:
                   name: test-artifacts
-                  path: frontend/tests_output/**
+                  path: |
+                      frontend/tests_output/failing-*.log
+                      frontend/tests_output/*.xml
+                      frontend/tests_output/*-counts.json
 
-            - name: Upload CI marker explicitly
-              if: always()
+            - name: Upload CI marker on failure
+              if: failure()
               uses: actions/upload-artifact@v4
               with:
                   name: ci-marker

@@ -4,7 +4,6 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 
 import CharacterGeneration from "../../frontend/src/pages/CharacterGeneration";
 import * as persistence from "../../frontend/src/services/persistence";
-import generateWorld from "../../frontend/src/services/generation";
 
 describe("CharacterGeneration component", () => {
     let saveGameSpy: any;
@@ -37,27 +36,17 @@ describe("CharacterGeneration component", () => {
     });
 
     it("saves world and prefs when name provided", async () => {
-        const worldSpy = vi.spyOn(
-            require("../../frontend/src/services/generation"),
-            "generateWorld",
-        );
-        worldSpy.mockImplementation(
-            () =>
-                ({
-                    seed: 1,
-                    player: {
-                        id: "p",
-                        name: "p",
-                        resources: {
-                            evil: 0,
-                            money: 0,
-                            infrastructure: 0,
-                            science: 0,
-                        },
-                        zones: [],
-                    },
-                }) as any,
-        );
+        const genMod = require("../../frontend/src/services/generation");
+        const worldSpy = vi.spyOn(genMod, "generateAndSaveWorld");
+        worldSpy.mockResolvedValue({
+            zones: [],
+            people: [],
+            buildings: [],
+            organizations: [],
+            placementErrors: [],
+            playerCharacterId: "p",
+            playerOrgId: "o",
+        } as any);
 
         render(<CharacterGeneration />);
         const input = screen.getByLabelText(

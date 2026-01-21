@@ -24,7 +24,7 @@ type Agent = {
   superiorId?: string | null;
   leadership?: number;
   zoneId?: string | null;
-  [k: string]: any;
+  [k: string]: unknown;
 };
 
 export function subordinateCount(leaderId: string, agents: Agent[]): number {

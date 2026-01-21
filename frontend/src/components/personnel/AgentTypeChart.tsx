@@ -72,7 +72,6 @@ export default function AgentTypeChart({
 
   const segments = buildSegments(summary, total);
   const radius = size / 2;
-  const circumference = Math.PI * size;
 
   return (
     <div
@@ -87,7 +86,7 @@ export default function AgentTypeChart({
         aria-hidden="false"
       >
         <g transform={`translate(${radius},${radius})`}>
-          {segments.map((s, i) => {
+          {segments.map((s) => {
             const r = radius * 0.8;
             const dash = Math.max(1, (s.angle / 360) * (2 * Math.PI * r));
             const dashOffset = (s.start / 360) * (2 * Math.PI * r);
