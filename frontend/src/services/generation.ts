@@ -385,6 +385,7 @@ export async function generateAndSaveWorld(
 
     // Initial Agent selection: up to 10 unique Agents sampled from the
     // player's starting zone population. Use bounded retries per slot.
+    const persistPromises: Array<Promise<unknown>> = [];
     try {
       const RETRY_LIMIT = 50;
       const TARGET_SLOTS = 10;
@@ -417,6 +418,38 @@ export async function generateAndSaveWorld(
             });
             ag.affiliationId = playerOrg.id;
             artifact.agents.push(ag as import("../models/agent").Agent);
+            // persist agent record for UI consumption when possible
+            try {
+              const isNode =
+                typeof process !== "undefined" &&
+                !!(process.versions && process.versions.node);
+              if (!isNode) {
+                const pers = await import("./personnelPersistence");
+                // try to enrich agent record with linked person fields
+                const personObj = (artifact.people || []).find(
+                  (pp: any) => pp.id === picked,
+                ) as import("../models/person").Person | undefined;
+                const rec = {
+                  id: ag.id,
+                  personId: picked,
+                  codename: (ag.codeName as string) || ag.id,
+                  firstName: (personObj && personObj.firstName) || undefined,
+                  lastName: (personObj && personObj.lastName) || undefined,
+                  intelligenceLevel:
+                    (personObj && (personObj.intelligenceLevel as number)) ||
+                    undefined,
+                  agentType:
+                    (ag.agentType as string) ||
+                    personObj?.occupation ||
+                    undefined,
+                  role: (ag.role as string) || undefined,
+                  affiliationId: ag.affiliationId,
+                } as import("../services/personnelPersistence").AgentRecord;
+                persistPromises.push(pers.saveAgent(rec).catch(() => {}));
+              }
+            } catch (e) {
+              // ignore persistence failures
+            }
           } else {
             // leave slot empty
           }
@@ -424,6 +457,12 @@ export async function generateAndSaveWorld(
       }
     } catch (e) {
       console.warn("generateAndSaveWorld: agent assignment failed", e);
+    }
+    // Await any pending persistence so callers (UI) can read agents after generation returns
+    try {
+      if (persistPromises.length > 0) await Promise.all(persistPromises);
+    } catch (e) {
+      // ignore
     }
   } catch (e) {
     console.warn("generateAndSaveWorld: failed to create player/org", e);

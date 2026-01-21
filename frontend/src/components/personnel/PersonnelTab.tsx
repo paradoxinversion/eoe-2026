@@ -24,17 +24,26 @@ export default function PersonnelTab() {
     let mounted = true;
     async function load() {
       const list = await personnelPersistence.listAgents();
+      // DEBUG: log raw persistence entries for diagnostics
+      try {
+        // eslint-disable-next-line no-console
+        console.debug("PersonnelTab: listAgents() -> count", list.length, list);
+      } catch (e) {
+        // ignore logging failures
+      }
       if (!mounted) return;
       const a = list.map((l) => {
         const ag = l.agent as AgentRecord;
+        // prefer codename, fall back to combined first/last
         const name =
-          typeof ag.name === "string"
-            ? ag.name
+          typeof ag.codename === "string"
+            ? ag.codename
             : `${ag.firstName || ""} ${ag.lastName || ""}`.trim();
         const intelligenceLevel =
           typeof ag.intelligenceLevel === "number"
             ? ag.intelligenceLevel
             : undefined;
+        // agentType may be stored directly or inferred from person's occupation
         const agentType =
           typeof ag.agentType === "string" ? ag.agentType : undefined;
         return {
@@ -89,12 +98,23 @@ export default function PersonnelTab() {
         // reload and set selected to the created id
         (async () => {
           const list = await personnelPersistence.listAgents();
+          // DEBUG: log raw persistence entries when handling create events
+          try {
+            // eslint-disable-next-line no-console
+            console.debug(
+              "PersonnelTab:onCreated: listAgents() -> count",
+              list.length,
+              list,
+            );
+          } catch (e) {
+            // ignore
+          }
           if (!mounted) return;
           const a = list.map((l) => {
             const ag = l.agent as AgentRecord;
             const name =
-              typeof ag.name === "string"
-                ? ag.name
+              typeof ag.codename === "string"
+                ? ag.codename
                 : `${ag.firstName || ""} ${ag.lastName || ""}`.trim();
             const intelligenceLevel =
               typeof ag.intelligenceLevel === "number"
