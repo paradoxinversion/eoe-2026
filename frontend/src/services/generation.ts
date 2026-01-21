@@ -366,6 +366,18 @@ export async function generateAndSaveWorld(
   const artifactSaveName = `generation-${String(seed)}`;
   await saveGameState(artifactSaveName, artifact);
 
+  // If a specific save name was provided, also persist the generated
+  // artifact under that save key so callers (and tests) can load it via
+  // `loadGameState(saveName)` without having to know the generation key.
+  if (saveName) {
+    try {
+      await saveGameState(saveName, artifact);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn("generateAndSaveWorld: failed to save artifact under saveName", e);
+    }
+  }
+
   // write a simple counts JSON file reporting the number of each entity created
   const counts = {
     zones: Array.isArray(artifact.zones) ? artifact.zones.length : 0,
