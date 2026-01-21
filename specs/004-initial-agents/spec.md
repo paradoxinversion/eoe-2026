@@ -15,6 +15,8 @@
 
 - Q: Which canonical `Person` fields should the Profile read? → A: Use canonical `Person` fields: `id`, `fullName`, `homeZone`/`originZone`, `skills`, `attributes`, `biography`. The Profile MUST read these directly from the `Person` referenced by the `Agent`.
 
+- Q: How should determinism for initial Agent selection be controlled for reproducible tests? → A: Pass an explicit RNG/seed into world-generation; when provided the world-generation process MUST use it for all random selection (including initial Agent selection) to guarantee reproducible tests.
+
 ## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Start a new game (Priority: P1)
@@ -83,6 +85,8 @@ When new People are created during world generation, they should have realistic 
 - **FR-007**: When the starting population is insufficient to supply 10 unique Agents, the system MUST fill as many unique Agent slots as possible and expose remaining slots as empty (no silent failures).
 - **FR-008**: People located in the Player's starting zone MUST NOT be assigned as Agents of any other Governing Organization at game initialization; they are considered unassigned for the purposes of initial Agent selection.
 
+- **FR-009**: World-generation MUST accept an explicit RNG/seed parameter; when provided, all random selection performed during world-generation (including initial Agent selection) MUST use this RNG/seed to ensure deterministic, reproducible outputs for testing.
+
 ### Key Entities
 
 **Agent**: Represents a person assignment record that references a `Person` entity from the canonical models. Key attributes: unique ID, reference to `Person` (source of `full name`, `homeZone`, `skills`, `attributes`), role/title, biography snippet. Note: People currently have no age field and are treated as adults.
@@ -107,7 +111,7 @@ The Profile view MUST read these fields from the referenced `Person` rather than
 ### Measurable Outcomes
 
 - **SC-001**: 100% of new game starts create a Governing Organization with exactly 10 Agent slots; at least 1 Agent slot is filled when the starting zone has >=1 eligible persons.
-- **SC-002**: For deterministic test seeds, the same seed reproduces the same initial Agent set in 100% of runs.
+- **SC-002**: When an explicit RNG/seed is passed into world-generation, the same seed reproduces the same initial Agent set in 100% of runs.
 - **SC-003**: When starting zone population >=10, at least 95% of new-game runs result in 10 unique Agents (no duplicates by ID).
 - **SC-004**: Personnel screen primary view loads and becomes interactive within 1 second on a typical development machine (user-facing responsiveness target).
 - **SC-005**: Name generator uniqueness: in a sample of 1,000 generated names, ≥95% are unique and ≥99% match sane name pattern (letters, spaces, typical punctuation).
