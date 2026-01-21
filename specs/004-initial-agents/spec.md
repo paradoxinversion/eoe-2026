@@ -77,6 +77,12 @@ Name-generator sanity check (precise validation):
 - When random selection produces duplicate individuals (by ID), the system must retry selection until 10 unique Agents or until a bounded retry limit is reached. The selection process SHOULD use a per-slot retry limit of 50 attempts; if after 50 retries a unique person cannot be found for a slot, leave the slot empty and surface this state to the player.
 - If an Agent's profile data is incomplete, the personnel screen should show fallback placeholders rather than crashing.
 
+UI presentation for empty slots (explicit acceptance criteria):
+
+- When fewer than 10 Agents are available, the Personnel screen MUST render vacant slots labelled `Vacant` or `Vacant slot #n` visually identical to filled slots but indicating emptiness.
+- Each vacant slot MUST include an accessible name/label (e.g., `aria-label="Vacant agent slot 3"`) and be keyboard-focusable. Vacant slots SHOULD expose an affordance (button or menu) for recruiting or assigning a Person to that slot.
+- Add a Playwright acceptance test that opens the Personnel screen when <10 Agents are present, asserts the presence of `Vacant` slots, verifies `aria-label`s, and checks keyboard focusability.
+
 ## Requirements _(mandatory)_
 
 ### Functional Requirements
@@ -104,7 +110,7 @@ Name-generator sanity check (precise validation):
 - `id` — unique identifier for the Person
 - `firstName` — given name
 - `lastName` — family name
-- `homeZoneId` / `originZone` — reference to the Person's zone
+- `homeZoneId` — reference to the Person's zone (canonical; legacy aliases: `originZone`, `origin`)
 - `skills` — summary or structured skills data used in Profile
 - `attributes` — key attributes (traits, stats) relevant to the UI
 

@@ -12,7 +12,7 @@ Decision: Select Agents by sampling unassigned People from the Player's starting
 Rationale: Matches spec constraints (starting-zone exclusivity) and performs well on typical zone sizes. A 50-attempt retry limit prevents infinite loops in low-population worlds and provides a deterministic fallback behavior.
 Alternatives considered: deterministic top-K selection (less variation), weighted sampling by traits (future enhancement).
 
-Decision: Profile UI reads canonical `Person` fields (`id`, `firstName`, `lastName`, `homeZoneId`/`originZone`, `skills`, `attributes`) from `frontend/src/models`.
+Decision: Profile UI reads canonical `Person` fields (`id`, `firstName`, `lastName`, `homeZoneId`, `skills`, `attributes`) from `frontend/src/models` (legacy alias: `originZone`).
 Rationale: Keeps `Agent` as a lightweight assignment record and prevents duplication. Frontend components simply dereference Person via `personId`.
 
 Test considerations
