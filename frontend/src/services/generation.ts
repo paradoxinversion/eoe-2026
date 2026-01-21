@@ -14,6 +14,7 @@ export type DebugArtifact = {
   people: Person[];
   buildings: Building[];
   organizations: GoverningOrganization[];
+  agents?: import("../models/agent").Agent[];
   placementErrors: Array<{
     zoneId?: string;
     buildingType?: string;
@@ -359,6 +360,52 @@ export async function generateAndSaveWorld(
 
     artifact.playerCharacterId = player.id;
     artifact.playerOrgId = playerOrg.id;
+
+    // Initialize agents array in artifact
+    artifact.agents = artifact.agents || [];
+
+    // Initial Agent selection: up to 10 unique Agents sampled from the
+    // player's starting zone population. Use bounded retries per slot.
+    try {
+      const RETRY_LIMIT = 50;
+      const TARGET_SLOTS = 10;
+      if (player.homeZoneId) {
+        const zone = (artifact.zones || []).find(
+          (z) => z.id === player.homeZoneId,
+        ) as ZoneWithExtras | undefined;
+        const zonePeople = Array.isArray(zone?.people)
+          ? zone!.people.slice()
+          : [];
+        const selected = new Set<string>();
+        for (let slot = 0; slot < TARGET_SLOTS; slot++) {
+          let attempts = 0;
+          let picked: string | null = null;
+          while (attempts < RETRY_LIMIT && zonePeople.length > 0) {
+            const candidate = rng.choice(zonePeople);
+            if (!selected.has(candidate)) {
+              picked = candidate;
+              break;
+            }
+            attempts++;
+          }
+          if (picked) {
+            selected.add(picked);
+            const agId = makeId(rng, "ag");
+            const codeName = `Agent ${agId.slice(-4)}`;
+            const agentModule = await import("../models/agent");
+            const ag = agentModule.createAgent(agId, picked, codeName, 0, {
+              role: "Recruit",
+            });
+            ag.affiliationId = playerOrg.id;
+            artifact.agents.push(ag as import("../models/agent").Agent);
+          } else {
+            // leave slot empty
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("generateAndSaveWorld: agent assignment failed", e);
+    }
   } catch (e) {
     console.warn("generateAndSaveWorld: failed to create player/org", e);
   }
