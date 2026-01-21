@@ -35,8 +35,6 @@ export default function CharacterGeneration() {
       // generate and persist the debug artifact as game state
       const artifact = await generateAndSaveWorld(seed, undefined, name);
 
-      const world = artifact; // existing code expects `world` variable
-
       // remove any autosave left behind by dev helpers
       try {
         await deleteConfig("game:autosave");

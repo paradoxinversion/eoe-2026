@@ -12,6 +12,8 @@ type Person = {
   leadership?: number;
   pay?: number;
   status?: string;
+  attributes?: Record<string, unknown>;
+  skills?: Record<string, unknown>;
   [k: string]: unknown;
 };
 
@@ -58,44 +60,42 @@ export default function Profile({ person }: { person: Person }) {
         </table>
 
         {/* Attributes (e.g., health, intelligence) */}
-        {(person as any).attributes &&
-          Object.keys((person as any).attributes).length > 0 && (
-            <div style={{ marginTop: 10 }}>
-              <div style={{ fontWeight: 600, marginBottom: 6 }}>Attributes</div>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                {Object.entries((person as any).attributes).map(([k, v]) => (
-                  <div key={k} style={{ minWidth: 110 }}>
-                    <div style={{ color: "#666", fontSize: 12 }}>
-                      {k
-                        .replace(/([A-Z])/g, " $1")
-                        .replace(/^./, (s) => s.toUpperCase())}
-                    </div>
-                    <div style={{ fontWeight: 600 }}>{String(v)}</div>
+        {person.attributes && Object.keys(person.attributes).length > 0 && (
+          <div style={{ marginTop: 10 }}>
+            <div style={{ fontWeight: 600, marginBottom: 6 }}>Attributes</div>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              {Object.entries(person.attributes).map(([k, v]) => (
+                <div key={k} style={{ minWidth: 110 }}>
+                  <div style={{ color: "#666", fontSize: 12 }}>
+                    {k
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, (s) => s.toUpperCase())}
                   </div>
-                ))}
-              </div>
+                  <div style={{ fontWeight: 600 }}>{String(v)}</div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
         {/* Skills (e.g., fighting, medicine) */}
-        {(person as any).skills &&
-          Object.keys((person as any).skills).length > 0 && (
-            <div style={{ marginTop: 10 }}>
-              <div style={{ fontWeight: 600, marginBottom: 6 }}>Skills</div>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                {Object.entries((person as any).skills).map(([k, v]) => (
-                  <div key={k} style={{ minWidth: 110 }}>
-                    <div style={{ color: "#666", fontSize: 12 }}>
-                      {k
-                        .replace(/([A-Z])/g, " $1")
-                        .replace(/^./, (s) => s.toUpperCase())}
-                    </div>
-                    <div style={{ fontWeight: 600 }}>{String(v)}</div>
+        {person.skills && Object.keys(person.skills).length > 0 && (
+          <div style={{ marginTop: 10 }}>
+            <div style={{ fontWeight: 600, marginBottom: 6 }}>Skills</div>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              {Object.entries(person.skills).map(([k, v]) => (
+                <div key={k} style={{ minWidth: 110 }}>
+                  <div style={{ color: "#666", fontSize: 12 }}>
+                    {k
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, (s) => s.toUpperCase())}
                   </div>
-                ))}
-              </div>
+                  <div style={{ fontWeight: 600 }}>{String(v)}</div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
+        )}
       </div>
     </div>
   );

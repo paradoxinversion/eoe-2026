@@ -12,7 +12,8 @@ export type ValidationResult = {
 };
 
 export function validateConfig(data: unknown): ValidationResult {
-  const valid = validate(data);
+  // call validate to populate AJV errors; return value is unused
+  validate(data);
   // Start with AJV errors if any
   let errors: Ajv.ErrorObject[] | null = validate.errors
     ? [...(validate.errors as Ajv.ErrorObject[])]
@@ -21,7 +22,7 @@ export function validateConfig(data: unknown): ValidationResult {
   // Additional rule: organizationCount must be less than total map cells (mapWidth * mapHeight)
   try {
     if (data && typeof data === "object") {
-      const d = data as Record<string, any>;
+      const d = data as Record<string, unknown>;
       const mapW =
         typeof d.mapWidth === "number" ? Math.floor(d.mapWidth) : undefined;
       const mapH =

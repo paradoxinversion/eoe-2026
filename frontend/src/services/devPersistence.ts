@@ -23,10 +23,9 @@ export async function exportSavedGameToFile(
   // In Node (tests), write to disk; in browser, trigger download
   try {
     // detect Node environment
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     if (typeof window === "undefined") {
-      const fs = require("fs");
-      const path = require("path");
+      const fs = await import("fs");
+      const path = await import("path");
       const dir = path.resolve(process.cwd(), outputDir);
       if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
       const filePath = path.join(dir, `saved-game-${name}.json`);

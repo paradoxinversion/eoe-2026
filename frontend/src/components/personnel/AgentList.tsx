@@ -22,7 +22,7 @@ export default function AgentList({
 
   React.useEffect(() => {
     // reset focus index when agents change
-    setFocusedIndex((idx) => (agents && agents.length > 0 ? 0 : null));
+    setFocusedIndex(() => (agents && agents.length > 0 ? 0 : null));
   }, [agents]);
 
   function focusIndex(i: number) {

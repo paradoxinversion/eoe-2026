@@ -72,9 +72,6 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
             const p = prefs as { startingSeed?: number; playerName?: string };
             if (typeof p.startingSeed === "number")
               setStartingSeed(p.startingSeed);
-            if (p.playerName && (!state || !state.player)) {
-              // no-op: playerName handled elsewhere
-            }
           }
         } catch (e) {
           // ignore
@@ -126,7 +123,7 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
     setState((s) => {
       const next = {
         ...s,
-        agents: [...(s.agents || []), agent as any],
+        agents: [...(s.agents || []), agent as unknown as Agent],
       } as GameState;
       return next;
     });
