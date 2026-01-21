@@ -13,7 +13,8 @@
     "test:a11y:playwright": "npx playwright test tests/playwright/axe.spec.ts --reporter=list",
     "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\"",
     "lint:fix": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css,scss}\""
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css,scss}\"",
+    "gen:debug": "npx ts-node src/services/generationDebug.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
