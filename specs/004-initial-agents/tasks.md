@@ -50,9 +50,9 @@ Note: Test-first requirement — all implementation tasks MUST be preceded by au
 
 **Independent Test**: UI integration tests verify list rendering, sort/filter behavior, and that Profile contents match the `Person` data for a selected Agent.
 
-- [ ] T013 [US2] Refactor `frontend/src/components/personnel/Profile.tsx` to read `Person` fields (`firstName`, `lastName`, `homeZoneId`, `skills`, `attributes`) from the canonical `Person` model and render accessible placeholders for missing data
-- [ ] T014 [US2] Implement or update `frontend/src/components/personnel/PersonnelList.tsx` (or equivalent) to include sorting by name/role/zone and filtering UI; add unit tests in `frontend/tests/unit/personnel.list.test.tsx`
-- [ ] T015 [US2] Add integration Playwright test `frontend/tests/playwright/personnel.spec.ts` that opens Personnel screen, selects an Agent, and asserts Profile shows Person fields and accessibility checks
+- [x] T013 [US2] Refactor `frontend/src/components/personnel/Profile.tsx` to read `Person` fields (`firstName`, `lastName`, `homeZoneId`, `skills`, `attributes`) from the canonical `Person` model and render accessible placeholders for missing data
+- [x] T014 [US2] Implement or update `frontend/src/components/personnel/PersonnelList.tsx` (or equivalent) to include sorting by name/role/zone and filtering UI; add unit tests in `frontend/tests/unit/personnel.list.test.tsx`
+- [x] T015 [US2] Add integration Playwright test `frontend/tests/playwright/personnel.spec.ts` that opens Personnel screen, selects an Agent, and asserts Profile shows Person fields and accessibility checks
 - [ ] T016 [US2] Ensure Profile changes conform to `specs/004-initial-agents/contracts/agent-view.json` and add a contract test in `frontend/tests/unit/agent-view.contract.test.ts`
 
 ---
