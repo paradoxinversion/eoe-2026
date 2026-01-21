@@ -29,11 +29,16 @@ export default function Profile({ person }: { person: Person }) {
     person.name ||
     person.id;
 
+  const leadershipValue =
+    (person.attributes && (person.attributes as any).leadership) ??
+    person.leadership ??
+    "—";
+
   const rows: Array<{ label: string; value: React.ReactNode }> = [
     { label: "ID", value: person.id },
     { label: "Type", value: person.agentType || "—" },
     { label: "Role", value: person.role || "—" },
-    { label: "Leadership", value: person.leadership ?? "—" },
+    { label: "Leadership", value: leadershipValue },
     { label: "Pay", value: person.pay ?? "—" },
     { label: "Status", value: person.status || "—" },
     { label: "Origin", value: person.homeZoneId || "—" },

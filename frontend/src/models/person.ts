@@ -3,6 +3,7 @@ export type UUID = string;
 export interface PersonAttributes {
   health: number;
   intelligence: number;
+  leadership: number;
   strength: number;
   agility: number;
   endurance: number;
@@ -69,6 +70,7 @@ export function createPerson(
 const defaultAttributes: PersonAttributes = {
   health: 50,
   intelligence: 50,
+  leadership: 50,
   strength: 50,
   agility: 50,
   endurance: 50,
