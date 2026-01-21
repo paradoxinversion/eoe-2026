@@ -53,7 +53,7 @@ Note: Test-first requirement — all implementation tasks MUST be preceded by au
 - [x] T013 [US2] Refactor `frontend/src/components/personnel/Profile.tsx` to read `Person` fields (`firstName`, `lastName`, `homeZoneId`, `skills`, `attributes`) from the canonical `Person` model and render accessible placeholders for missing data
 - [x] T014 [US2] Implement or update `frontend/src/components/personnel/PersonnelList.tsx` (or equivalent) to include sorting by name/role/zone and filtering UI; add unit tests in `frontend/tests/unit/personnel.list.test.tsx`
 - [x] T015 [US2] Add integration Playwright test `frontend/tests/playwright/personnel.spec.ts` that opens Personnel screen, selects an Agent, and asserts Profile shows Person fields and accessibility checks
-- [ ] T016 [US2] Ensure Profile changes conform to `specs/004-initial-agents/contracts/agent-view.json` and add a contract test in `frontend/tests/unit/agent-view.contract.test.ts`
+- [x] T016 [US2] Ensure Profile changes conform to `specs/004-initial-agents/contracts/agent-view.json` and add a contract test in `frontend/tests/unit/agent-view.contract.test.tsx`
 
 ---
 
@@ -63,7 +63,7 @@ Note: Test-first requirement — all implementation tasks MUST be preceded by au
 
 **Independent Test**: Unit tests for `NameGenerator` (format/uniqueness) and integration test verifying names are assigned during generation when invoked.
 
-- [ ] T017 [US3] Integrate `NameGenerator` into `frontend/src/services/generation.ts` so newly created `Person` records receive `firstName` and `lastName` when generated
+- [x] T017 [US3] Integrate `NameGenerator` into `frontend/src/services/generation.ts` so newly created `Person` records receive `firstName` and `lastName` when generated
 - [ ] T018 [US3] Unit test `frontend/tests/unit/nameGenerator.uniqueness.test.ts` sampling 1,000 names and asserting uniqueness/format metrics per spec
 - [ ] T019 [US3] Integration test `frontend/tests/integration/namegen.integration.test.tsx` to verify deterministic outputs when seeding name generation
 

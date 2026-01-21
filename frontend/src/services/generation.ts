@@ -1,4 +1,5 @@
 import createRng from "../lib/rng";
+import NameGenerator from "./nameGenerator";
 import { createZone } from "../models/zone";
 import type { Zone } from "../models/zone";
 import { createPerson } from "../models/person";
@@ -51,6 +52,7 @@ export function generateDebugWorld(
   },
 ): DebugArtifact {
   const rng = createRng(seed);
+  const nameGen = new NameGenerator({ rng });
   const mapWidth = Math.max(1, Math.floor(opts?.mapWidth ?? 100));
   const mapHeight = Math.max(1, Math.floor(opts?.mapHeight ?? 100));
   const peoplePerZone = opts?.peoplePerZone ?? 2;
@@ -147,8 +149,10 @@ export function generateDebugWorld(
     );
     for (let i = 0; i < peopleCount; i++) {
       const id = makeId(rng, "p");
-      const firstName = `P${rng.int(10, 99)}`;
-      const lastName = `Z${z.id.split("-").slice(-2).join("")}`;
+      const nm = nameGen.generate();
+      // fallback for any generation issues
+      const firstName = nm?.firstName ?? `P${rng.int(10, 99)}`;
+      const lastName = nm?.lastName ?? `Z${z.id.split("-").slice(-2).join("")}`;
       const p = createPerson(id, firstName, lastName, {
         homeZoneId: z.id,
         intelligenceLevel: rng.int(0, 100),
@@ -311,6 +315,7 @@ export async function generateAndSaveWorld(
 
   try {
     const rng = createRng(seed);
+    const nameGen = new NameGenerator({ rng });
     let playerName = defaultConfig.playerName || "Player";
     try {
       const prefs = (await loadConfig("preferences")) as
@@ -329,12 +334,26 @@ export async function generateAndSaveWorld(
       // ignore
     }
 
-    const [firstName, ...rest] = String(playerName).split(/\s+/);
-    const lastName = rest.length > 0 ? rest.join(" ") : "Player";
+    let firstName: string;
+    let lastName: string;
+    if (playerName && String(playerName).trim().length > 0) {
+      const parts = String(playerName).split(/\s+/);
+      firstName = parts[0] || "Player";
+      lastName = parts.slice(1).join(" ") || "Player";
+    } else {
+      const nm = nameGen.generate();
+      firstName = nm.firstName;
+      lastName = nm.lastName;
+    }
     const playerId = makeId(rng, "player");
-    const player = createPerson(playerId, firstName || "Player", lastName, {
-      intelligenceLevel: rng.int(30, 90),
-    });
+    const player = createPerson(
+      playerId,
+      firstName || "Player",
+      lastName || "Player",
+      {
+        intelligenceLevel: rng.int(30, 90),
+      },
+    );
     artifact.people.push(player);
 
     const orgId = makeId(rng, "org-player");
