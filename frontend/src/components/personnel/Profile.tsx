@@ -38,6 +38,7 @@ export default function Profile({ person }: { person: Person }) {
     <div style={{ padding: 12, border: "1px solid #ddd", borderRadius: 6 }}>
       <div style={{ fontSize: 18, fontWeight: 700 }}>
         {`${person.firstName || ""} ${person.lastName || ""}`.trim() ||
+          person.name ||
           person.id}
       </div>
       <div style={{ marginTop: 8 }}>
