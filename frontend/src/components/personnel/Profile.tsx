@@ -24,6 +24,11 @@ export default function Profile({ person }: { person: Person }) {
       ? intelligenceToConfidence(person.intelligenceLevel)
       : 100;
 
+  const displayName =
+    `${person.firstName || ""} ${person.lastName || ""}`.trim() ||
+    person.name ||
+    person.id;
+
   const rows: Array<{ label: string; value: React.ReactNode }> = [
     { label: "ID", value: person.id },
     { label: "Type", value: person.agentType || "—" },
@@ -35,15 +40,23 @@ export default function Profile({ person }: { person: Person }) {
   ];
 
   return (
-    <div style={{ padding: 12, border: "1px solid #ddd", borderRadius: 6 }}>
-      <div style={{ fontSize: 18, fontWeight: 700 }}>
-        {`${person.firstName || ""} ${person.lastName || ""}`.trim() ||
-          person.name ||
-          person.id}
-      </div>
+    <div
+      style={{ padding: 12, border: "1px solid #ddd", borderRadius: 6 }}
+      aria-labelledby={`person-${person.id}-name`}
+    >
+      <h2
+        id={`person-${person.id}-name`}
+        data-testid="person-name"
+        style={{ fontSize: 18, fontWeight: 700, margin: 0 }}
+      >
+        {displayName}
+      </h2>
       <div style={{ marginTop: 8 }}>
         <div style={{ marginBottom: 8 }}>Confidence: {confidence}%</div>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <table
+          style={{ width: "100%", borderCollapse: "collapse" }}
+          aria-labelledby={`person-${person.id}-name`}
+        >
           <tbody>
             {rows.map((r) => (
               <tr key={r.label}>
@@ -57,7 +70,13 @@ export default function Profile({ person }: { person: Person }) {
                 >
                   {r.label}
                 </td>
-                <td style={{ padding: "4px 8px" }}>{r.value}</td>
+                <td style={{ padding: "4px 8px" }}>
+                  {typeof r.value === "string" && r.value === "—" ? (
+                    <span aria-label="missing">—</span>
+                  ) : (
+                    r.value
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
