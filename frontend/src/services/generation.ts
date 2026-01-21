@@ -374,7 +374,10 @@ export async function generateAndSaveWorld(
       await saveGameState(saveName, artifact);
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.warn("generateAndSaveWorld: failed to save artifact under saveName", e);
+      console.warn(
+        "generateAndSaveWorld: failed to save artifact under saveName",
+        e,
+      );
     }
   }
 
