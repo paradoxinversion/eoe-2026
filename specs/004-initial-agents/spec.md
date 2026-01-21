@@ -13,7 +13,7 @@
 
 - Q: Where do the Agent/Governing Organization/Zone data shapes come from and how should the Profile obtain display fields? → A: The `Agent`, `Governing Organization`, and `Zone` canonical data models are the ones in `frontend/src/models`. When viewing an Agent's Profile on the Personnel screen, the UI MUST obtain the Agent's actual `name`, `homeZone`/`originZone`, `skills`, `attributes`, etc., from the associated `Person` entity referenced by the `Agent` object in those canonical models.
 
-- Q: Which canonical `Person` fields should the Profile read? → A: Use canonical `Person` fields: `id`, `fullName`, `homeZone`/`originZone`, `skills`, `attributes`, `biography`. The Profile MUST read these directly from the `Person` referenced by the `Agent`.
+- Q: Which canonical `Person` fields should the Profile read? → A: Use canonical `Person` fields: `id`, `fullName`, `homeZone`/`originZone`, `skills`, `attributes`. The Profile MUST read these directly from the `Person` referenced by the `Agent`.
 
 - Q: How should determinism for initial Agent selection be controlled for reproducible tests? → A: Pass an explicit RNG/seed into world-generation; when provided the world-generation process MUST use it for all random selection (including initial Agent selection) to guarantee reproducible tests.
 
@@ -46,7 +46,7 @@ As a Player, I can open the Personnel screen to see the list of Agents, access a
 **Acceptance Scenarios**:
 
 1. **Given** a Player with Agents, **When** they open the Personnel screen, **Then** the screen displays a list of Agents (>=1) with name, role, and a selectable entry for Profile.
-2. **Given** an Agent selected in the list, **When** the Player opens the Profile pane, **Then** additional fields (biography snippet, skills summary, origin zone) are visible.
+2. **Given** an Agent selected in the list, **When** the Player opens the Profile pane, **Then** additional fields (skills summary, origin zone, attributes) are visible.
 3. **Given** many Agents, **When** Player sorts or filters by role/zone/name, **Then** the list updates accordingly and remains usable.
 
 ---
@@ -79,7 +79,7 @@ When new People are created during world generation, they should have realistic 
 - **FR-001**: On a new game, the Player's Governing Organization MUST be initialized with exactly 10 Agent slots; filled slots must reference unique Agent entities when available.
 - **FR-002**: The 10 Agents MUST be selected from the Player's starting zone population (no Agents from other zones), chosen randomly unless deterministic seeding is used for testing.
 - **FR-003**: The Personnel screen MUST display a list of the Player's Agents including at minimum: full name, role/title, and origin zone.
-  **FR-004**: Selecting an Agent in the list MUST open a Profile pane that displays additional details sourced from the associated `Person` record: biography snippet, skills summary, attributes, `homeZone`/origin, and any assigned roles. The Profile MUST read these fields via the canonical models in `frontend/src/models`.
+  **FR-004**: Selecting an Agent in the list MUST open a Profile pane that displays additional details sourced from the associated `Person` record: skills summary, attributes, `homeZone`/origin, and any assigned roles. The Profile MUST read these fields via the canonical models in `frontend/src/models`.
 - **FR-005**: The Personnel screen MUST support sorting by name, role, and origin zone, and simple filtering by role/zone.
 - **FR-006**: The name generator MUST produce plausible full names (given + family) for People created during world generation and be callable during person/Agent creation and for display purposes.
 - **FR-007**: When the starting population is insufficient to supply 10 unique Agents, the system MUST fill as many unique Agent slots as possible and expose remaining slots as empty (no silent failures).
@@ -89,7 +89,7 @@ When new People are created during world generation, they should have realistic 
 
 ### Key Entities
 
-**Agent**: Represents a person assignment record that references a `Person` entity from the canonical models. Key attributes: unique ID, reference to `Person` (source of `full name`, `homeZone`, `skills`, `attributes`), role/title, biography snippet. Note: People currently have no age field and are treated as adults.
+**Agent**: Represents a person assignment record that references a `Person` entity from the canonical models. Key attributes: unique ID, reference to `Person` (source of `full name`, `homeZone`, `skills`, `attributes`), role/title. Note: People currently have no age field and are treated as adults.
 
 - **Governing Organization**: Player-owned entity that has a roster of Agent slots (initially 10) and references to Agent entities; see canonical models in `frontend/src/models`.
 - **Zone**: Geographical or logical area used as the selection pool for initial Agent assignment; canonical `Zone` model is in `frontend/src/models`.
@@ -102,7 +102,7 @@ When new People are created during world generation, they should have realistic 
 - `homeZone` / `originZone` — reference to the Person's zone
 - `skills` — summary or structured skills data used in Profile
 - `attributes` — key attributes (traits, stats) relevant to the UI
-- `biography` — short biography snippet for display
+- `attributes` — key attributes (traits, stats) relevant to the UI
 
 The Profile view MUST read these fields from the referenced `Person` rather than duplicating them on the `Agent` record.
 
