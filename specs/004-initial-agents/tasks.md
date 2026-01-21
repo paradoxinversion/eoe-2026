@@ -23,9 +23,6 @@ description: "Generated task list for Initial Agents & Personnel Screen feature"
 
 Note: Test-first requirement — all implementation tasks MUST be preceded by authored failing tests (Red). The following test-authoring tasks must be completed before implementing the corresponding modules.
 
-- [ ] T004a Write failing unit tests for the PRNG wrapper in `frontend/tests/unit/rng.test.ts` (these tests should assert deterministic sampling behavior and fail until `frontend/src/lib/rng.ts` is implemented).
-- [ ] T005a Write failing unit tests for `NameGenerator` in `frontend/tests/unit/nameGenerator.test.ts` (format + uniqueness tests per spec) and ensure they fail initially.
-- [ ] T006a Write failing generation/seed unit tests in `frontend/tests/unit/generation.seed.test.ts` that assert deterministic sampling and seeded reproducibility and fail until `frontend/src/services/generation.ts` is implemented.
 - [x] T004a Write failing unit tests for the PRNG wrapper in `frontend/tests/unit/rng.test.ts` (these tests should assert deterministic sampling behavior and fail until `frontend/src/lib/rng.ts` is implemented).
 - [x] T005a Write failing unit tests for `NameGenerator` in `frontend/tests/unit/nameGenerator.test.ts` (format + uniqueness tests per spec) and ensure they fail initially.
 - [x] T006a Write failing generation/seed unit tests in `frontend/tests/unit/generation.seed.test.ts` that assert deterministic sampling and seeded reproducibility and fail until `frontend/src/services/generation.ts` is implemented.
@@ -44,6 +41,12 @@ Note: Test-first requirement — all implementation tasks MUST be preceded by au
 - [ ] T010 [US1] Add bounded-retry uniqueness handling in `frontend/src/services/generation.ts` with a clear retry limit and fallback behavior when population <10
 - [ ] T011 [US1] Integration test: `frontend/tests/integration/initial-agents.integration.test.tsx` — seed-in/seed-out reproducibility and correct zone scoping (uses deterministic RNG)
 - [ ] T012 [US1] Add edge-case test: `frontend/tests/unit/initial-agents.edge.test.ts` for low-population behavior (fewer than 10 people)
+- [x] T008 [US1] Implement sampling algorithm in `frontend/src/services/generation.ts` to select up to 10 unique `Person` ids from the starting zone using the injected RNG
+- [x] T008a Write failing integration test `frontend/tests/integration/initial-agents.integration.test.tsx` asserting roster size, uniqueness, and source zone given a seed (must fail before implementation).
+- [x] T009 [US1] Implement Agent creation in `frontend/src/services/generation.ts` (create `Agent` records with `personId` and `affiliationId` set to the Player's GoverningOrganization id) and persist via existing storage layer (IndexedDB wrappers under `frontend/src/lib/` or `frontend/src/services/`)
+- [x] T010 [US1] Add bounded-retry uniqueness handling in `frontend/src/services/generation.ts` with a clear retry limit and fallback behavior when population <10
+- [x] T011 [US1] Integration test: `frontend/tests/integration/initial-agents.integration.test.tsx` — seed-in/seed-out reproducibility and correct zone scoping (uses deterministic RNG)
+- [x] T012 [US1] Add edge-case test: `frontend/tests/unit/initial-agents.edge.test.ts` for low-population behavior (fewer than 10 people)
 
 ---
 
