@@ -3,7 +3,7 @@ import React from "react";
 type Agent = {
   id: string;
   name: string;
-  agentType?: string;
+  role?: string;
 };
 
 export default function AgentList({
@@ -86,7 +86,9 @@ export default function AgentList({
           >
             <div>
               <div style={{ fontWeight: 600 }}>{a.name}</div>
-              <div style={{ fontSize: 12, color: "#666" }}>{a.agentType}</div>
+              <div style={{ fontSize: 12, color: "#666" }}>
+                {a.role || (a as any).agentType}
+              </div>
             </div>
             <div>
               <button

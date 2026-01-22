@@ -4,7 +4,7 @@ import AgentList from "./AgentList";
 type Agent = {
   id: string;
   name: string;
-  agentType?: string;
+  role?: string;
 };
 
 export default function PersonnelList({
@@ -22,7 +22,8 @@ export default function PersonnelList({
 
   const types = React.useMemo(() => {
     const s = new Set<string>();
-    for (const a of agents) if (a.agentType) s.add(a.agentType);
+    for (const a of agents)
+      if (a.role || (a as any).agentType) s.add(a.role || (a as any).agentType);
     return Array.from(s).sort();
   }, [agents]);
 
@@ -33,12 +34,18 @@ export default function PersonnelList({
       out = out.filter((a) => (a.name || "").toLowerCase().includes(q));
     }
     if (typeFilter !== "all") {
-      out = out.filter((a) => (a.agentType || "") === typeFilter);
+      out = out.filter(
+        (a) => (a.role || (a as any).agentType || "") === typeFilter,
+      );
     }
     if (sortBy === "name") {
       out.sort((x, y) => (x.name || "").localeCompare(y.name || ""));
     } else {
-      out.sort((x, y) => (x.agentType || "").localeCompare(y.agentType || ""));
+      out.sort((x, y) =>
+        (x.role || (x as any).agentType || "").localeCompare(
+          y.role || (y as any).agentType || "",
+        ),
+      );
     }
     return out;
   }, [agents, query, typeFilter, sortBy]);
@@ -59,7 +66,7 @@ export default function PersonnelList({
           onChange={(e) => setTypeFilter(e.target.value)}
           style={{ padding: 6 }}
         >
-          <option value="all">All types</option>
+          <option value="all">All roles</option>
           {types.map((t) => (
             <option key={t} value={t}>
               {t}
@@ -73,7 +80,7 @@ export default function PersonnelList({
           style={{ padding: 6 }}
         >
           <option value="name">Sort: Name</option>
-          <option value="type">Sort: Type</option>
+          <option value="type">Sort: Role</option>
         </select>
       </div>
       <AgentList agents={filtered} onFocus={onFocus} onActivate={onActivate} />
