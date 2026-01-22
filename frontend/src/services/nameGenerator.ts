@@ -1,5 +1,21 @@
 import createRng, { type RNG } from "../lib/rng";
 
+/**
+ * NameGenerator
+ *
+ * Produces deterministic first/last name pairs when constructed with a
+ * deterministic RNG or when supplied a `seed`. Callers may pass either
+ * `opts.seed` (a number or string) or `opts.rng` (an RNG instance). When the
+ * same seed or RNG is used across runs the sequence of generated names will
+ * be identical.
+ *
+ * Type guarantees:
+ * - `generate()` returns a `NamePair` with `firstName` and `lastName` both
+ *   strongly typed as `string`.
+ * - The implementation avoids `any` and uses the `RNG` type from
+ *   `src/lib/rng` for random operations.
+ */
+
 export type NamePair = { firstName: string; lastName: string };
 
 export class NameGenerator {

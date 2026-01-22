@@ -1,6 +1,33 @@
 import createRng from "../lib/rng";
 import NameGenerator from "./nameGenerator";
 import { createZone } from "../models/zone";
+/**
+ * RNG / Seed notes
+ *
+ * This module produces deterministic world artifacts when given the same
+ * `seed` value. Callers may supply either a numeric/string `seed` (most
+ * consumer entrypoints do) or an injected RNG via the `NameGenerator` and
+ * other helpers. Internally we derive a local RNG using `createRng(seed)` so
+ * all random choices (zones, people, buildings, agent sampling, name
+ * generation) are reproducible for a given seed.
+ *
+ * Determinism guarantees:
+ * - `generateDebugWorld(seed, opts)` is pure and returns identical artifacts
+ *   for the same `seed` + `opts` inputs (ordering differences are only from
+ *   callers that mutate the returned object).
+ * - `generateAndSaveWorld(seed, opts)` uses the same generator logic but may
+ *   perform side-effectful persistence (writing `generation-{seed}`). To keep
+ *   persistence deterministic and avoid shape/ordering races, callers should
+ *   treat the returned `DebugArtifact` as authoritative rather than relying on
+ *   any intermediate persisted keys.
+ *
+ * Implementation notes:
+ * - For deterministic behavior in tests, pass an explicit seed (number|string)
+ *   to the public APIs in this module.
+ * - `NameGenerator` accepts an injected RNG; when provided the same RNG
+ *   instance across runs it will also be deterministic.
+ */
+
 import type { Zone } from "../models/zone";
 import { createPerson } from "../models/person";
 import type { Person } from "../models/person";
