@@ -210,7 +210,6 @@ export async function generateAndSaveWorld(
     peoplePerZone?: number;
     orgCount?: number;
   },
-  saveName?: string,
 ): Promise<DebugArtifact> {
   const finalOpts: {
     mapWidth?: number;

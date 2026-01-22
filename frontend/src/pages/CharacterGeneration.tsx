@@ -33,7 +33,7 @@ export default function CharacterGeneration() {
       // choose or derive a seed; use timestamp-based number for determinism
       const seed = Date.now();
       // generate and persist the debug artifact as game state
-      const artifact = await generateAndSaveWorld(seed, undefined, name);
+      const artifact = await generateAndSaveWorld(seed);
 
       // remove any autosave left behind by dev helpers
       try {
