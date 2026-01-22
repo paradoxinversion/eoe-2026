@@ -7,6 +7,11 @@ export type AgentRole =
   | "Doctor"
   | "Soldier";
 
+// The player's avatar agent role
+export type PlayerAgentRole = "Overlord";
+
+export type ExtendedAgentRole = AgentRole | PlayerAgentRole;
+
 export interface AgentInventoryItem {
   itemId: string;
   qty: number;
@@ -16,7 +21,7 @@ export interface Agent {
   id: UUID;
   personId: UUID;
   codeName: string;
-  role: AgentRole;
+  role: ExtendedAgentRole;
   affiliationId?: UUID;
   inventory?: AgentInventoryItem[];
   health: number;

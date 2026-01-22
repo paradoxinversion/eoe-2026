@@ -57,6 +57,8 @@ export default function CapacityWidgets() {
         if (!mounted) return;
         const cnt = agents.length;
         const cap = agents.reduce((acc, a) => {
+          const role = a.role ?? a.agentType ?? a.type;
+          if (role === "Recruit") return acc; // recruits don't contribute leadership capacity
           const leadership = a.leadership ?? a.attributes?.leadership ?? 0;
           return acc + (computeCapacity(leadership) || 0);
         }, 0);

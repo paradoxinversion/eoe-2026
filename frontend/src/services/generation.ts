@@ -413,6 +413,31 @@ export async function generateAndSaveWorld(
     // Initialize agents array in artifact
     artifact.agents = artifact.agents || [];
 
+    // Create an Agent entry for the player's character with role Overlord
+    try {
+      const agentModule = await import("../models/agent");
+      const playerAgentId = makeId(rng, "ag");
+      const playerCodeName =
+        `${player.firstName || "Player"} ${player.lastName || "Player"}`.trim();
+      const playerAgent = agentModule.createAgent(
+        playerAgentId,
+        player.id,
+        playerCodeName,
+        0,
+        {
+          role: "Overlord",
+          hired_at: new Date().toISOString(),
+        },
+      );
+      playerAgent.affiliationId = playerOrg.id;
+      // ensure player agent is first so UI can select it predictably
+      artifact.agents.unshift(playerAgent as import("../models/agent").Agent);
+    } catch (e) {
+      // ignore if dynamic import fails
+      // eslint-disable-next-line no-console
+      console.warn("generateAndSaveWorld: failed to create player agent", e);
+    }
+
     // When running in the browser, clear any previously persisted agents
     // so a fresh game starts with a clean personnel store.
     try {
@@ -444,8 +469,18 @@ export async function generateAndSaveWorld(
         const zonePeople = Array.isArray(zone?.people)
           ? zone!.people.slice()
           : [];
-        const selected = new Set<string>();
-        for (let slot = 0; slot < TARGET_SLOTS; slot++) {
+        const selected = new Set<string>(
+          (Array.isArray(artifact.agents) ? artifact.agents : []).map(
+            (a: any) => a.personId,
+          ),
+        );
+        // If a player agent was already added, reduce the number of
+        // additional sampled agents so total does not exceed TARGET_SLOTS.
+        const existing = Array.isArray(artifact.agents)
+          ? artifact.agents.length
+          : 0;
+        const slotsToFill = Math.max(0, TARGET_SLOTS - existing);
+        for (let slot = 0; slot < slotsToFill; slot++) {
           let attempts = 0;
           let picked: string | null = null;
           while (attempts < RETRY_LIMIT && zonePeople.length > 0) {
