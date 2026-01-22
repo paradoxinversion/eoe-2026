@@ -5,6 +5,7 @@ type Agent = {
   id: string;
   name: string;
   role?: string;
+  agentType?: string;
 };
 
 export default function PersonnelList({
@@ -23,7 +24,7 @@ export default function PersonnelList({
   const types = React.useMemo(() => {
     const s = new Set<string>();
     for (const a of agents)
-      if (a.role || (a as any).agentType) s.add(a.role || (a as any).agentType);
+      if (a.role || a.agentType) s.add(a.role || a.agentType!);
     return Array.from(s).sort();
   }, [agents]);
 
@@ -34,16 +35,14 @@ export default function PersonnelList({
       out = out.filter((a) => (a.name || "").toLowerCase().includes(q));
     }
     if (typeFilter !== "all") {
-      out = out.filter(
-        (a) => (a.role || (a as any).agentType || "") === typeFilter,
-      );
+      out = out.filter((a) => (a.role || a.agentType || "") === typeFilter);
     }
     if (sortBy === "name") {
       out.sort((x, y) => (x.name || "").localeCompare(y.name || ""));
     } else {
       out.sort((x, y) =>
-        (x.role || (x as any).agentType || "").localeCompare(
-          y.role || (y as any).agentType || "",
+        (x.role || x.agentType || "").localeCompare(
+          y.role || y.agentType || "",
         ),
       );
     }
@@ -76,7 +75,7 @@ export default function PersonnelList({
         <select
           aria-label="sort-by"
           value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as any)}
+          onChange={(e) => setSortBy(e.target.value as "name" | "type")}
           style={{ padding: 6 }}
         >
           <option value="name">Sort: Name</option>

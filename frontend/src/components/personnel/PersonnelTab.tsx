@@ -36,27 +36,45 @@ export default function PersonnelTab() {
           if (gameState) {
             // gameState may be the artifact directly or a wrapper with .world.artifact
             const art =
-              (gameState as any).world?.artifact || (gameState as any);
-            if (art && Array.isArray(art.agents) && art.agents.length > 0) {
-              const a = (art.agents as any[]).map((ag: any) => {
+              (gameState as unknown as Record<string, unknown>)?.world
+                ?.artifact ?? (gameState as unknown as Record<string, unknown>);
+            const artRec = art as Record<string, unknown> | undefined;
+            const agentsRaw = Array.isArray(artRec?.agents)
+              ? (artRec!.agents as unknown[])
+              : [];
+            if (agentsRaw.length > 0) {
+              const peopleRaw = Array.isArray(artRec?.people)
+                ? (artRec!.people as unknown[])
+                : [];
+              const a = agentsRaw.map((agUnknown) => {
+                const ag = agUnknown as Record<string, unknown>;
                 // find linked person
-                const person =
-                  (art.people || []).find((p: any) => p.id === ag.personId) ||
-                  null;
+                const person = (peopleRaw as unknown[]).find((p) => {
+                  const pr = p as Record<string, unknown>;
+                  return pr && pr.id && pr.id === ag.personId;
+                }) as Record<string, unknown> | undefined | null;
                 const name =
-                  ag.codeName ||
+                  (ag.codeName as string) ||
                   `${person?.firstName || ""} ${person?.lastName || ""}`.trim();
                 return {
-                  id: ag.id,
+                  id: ag.id as string,
                   name,
-                  firstName: person?.firstName,
-                  lastName: person?.lastName,
-                  homeZoneId: person?.homeZoneId,
-                  intelligenceLevel: person?.intelligenceLevel,
-                  agentType: ag.agentType || person?.occupation,
-                  attributes: person?.attributes || ag.attributes,
-                  skills: person?.skills || ag.skills,
-                  ...ag,
+                  firstName: person?.firstName as string | undefined,
+                  lastName: person?.lastName as string | undefined,
+                  homeZoneId: person?.homeZoneId as string | undefined,
+                  intelligenceLevel: person?.intelligenceLevel as
+                    | number
+                    | undefined,
+                  agentType:
+                    (ag.agentType as string) ||
+                    (person?.occupation as string | undefined),
+                  attributes:
+                    (person?.attributes as Record<string, unknown>) ||
+                    (ag.attributes as Record<string, unknown> | undefined),
+                  skills:
+                    (person?.skills as Record<string, unknown>) ||
+                    (ag.skills as Record<string, unknown> | undefined),
+                  ...(ag as Record<string, unknown>),
                 } as Agent;
               });
               setAgents(a);
@@ -98,9 +116,15 @@ export default function PersonnelTab() {
           name,
           intelligenceLevel,
           agentType,
-          attributes: (ag as any).attributes,
-          skills: (ag as any).skills,
-          homeZoneId: (ag as any).homeZoneId,
+          attributes: (ag as unknown as Record<string, unknown>)?.attributes as
+            | Record<string, unknown>
+            | undefined,
+          skills: (ag as unknown as Record<string, unknown>)?.skills as
+            | Record<string, unknown>
+            | undefined,
+          homeZoneId: (ag as unknown as Record<string, unknown>)?.homeZoneId as
+            | string
+            | undefined,
           ...ag,
         } as Agent;
       });
@@ -125,9 +149,15 @@ export default function PersonnelTab() {
               : undefined,
           agentType:
             typeof ag.agentType === "string" ? ag.agentType : undefined,
-          attributes: (ag as any).attributes,
-          skills: (ag as any).skills,
-          homeZoneId: (ag as any).homeZoneId,
+          attributes: (ag as unknown as Record<string, unknown>)?.attributes as
+            | Record<string, unknown>
+            | undefined,
+          skills: (ag as unknown as Record<string, unknown>)?.skills as
+            | Record<string, unknown>
+            | undefined,
+          homeZoneId: (ag as unknown as Record<string, unknown>)?.homeZoneId as
+            | string
+            | undefined,
           ...ag,
         };
         setAgents((prev) => {
@@ -180,8 +210,11 @@ export default function PersonnelTab() {
               name,
               intelligenceLevel,
               agentType,
-              attributes: (ag as any).attributes,
-              skills: (ag as any).skills,
+              attributes: (ag as unknown as Record<string, unknown>)
+                ?.attributes as Record<string, unknown> | undefined,
+              skills: (ag as unknown as Record<string, unknown>)?.skills as
+                | Record<string, unknown>
+                | undefined,
               ...ag,
             } as Agent;
           });
@@ -210,7 +243,9 @@ export default function PersonnelTab() {
               : undefined,
           agentType:
             typeof ag.agentType === "string" ? ag.agentType : undefined,
-          homeZoneId: (ag as any).homeZoneId,
+          homeZoneId: (ag as unknown as Record<string, unknown>)?.homeZoneId as
+            | string
+            | undefined,
           ...ag,
         } as Agent;
         setAgents((prev) => {

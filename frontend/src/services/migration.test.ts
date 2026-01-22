@@ -18,7 +18,7 @@ describe("migration helpers (spec scaffold)", () => {
       people: [{ id: "p1", name: "Alice Smith" }],
       agents: [{ id: "ag1", name: "Agent A", personId: "p1" }],
       zones: [],
-    } as any;
+    } as unknown as Record<string, unknown>;
 
     const report = migrateFixture(fixture);
     expect(report).toBeDefined();

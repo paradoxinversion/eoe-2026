@@ -31,7 +31,10 @@ export default function Profile({ person }: { person: Person }) {
     person.id;
 
   const leadershipValue =
-    (person.attributes && (person.attributes as any).leadership) ??
+    (person.attributes &&
+      ((person.attributes as Record<string, unknown>)?.leadership as
+        | number
+        | undefined)) ??
     person.leadership ??
     "—";
 
@@ -47,9 +50,12 @@ export default function Profile({ person }: { person: Person }) {
         games.sort((x, y) => (y.updatedAt || 0) - (x.updatedAt || 0));
         const latest = games[0];
         const gameState = await loadGameState(latest.name);
-        const art = (gameState as any).world?.artifact || (gameState as any);
+        const art =
+          (gameState as unknown as Record<string, unknown>)?.world?.artifact ??
+          (gameState as unknown as Record<string, unknown>);
         const zone = (art?.zones || []).find(
-          (z: any) => z.id === person.homeZoneId,
+          (z: unknown) =>
+            (z as Record<string, unknown>).id === person.homeZoneId,
         );
         if (mounted) setOriginName(zone?.name ?? null);
       } catch (e) {

@@ -14,7 +14,15 @@ export default function CapacityWidgets() {
       setLoading(true);
       try {
         // Prefer authoritative agents stored in the latest `game:` save.
-        let agents: any[] = [];
+        type AgentLike = Record<string, unknown> & {
+          personId?: string;
+          leadership?: number;
+          attributes?: Record<string, unknown>;
+          role?: string;
+          agentType?: string;
+          type?: string;
+        };
+        let agents: AgentLike[] = [];
         try {
           const games = await listGameStates();
           if (games && games.length) {
@@ -22,21 +30,31 @@ export default function CapacityWidgets() {
               a.updatedAt >= b.updatedAt ? a : b,
             );
             const state = await loadGameState(latest.name);
-            const art = (state as any)?.world?.artifact || (state as any);
-            const maybeAgents = (art as any)?.agents || [];
+            const art =
+              (state as unknown as Record<string, unknown>)?.world?.artifact ||
+              (state as unknown as Record<string, unknown>);
+            const maybeAgents =
+              (art as unknown as Record<string, unknown>)?.agents || [];
             if (Array.isArray(maybeAgents)) {
               // enrich agents with linked person attributes when available
-              const people = (art as any)?.people || [];
-              agents = maybeAgents.map((ag: any) => {
+              const people =
+                (art as unknown as Record<string, unknown>)?.people || [];
+              agents = (maybeAgents as unknown[]).map((agUnknown) => {
+                const ag = agUnknown as AgentLike;
                 if (ag.leadership === undefined) {
-                  const person = people.find((p: any) => p.id === ag.personId);
+                  const person = (people as unknown[]).find((p) => {
+                    const pp = p as Record<string, unknown>;
+                    return pp && pp.id && pp.id === ag.personId;
+                  }) as Record<string, unknown> | undefined;
                   if (
                     person &&
                     person.attributes &&
-                    typeof person.attributes.leadership === "number"
+                    typeof (person.attributes as Record<string, unknown>)
+                      .leadership === "number"
                   ) {
                     return Object.assign({}, ag, {
-                      leadership: person.attributes.leadership,
+                      leadership: (person.attributes as Record<string, unknown>)
+                        .leadership as number,
                     });
                   }
                 }
@@ -51,15 +69,22 @@ export default function CapacityWidgets() {
 
         if ((!agents || agents.length === 0) && mounted) {
           const list = await personnelPersistence.listAgents();
-          agents = list.map((l) => l.agent);
+          agents = list.map((l) => l.agent as AgentLike);
         }
 
         if (!mounted) return;
         const cnt = agents.length;
         const cap = agents.reduce((acc, a) => {
-          const role = a.role ?? a.agentType ?? a.type;
+          const role =
+            (a.role as string | undefined) ??
+            (a.agentType as string | undefined) ??
+            (a.type as string | undefined);
           if (role === "Recruit") return acc; // recruits don't contribute leadership capacity
-          const leadership = a.leadership ?? a.attributes?.leadership ?? 0;
+          const leadership =
+            (a.leadership as number | undefined) ??
+            ((a.attributes as Record<string, unknown> | undefined)
+              ?.leadership as number | undefined) ??
+            0;
           return acc + (computeCapacity(leadership) || 0);
         }, 0);
         setCurrent(cnt);
@@ -74,7 +99,6 @@ export default function CapacityWidgets() {
     };
   }, []);
 
-  const atCapacity = maxCapacity > 0 ? current >= maxCapacity : false;
   const pct = maxCapacity > 0 ? Math.round((current / maxCapacity) * 100) : 0;
   const warning = pct >= 90 && pct < 100;
 

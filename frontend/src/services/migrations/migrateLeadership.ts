@@ -12,9 +12,11 @@ export async function migrateLeadershipInAgents(): Promise<{
 
   for (const entry of list) {
     const ag = entry.agent as AgentRecord;
-    const topLeadership = (ag as any).leadership;
-    const attrs = (ag as any).attributes || {};
-    const hasAttrLeadership = typeof (attrs as any).leadership === "number";
+    const topLeadership = (ag as unknown as Record<string, unknown>)
+      ?.leadership as number | undefined;
+    const attrs = (ag as unknown as Record<string, unknown>)?.attributes || {};
+    const hasAttrLeadership =
+      typeof (attrs as Record<string, unknown>)?.leadership === "number";
 
     if (typeof topLeadership === "number" && !hasAttrLeadership) {
       const updated: AgentRecord = Object.assign({}, ag);
@@ -22,7 +24,7 @@ export async function migrateLeadershipInAgents(): Promise<{
         leadership: topLeadership,
       });
       // remove legacy top-level leadership to avoid duplication
-      delete (updated as any).leadership;
+      delete (updated as unknown as Record<string, unknown>).leadership;
       await personnelPersistence.saveAgent(updated);
       migrated++;
     } else {

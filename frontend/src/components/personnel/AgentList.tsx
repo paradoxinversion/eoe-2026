@@ -4,6 +4,7 @@ type Agent = {
   id: string;
   name: string;
   role?: string;
+  agentType?: string;
 };
 
 export default function AgentList({
@@ -87,7 +88,7 @@ export default function AgentList({
             <div>
               <div style={{ fontWeight: 600 }}>{a.name}</div>
               <div style={{ fontSize: 12, color: "#666" }}>
-                {a.role || (a as any).agentType}
+                {a.role || a.agentType}
               </div>
             </div>
             <div>
