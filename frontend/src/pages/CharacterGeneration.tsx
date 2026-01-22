@@ -49,7 +49,14 @@ export default function CharacterGeneration() {
           world: { seed, artifact },
         });
       } catch (e) {
-        // ignore save wrapper failures
+        // Surface wrapper save failures so CI shows the root cause instead
+        // of silently continuing and causing confusing test assertions.
+        // eslint-disable-next-line no-console
+        console.error(
+          "CharacterGeneration: failed to save wrapper game state",
+          e,
+        );
+        throw e;
       }
 
       // persist the generated world as a game state
