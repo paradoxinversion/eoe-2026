@@ -25,8 +25,8 @@ describe("NameGenerator uniqueness and format", () => {
     const uniqueCount = seen.size;
     const uniqueness = uniqueCount / total;
 
-    // Expect at least 90% unique full names in this sample
-    expect(uniqueness).toBeGreaterThanOrEqual(0.9);
+    // Expect at least 95% unique full names in this sample per spec
+    expect(uniqueness).toBeGreaterThanOrEqual(0.95);
   });
 
   test("deterministic for same seed", () => {
