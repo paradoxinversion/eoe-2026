@@ -15,7 +15,6 @@ type Agent = {
   name?: string;
   intelligenceLevel?: number;
   agentType?: string;
-  originName?: string;
 };
 
 export default function PersonnelTab() {
@@ -47,18 +46,14 @@ export default function PersonnelTab() {
                 const name =
                   ag.codeName ||
                   `${person?.firstName || ""} ${person?.lastName || ""}`.trim();
-                const zone = (art.zones || []).find(
-                  (z: any) => z.id === person?.homeZoneId,
-                );
-                const originName = zone?.name || undefined;
                 return {
                   id: ag.id,
                   name,
                   firstName: person?.firstName,
                   lastName: person?.lastName,
+                  homeZoneId: person?.homeZoneId,
                   intelligenceLevel: person?.intelligenceLevel,
                   agentType: ag.agentType || person?.occupation,
-                  originName,
                   attributes: person?.attributes || ag.attributes,
                   skills: person?.skills || ag.skills,
                   ...ag,
@@ -105,6 +100,7 @@ export default function PersonnelTab() {
           agentType,
           attributes: (ag as any).attributes,
           skills: (ag as any).skills,
+          homeZoneId: (ag as any).homeZoneId,
           ...ag,
         } as Agent;
       });
@@ -131,6 +127,7 @@ export default function PersonnelTab() {
             typeof ag.agentType === "string" ? ag.agentType : undefined,
           attributes: (ag as any).attributes,
           skills: (ag as any).skills,
+          homeZoneId: (ag as any).homeZoneId,
           ...ag,
         };
         setAgents((prev) => {
@@ -213,6 +210,7 @@ export default function PersonnelTab() {
               : undefined,
           agentType:
             typeof ag.agentType === "string" ? ag.agentType : undefined,
+          homeZoneId: (ag as any).homeZoneId,
           ...ag,
         } as Agent;
         setAgents((prev) => {

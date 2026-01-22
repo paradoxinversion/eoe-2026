@@ -1,5 +1,6 @@
 import React from "react";
 import { intelligenceToConfidence } from "../../services/personnelService";
+import { listGameStates, loadGameState } from "../../services/persistence";
 
 type Person = {
   id: string;
@@ -34,6 +35,33 @@ export default function Profile({ person }: { person: Person }) {
     person.leadership ??
     "—";
 
+  const [originName, setOriginName] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    let mounted = true;
+    async function resolveZone() {
+      try {
+        if (!person?.homeZoneId) return;
+        const games = await listGameStates();
+        if (!Array.isArray(games) || games.length === 0) return;
+        games.sort((x, y) => (y.updatedAt || 0) - (x.updatedAt || 0));
+        const latest = games[0];
+        const gameState = await loadGameState(latest.name);
+        const art = (gameState as any).world?.artifact || (gameState as any);
+        const zone = (art?.zones || []).find(
+          (z: any) => z.id === person.homeZoneId,
+        );
+        if (mounted) setOriginName(zone?.name ?? null);
+      } catch (e) {
+        // ignore
+      }
+    }
+    void resolveZone();
+    return () => {
+      mounted = false;
+    };
+  }, [person?.homeZoneId]);
+
   const rows: Array<{ label: string; value: React.ReactNode }> = [
     { label: "ID", value: person.id },
     { label: "Type", value: person.agentType || "—" },
@@ -41,10 +69,7 @@ export default function Profile({ person }: { person: Person }) {
     { label: "Leadership", value: leadershipValue },
     { label: "Pay", value: person.pay ?? "—" },
     { label: "Status", value: person.status || "—" },
-    {
-      label: "Origin",
-      value: (person as any).originName || person.homeZoneId || "—",
-    },
+    { label: "Origin", value: originName ?? person.homeZoneId ?? "—" },
   ];
 
   return (

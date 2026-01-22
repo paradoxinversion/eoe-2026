@@ -10,10 +10,12 @@ export function computeCapacity(leadership: number): number {
   return Math.floor(leadership);
 }
 
-export function agentTypeSummary(agents: Array<{ agentType?: string }>) {
+export function agentTypeSummary(
+  agents: Array<{ agentType?: string; role?: string }>,
+) {
   const map: Record<string, number> = {};
   for (const a of agents) {
-    const t = a.agentType || "Unknown";
+    const t = (a.role as string) || a.agentType || "Unknown";
     map[t] = (map[t] || 0) + 1;
   }
   return map;

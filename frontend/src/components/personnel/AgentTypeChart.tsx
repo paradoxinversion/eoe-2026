@@ -3,7 +3,7 @@ import { agentTypeSummary } from "../../services/personnelService";
 import personnelPersistence from "../../services/personnelPersistence";
 
 type Props = {
-  agents?: Array<{ agentType?: string }>;
+  agents?: Array<{ role?: string; agentType?: string }>;
   size?: number;
 };
 
@@ -38,7 +38,9 @@ export default function AgentTypeChart({
   agents: propAgents,
   size = 120,
 }: Props) {
-  const [agents, setAgents] = React.useState<Array<{ agentType?: string }>>([]);
+  const [agents, setAgents] = React.useState<
+    Array<{ role?: string; agentType?: string }>
+  >([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
