@@ -236,6 +236,17 @@ export async function loadGameState(name: string): Promise<unknown | null> {
     console.debug(
       `loadGameState: loaded key=${key} present=${r.state !== undefined}`,
     );
+    try {
+      // attempt safe serialization of state for CI debugging
+      const serialized = JSON.stringify(r.state, (_k, v) =>
+        typeof v === "bigint" ? String(v) : v,
+      );
+      // eslint-disable-next-line no-console
+      console.debug(`loadGameState: state=${serialized}`);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.debug("loadGameState: state un-serializable", e);
+    }
   }
 
   return r.state === undefined ? null : r.state;
