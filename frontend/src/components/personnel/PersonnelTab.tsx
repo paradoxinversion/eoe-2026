@@ -26,6 +26,64 @@ export default function PersonnelTab() {
   const [selected, setSelected] = React.useState<Agent | null>(null);
   const [agents, setAgents] = React.useState<Agent[]>([]);
 
+  // Ensure we pick a default selected agent when agents arrive
+  React.useEffect(() => {
+    if (!selected && Array.isArray(agents) && agents.length > 0) {
+      setSelected(agents[0]);
+    }
+  }, [agents, selected]);
+
+  // As a fallback, attempt to load persisted agents directly once on mount
+  React.useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        if (!selected) {
+          const list = await personnelPersistence.listAgents();
+          if (!mounted) return;
+          if (Array.isArray(list) && list.length > 0) {
+            const mapped = list.map((l) => {
+              const ag = l.agent as AgentRecord & {
+                attributes?: Record<string, unknown>;
+                skills?: Record<string, unknown>;
+                homeZoneId?: string;
+              };
+              const name =
+                typeof ag.codename === "string"
+                  ? ag.codename
+                  : `${ag.firstName || ""} ${ag.lastName || ""}`.trim();
+              const intelligenceLevel =
+                typeof ag.intelligenceLevel === "number"
+                  ? ag.intelligenceLevel
+                  : undefined;
+              const agentType =
+                typeof ag.agentType === "string" ? ag.agentType : undefined;
+              return {
+                id: typeof ag.id === "string" ? ag.id : l.id,
+                name,
+                intelligenceLevel,
+                agentType,
+                attributes: ag.attributes,
+                skills: ag.skills,
+                homeZoneId: ag.homeZoneId as string | undefined,
+                ...ag,
+              } as Agent;
+            });
+            if ((!agents || agents.length === 0) && mounted) {
+              setAgents(mapped);
+            }
+            if (!selected && mapped.length > 0) setSelected(mapped[0]);
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   React.useEffect(() => {
     let mounted = true;
     async function load() {
@@ -76,6 +134,15 @@ export default function PersonnelTab() {
               });
               setAgents(a);
               setSelected((prev) => (prev ? prev : a.length > 0 ? a[0] : prev));
+              try {
+                // eslint-disable-next-line no-console
+                console.debug(
+                  "PersonnelTab: setSelected (gameState)",
+                  a.length > 0 ? a[0] : null,
+                );
+              } catch (e) {
+                /* ignore */
+              }
               return;
             }
           }
@@ -125,6 +192,15 @@ export default function PersonnelTab() {
       });
       setAgents(a);
       setSelected((prev) => (prev ? prev : a.length > 0 ? a[0] : prev));
+      try {
+        // eslint-disable-next-line no-console
+        console.debug(
+          "PersonnelTab: setSelected (fallback)",
+          a.length > 0 ? a[0] : null,
+        );
+      } catch (e) {
+        /* ignore */
+      }
     }
     load();
     // pickup any pending local agent stored by Main before this tab mounted

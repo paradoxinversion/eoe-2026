@@ -46,7 +46,8 @@ export default function AgentTypeChart({
   React.useEffect(() => {
     let mounted = true;
     async function load() {
-      if (propAgents) {
+      // If propAgents is provided and non-empty, prefer it. Otherwise fetch persisted agents.
+      if (propAgents && propAgents.length > 0) {
         setAgents(propAgents);
         setLoading(false);
         return;
@@ -60,7 +61,7 @@ export default function AgentTypeChart({
         if (mounted) setLoading(false);
       }
     }
-    load();
+    void load();
     return () => {
       mounted = false;
     };
