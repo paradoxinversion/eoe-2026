@@ -29,6 +29,15 @@ jobs:
               with:
                   version: 8
 
+            - name: Ensure pnpm available (fallback)
+              run: |
+                  if ! command -v pnpm >/dev/null 2>&1; then
+                    echo "pnpm not found, installing via npm..."
+                    npm install -g pnpm@8
+                  else
+                    echo "pnpm available: $(pnpm --version)"
+                  fi
+
             - name: Install frontend dependencies
               working-directory: frontend
               run: pnpm install --frozen-lockfile
