@@ -5,6 +5,13 @@ export type MigrationReport = {
   actions?: string[];
 };
 
+import type {
+  ArtifactLike,
+  ZoneLike,
+  PersonLike,
+  AgentLike,
+} from "../types/game";
+
 function shortId() {
   if (
     typeof crypto !== "undefined" &&
@@ -62,7 +69,7 @@ export function mapLegacySentiment(person: unknown, govIds: string[] = []) {
 }
 
 export function generateBuildingsForZone(zone: unknown) {
-  const z = (isObject(zone) ? zone : {}) as Record<string, unknown>;
+  const z = (isObject(zone) ? zone : {}) as ZoneLike & Record<string, unknown>;
   const size = typeof z.size === "number" ? z.size : 10;
   const wealth = typeof z.wealth === "number" ? z.wealth : 10;
   const numBuildings = Math.max(1, Math.round(size / 10));
@@ -94,7 +101,7 @@ export function migrateFixture(
     quarantine: [],
     actions: [],
   };
-  const fx = isObject(fixture) ? fixture : ({} as Record<string, unknown>);
+  const fx = (isObject(fixture) ? fixture : {}) as ArtifactLike;
 
   const govIds = (
     Array.isArray(fx.governingOrganizations)
@@ -105,13 +112,14 @@ export function migrateFixture(
     .filter(Boolean);
 
   // Ensure arrays exist
-  if (!Array.isArray(fx.people)) fx.people = [];
-  if (!Array.isArray(fx.agents)) fx.agents = [];
-  if (!Array.isArray(fx.zones)) fx.zones = [];
-  if (!Array.isArray(fx.buildings)) fx.buildings = [];
+  if (!Array.isArray((fx as any).people)) (fx as any).people = [];
+  if (!Array.isArray((fx as any).agents)) (fx as any).agents = [];
+  if (!Array.isArray((fx as any).zones)) (fx as any).zones = [];
+  if (!Array.isArray((fx as any).buildings)) (fx as any).buildings = [];
 
   // Migrate people
-  for (const p of fx.people as unknown[]) {
+  for (const p0 of (fx as any).people as unknown[]) {
+    const p = p0 as PersonLike & Record<string, unknown>;
     report.summary.processed++;
     if (isObject(p)) {
       if (p.name && (!p.firstName || !p.lastName)) {
@@ -126,10 +134,10 @@ export function migrateFixture(
           lastName: p.lastName,
         });
       }
-      if (!p.governingOrganizationSentiments) {
+      if (!(p as any).governingOrganizationSentiments) {
         const mapped = mapLegacySentiment(p, govIds);
         if (Object.keys(mapped).length) {
-          p.governingOrganizationSentiments = mapped as unknown;
+          (p as any).governingOrganizationSentiments = mapped as unknown;
           report.summary.migrated++;
         }
       }
@@ -137,45 +145,46 @@ export function migrateFixture(
   }
 
   // Migrate agents
-  for (const a of fx.agents as unknown[]) {
+  for (const a0 of (fx as any).agents as unknown[]) {
+    const a = a0 as AgentLike;
     if (!isObject(a)) continue;
     // If the legacy `name` exists prefer it but store deterministically as `codeName`
-    if (a.name && !a.codeName) {
-      a.codeName = String(a.name);
+    if ((a as any).name && !(a as any).codeName) {
+      (a as any).codeName = String((a as any).name);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore - deleting legacy prop
-      delete (a as Record<string, unknown>).name;
+      delete (a as any).name;
       report.summary.migrated++;
       report.examples.push({
         type: "renameAgentName",
         id: a.id,
-        codeName: a.codeName,
+        codeName: (a as any).codeName,
       });
     }
     // If still missing, generate a stable codeName derived from personId or id
-    if (!a.codeName) {
+    if (!(a as any).codeName) {
       const seed = (a.personId as string) || (a.id as string) || "unknown";
-      a.codeName = generateCodeNameFromSeed(seed);
+      (a as any).codeName = generateCodeNameFromSeed(seed);
       report.summary.migrated++;
       report.examples.push({
         type: "generateCodeName",
         id: a.id,
-        codeName: a.codeName,
+        codeName: (a as any).codeName,
         seed,
       });
     }
   }
 
   // Generate buildings for zones that lack them
-  for (const z of fx.zones as unknown[]) {
+  for (const z0 of (fx as any).zones as unknown[]) {
+    const z = z0 as ZoneLike & Record<string, unknown>;
     const zid = isObject(z) && (z.id ? String(z.id) : undefined);
-    const has = (fx.buildings as unknown[]).some(
-      (b) =>
-        isObject(b) && String((b as Record<string, unknown>).zoneId) === zid,
+    const has = ((fx as any).buildings as unknown[]).some(
+      (b) => isObject(b) && String((b as any).zoneId) === zid,
     );
     if (!has) {
       const gen = generateBuildingsForZone(z);
-      (fx.buildings as unknown[]).push(...gen);
+      ((fx as any).buildings as unknown[]).push(...gen);
       report.summary.migrated += gen.length;
       report.examples.push({
         type: "generateBuildings",
@@ -186,7 +195,8 @@ export function migrateFixture(
   }
 
   // Normalize legacy `zone.currentOccupants` formats and reconcile with people
-  for (const z of fx.zones as unknown[]) {
+  for (const z0 of (fx as any).zones as unknown[]) {
+    const z = z0 as ZoneLike & Record<string, unknown>;
     let occupantIds: string[] = [];
     if (isObject(z) && Array.isArray(z.currentOccupants)) {
       occupantIds = (z.currentOccupants as unknown[]).map((id) => String(id));
@@ -202,54 +212,50 @@ export function migrateFixture(
     if (occupantIds.length) {
       // ensure person.homeZoneId is set for referenced people
       for (const pid of occupantIds) {
-        const person = (fx.people as unknown[]).find(
-          (p) =>
-            isObject(p) &&
-            String((p as Record<string, unknown>).id) === String(pid),
+        const person = ((fx as any).people as unknown[]).find(
+          (p) => isObject(p) && String((p as any).id) === String(pid),
         );
         if (person && isObject(person)) {
-          if (!(person as Record<string, unknown>).homeZoneId) {
-            (person as Record<string, unknown>).homeZoneId = (
-              z as Record<string, unknown>
-            ).id;
+          if (!(person as any).homeZoneId) {
+            (person as any).homeZoneId = z.id;
             report.summary.migrated++;
             report.examples.push({
               type: "setHomeZone",
               personId: pid,
-              zoneId: (z as Record<string, unknown>).id,
+              zoneId: z.id,
             });
           }
         } else {
           report.quarantine.push({
             id: pid,
             reason: "zone references missing person",
-            payload: { zoneId: (z as Record<string, unknown>).id },
+            payload: { zoneId: z.id },
           });
           report.summary.quarantined++;
         }
       }
       // normalize to array of strings
-      if (isObject(z)) (z.currentOccupants as unknown) = occupantIds;
+      if (isObject(z))
+        z.currentOccupants =
+          occupantIds as unknown as ZoneLike["currentOccupants"];
       report.summary.migrated++;
       report.examples.push({
         type: "normalizeZoneOccupants",
-        zoneId: (z as Record<string, unknown>).id,
+        zoneId: z.id,
         count: occupantIds.length,
       });
     }
   }
 
   // Basic integrity: quarantine agents with missing person references
-  for (const a of fx.agents as unknown[]) {
-    const exists = (fx.people as unknown[]).some(
+  for (const a of (fx as any).agents as unknown[]) {
+    const exists = ((fx as any).people as unknown[]).some(
       (p) =>
-        isObject(p) &&
-        String((p as Record<string, unknown>).id) ===
-          String((a as Record<string, unknown>).personId),
+        isObject(p) && String((p as any).id) === String((a as any).personId),
     );
     if (!exists) {
       report.quarantine.push({
-        id: (a as Record<string, unknown>).id,
+        id: (a as any).id,
         reason: "missing person reference",
         payload: a,
       });
@@ -259,7 +265,11 @@ export function migrateFixture(
 
   // Optionally export a dry-run report to disk (Node only).
   try {
-    const o = opts as unknown as Record<string, unknown>;
+    const o = opts as {
+      exportReport?: boolean;
+      fixtureName?: string;
+      outDir?: string;
+    };
     if (o.exportReport && o.fixtureName) {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       const res = exportDryRunReport(

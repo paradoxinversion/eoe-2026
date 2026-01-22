@@ -137,7 +137,10 @@ export default function OptionsPage() {
       for (const err of res.errors) {
         try {
           const path = (err.instancePath || "").replace(/^\//, "");
-          const params = err.params as Record<string, unknown> | undefined;
+          const params =
+            err.params && typeof err.params === "object"
+              ? (err.params as { [k: string]: unknown })
+              : undefined;
           const missingProp =
             params && typeof params.missingProperty === "string"
               ? (params.missingProperty as string)

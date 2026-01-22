@@ -20,14 +20,6 @@ export default function CapacityWidgets() {
       setLoading(true);
       try {
         // Prefer authoritative agents stored in the latest `game:` save.
-        type AgentLike = Record<string, unknown> & {
-          personId?: string;
-          leadership?: number;
-          attributes?: Record<string, unknown>;
-          role?: string;
-          agentType?: string;
-          type?: string;
-        };
         let agents: AgentLike[] = [];
         try {
           const games = await listGameStates();

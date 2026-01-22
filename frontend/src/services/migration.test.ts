@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import type { ArtifactLike } from "../types/game";
 
 // Lightweight migration test scaffold for p.name -> firstName/lastName and a.name -> codeName
 import {
@@ -18,7 +19,7 @@ describe("migration helpers (spec scaffold)", () => {
       people: [{ id: "p1", name: "Alice Smith" }],
       agents: [{ id: "ag1", name: "Agent A", personId: "p1" }],
       zones: [],
-    } as unknown as Record<string, unknown>;
+    } as unknown as ArtifactLike;
 
     const report = migrateFixture(fixture);
     expect(report).toBeDefined();

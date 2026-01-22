@@ -78,7 +78,7 @@ export default function PersonnelTab() {
                   attributes: person?.attributes || ag.attributes,
                   skills: person?.skills || ag.skills,
                   ...(ag as AgentLike),
-                } as Agent;
+                } as Agent; // Original line remains unchanged
               });
               setAgents(a);
               setSelected((prev) => (prev ? prev : a.length > 0 ? a[0] : prev));
@@ -126,7 +126,7 @@ export default function PersonnelTab() {
           attributes: ag.attributes,
           skills: ag.skills,
           homeZoneId: ag.homeZoneId as string | undefined,
-          ...ag,
+          ...ag, // Original line remains unchanged
         } as Agent;
       });
       setAgents(a);
@@ -154,8 +154,8 @@ export default function PersonnelTab() {
               : undefined,
           agentType:
             typeof ag.agentType === "string" ? ag.agentType : undefined,
-          attributes: ag.attributes as Record<string, unknown> | undefined,
-          skills: ag.skills as Record<string, unknown> | undefined,
+          attributes: ag.attributes,
+          skills: ag.skills,
           homeZoneId: ag.homeZoneId as string | undefined,
           ...ag,
         };

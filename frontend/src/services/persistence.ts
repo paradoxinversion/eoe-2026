@@ -1,5 +1,6 @@
 import { openDB, IDBPDatabase } from "idb";
 import type { Config } from "../config/schema";
+import type { GameState, ArtifactLike, ZoneLike } from "../types/game";
 import indexeddbSchema from "../../../specs/001-empire-game-spec/contracts/indexeddb-schema.json";
 
 interface IndexedDBStoreSchema {
@@ -154,23 +155,22 @@ export async function saveGameState(name: string, state: unknown) {
   const key = `game:${name}`;
   // Normalize zones.currentOccupants before saving to ensure consistent shape
   try {
-    const s = (state as Record<string, unknown>) || {};
+    const s = (state as ArtifactLike) || {};
     if (Array.isArray(s.zones)) {
-      for (const z of s.zones as unknown[]) {
+      for (const z of s.zones as ZoneLike[]) {
         if (z && typeof z === "object") {
-          const zz = z as Record<string, unknown>;
-          if (zz.currentOccupants !== undefined) {
-            if (Array.isArray(zz.currentOccupants)) {
-              zz.currentOccupants = (zz.currentOccupants as unknown[]).map(
-                (id) => String(id),
+          if (z.currentOccupants !== undefined) {
+            if (Array.isArray(z.currentOccupants)) {
+              z.currentOccupants = (z.currentOccupants as unknown[]).map((id) =>
+                String(id),
               );
-            } else if (typeof zz.currentOccupants === "string") {
-              zz.currentOccupants = (zz.currentOccupants as string)
+            } else if (typeof z.currentOccupants === "string") {
+              z.currentOccupants = (z.currentOccupants as string)
                 .split(/[\s,;]+/)
                 .map((s2) => s2.trim())
                 .filter(Boolean);
-            } else if (typeof zz.currentOccupants === "number") {
-              zz.currentOccupants = [String(zz.currentOccupants)];
+            } else if (typeof z.currentOccupants === "number") {
+              z.currentOccupants = [String(z.currentOccupants)];
             }
           }
         }
@@ -197,22 +197,21 @@ export async function loadGameState(name: string): Promise<unknown | null> {
   const r = rec as { state?: unknown; schemaVersion?: number };
   // Coerce legacy zone.currentOccupants on load to array of strings
   try {
-    const s = r.state as Record<string, unknown> | undefined;
+    const s = r.state as ArtifactLike | undefined;
     if (s && Array.isArray(s.zones)) {
-      for (const z of s.zones as unknown[]) {
+      for (const z of s.zones as ZoneLike[]) {
         if (z && typeof z === "object") {
-          const zz = z as Record<string, unknown>;
           if (
-            zz.currentOccupants !== undefined &&
-            !Array.isArray(zz.currentOccupants)
+            z.currentOccupants !== undefined &&
+            !Array.isArray(z.currentOccupants)
           ) {
-            if (typeof zz.currentOccupants === "string") {
-              zz.currentOccupants = (zz.currentOccupants as string)
+            if (typeof z.currentOccupants === "string") {
+              z.currentOccupants = (z.currentOccupants as string)
                 .split(/[\s,;]+/)
                 .map((s2) => s2.trim())
                 .filter(Boolean);
-            } else if (typeof zz.currentOccupants === "number") {
-              zz.currentOccupants = [String(zz.currentOccupants)];
+            } else if (typeof z.currentOccupants === "number") {
+              z.currentOccupants = [String(z.currentOccupants)];
             }
           }
         }
