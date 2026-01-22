@@ -69,3 +69,7 @@ frontend/tests_output/**
 # Generated migration reports (ignore by default; curated samples are committed separately)
 specs/001-rework-data-models/migration-reports/
 specs/001-rework-data-models/migration-applied/
+
+# Test results
+test-results/
+frontend/test-results/
