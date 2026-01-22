@@ -1,5 +1,6 @@
 import React from "react";
 import personnelPersistence from "../../services/personnelPersistence";
+import { listGameStates, loadGameState } from "../../services/persistence";
 import { computeCapacity } from "../../services/personnelService";
 
 export default function CapacityWidgets() {
@@ -12,14 +13,53 @@ export default function CapacityWidgets() {
     async function load() {
       setLoading(true);
       try {
-        const list = await personnelPersistence.listAgents();
+        // Prefer authoritative agents stored in the latest `game:` save.
+        let agents: any[] = [];
+        try {
+          const games = await listGameStates();
+          if (games && games.length) {
+            const latest = games.reduce((a, b) =>
+              a.updatedAt >= b.updatedAt ? a : b,
+            );
+            const state = await loadGameState(latest.name);
+            const art = (state as any)?.world?.artifact || (state as any);
+            const maybeAgents = (art as any)?.agents || [];
+            if (Array.isArray(maybeAgents)) {
+              // enrich agents with linked person attributes when available
+              const people = (art as any)?.people || [];
+              agents = maybeAgents.map((ag: any) => {
+                if (ag.leadership === undefined) {
+                  const person = people.find((p: any) => p.id === ag.personId);
+                  if (
+                    person &&
+                    person.attributes &&
+                    typeof person.attributes.leadership === "number"
+                  ) {
+                    return Object.assign({}, ag, {
+                      leadership: person.attributes.leadership,
+                    });
+                  }
+                }
+                return ag;
+              });
+            }
+          }
+        } catch (e) {
+          // fall back to legacy per-agent store if game-state read fails
+          agents = [];
+        }
+
+        if ((!agents || agents.length === 0) && mounted) {
+          const list = await personnelPersistence.listAgents();
+          agents = list.map((l) => l.agent);
+        }
+
         if (!mounted) return;
-        const agents = list.map((l) => l.agent);
         const cnt = agents.length;
-        const cap = agents.reduce(
-          (acc, a) => acc + (computeCapacity(a.leadership ?? 0) || 0),
-          0,
-        );
+        const cap = agents.reduce((acc, a) => {
+          const leadership = a.leadership ?? a.attributes?.leadership ?? 0;
+          return acc + (computeCapacity(leadership) || 0);
+        }, 0);
         setCurrent(cnt);
         setMaxCapacity(cap);
       } finally {
@@ -82,25 +122,7 @@ export default function CapacityWidgets() {
         </div>
       </div>
 
-      <div
-        style={{
-          flex: 1,
-          padding: 8,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {atCapacity ? (
-          <div style={{ color: "#c62828", fontWeight: 700 }}>At capacity</div>
-        ) : warning ? (
-          <div style={{ color: "#b58900", fontWeight: 600 }}>
-            Approaching capacity
-          </div>
-        ) : (
-          <div style={{ color: "#2e7d32" }}>Capacity OK</div>
-        )}
-      </div>
+      {/* Status text moved into the Capacity card; remove standalone status box */}
     </div>
   );
 }
