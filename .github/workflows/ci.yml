@@ -61,6 +61,18 @@ jobs:
               working-directory: frontend
               run: pnpm run test:a11y
 
+            - name: Run performance benchmark (world-gen)
+              working-directory: frontend
+              run: pnpm run test:unit -- tests/perf/world-gen.bench.ts --run
+
+            - name: Record benchmark output
+              if: always()
+              working-directory: frontend
+              run: |
+                  mkdir -p tests_output
+                  # Run the bench once more and capture stdout to a timestamped file
+                  pnpm run test:unit -- tests/perf/world-gen.bench.ts --run | tee tests_output/world-gen-bench-$(date +%s).log
+
             - name: Ensure artifact directory exists
               run: mkdir -p frontend/tests_output
 
