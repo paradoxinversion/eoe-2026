@@ -7,6 +7,12 @@ import personnelPersistence, {
   AgentRecord,
 } from "../../services/personnelPersistence";
 import { listGameStates, loadGameState } from "../../services/persistence";
+import type {
+  AgentLike,
+  PersonLike,
+  ArtifactLike,
+  GameState,
+} from "../../types/game";
 
 type Agent = {
   id: string;
@@ -15,6 +21,9 @@ type Agent = {
   name?: string;
   intelligenceLevel?: number;
   agentType?: string;
+  attributes?: Record<string, unknown> | undefined;
+  skills?: Record<string, unknown> | undefined;
+  homeZoneId?: string | undefined;
 };
 
 export default function PersonnelTab() {
@@ -36,28 +45,26 @@ export default function PersonnelTab() {
           if (gameState) {
             // gameState may be the artifact directly or a wrapper with .world.artifact
             const art =
-              (gameState as unknown as Record<string, unknown>)?.world
-                ?.artifact ?? (gameState as unknown as Record<string, unknown>);
-            const artRec = art as Record<string, unknown> | undefined;
-            const agentsRaw = Array.isArray(artRec?.agents)
-              ? (artRec!.agents as unknown[])
+              (gameState as GameState as any)?.world?.artifact ??
+              (gameState as ArtifactLike | undefined);
+            const agentsRaw = Array.isArray(art?.agents)
+              ? (art!.agents as AgentLike[])
               : [];
             if (agentsRaw.length > 0) {
-              const peopleRaw = Array.isArray(artRec?.people)
-                ? (artRec!.people as unknown[])
+              const peopleRaw = Array.isArray(art?.people)
+                ? (art!.people as PersonLike[])
                 : [];
-              const a = agentsRaw.map((agUnknown) => {
-                const ag = agUnknown as Record<string, unknown>;
-                // find linked person
-                const person = (peopleRaw as unknown[]).find((p) => {
-                  const pr = p as Record<string, unknown>;
-                  return pr && pr.id && pr.id === ag.personId;
-                }) as Record<string, unknown> | undefined | null;
+              const a = agentsRaw.map((ag) => {
+                const person = peopleRaw.find(
+                  (p) => p.id && p.id === ag.personId,
+                ) as PersonLike | undefined | null;
                 const name =
-                  (ag.codeName as string) ||
+                  ag.codeName ||
+                  ag.codename ||
+                  ag.name ||
                   `${person?.firstName || ""} ${person?.lastName || ""}`.trim();
                 return {
-                  id: ag.id as string,
+                  id: String(ag.id || ag.agentId || ag.agentId),
                   name,
                   firstName: person?.firstName as string | undefined,
                   lastName: person?.lastName as string | undefined,
@@ -68,13 +75,9 @@ export default function PersonnelTab() {
                   agentType:
                     (ag.agentType as string) ||
                     (person?.occupation as string | undefined),
-                  attributes:
-                    (person?.attributes as Record<string, unknown>) ||
-                    (ag.attributes as Record<string, unknown> | undefined),
-                  skills:
-                    (person?.skills as Record<string, unknown>) ||
-                    (ag.skills as Record<string, unknown> | undefined),
-                  ...(ag as Record<string, unknown>),
+                  attributes: person?.attributes || ag.attributes,
+                  skills: person?.skills || ag.skills,
+                  ...(ag as AgentLike),
                 } as Agent;
               });
               setAgents(a);
@@ -98,7 +101,11 @@ export default function PersonnelTab() {
       }
       if (!mounted) return;
       const a = list.map((l) => {
-        const ag = l.agent as AgentRecord;
+        const ag = l.agent as AgentRecord & {
+          attributes?: Record<string, unknown>;
+          skills?: Record<string, unknown>;
+          homeZoneId?: string;
+        };
         // prefer codename, fall back to combined first/last
         const name =
           typeof ag.codename === "string"
@@ -116,15 +123,9 @@ export default function PersonnelTab() {
           name,
           intelligenceLevel,
           agentType,
-          attributes: (ag as unknown as Record<string, unknown>)?.attributes as
-            | Record<string, unknown>
-            | undefined,
-          skills: (ag as unknown as Record<string, unknown>)?.skills as
-            | Record<string, unknown>
-            | undefined,
-          homeZoneId: (ag as unknown as Record<string, unknown>)?.homeZoneId as
-            | string
-            | undefined,
+          attributes: ag.attributes,
+          skills: ag.skills,
+          homeZoneId: ag.homeZoneId as string | undefined,
           ...ag,
         } as Agent;
       });
@@ -136,7 +137,11 @@ export default function PersonnelTab() {
     try {
       const pending = sessionStorage.getItem("personnel:pendingLocal");
       if (pending) {
-        const ag = JSON.parse(pending) as AgentRecord;
+        const ag = JSON.parse(pending) as AgentRecord & {
+          attributes?: Record<string, unknown>;
+          skills?: Record<string, unknown>;
+          homeZoneId?: string;
+        };
         const newAgent: Agent = {
           id: ag.id,
           name:
@@ -149,15 +154,9 @@ export default function PersonnelTab() {
               : undefined,
           agentType:
             typeof ag.agentType === "string" ? ag.agentType : undefined,
-          attributes: (ag as unknown as Record<string, unknown>)?.attributes as
-            | Record<string, unknown>
-            | undefined,
-          skills: (ag as unknown as Record<string, unknown>)?.skills as
-            | Record<string, unknown>
-            | undefined,
-          homeZoneId: (ag as unknown as Record<string, unknown>)?.homeZoneId as
-            | string
-            | undefined,
+          attributes: ag.attributes as Record<string, unknown> | undefined,
+          skills: ag.skills as Record<string, unknown> | undefined,
+          homeZoneId: ag.homeZoneId as string | undefined,
           ...ag,
         };
         setAgents((prev) => {
@@ -194,7 +193,10 @@ export default function PersonnelTab() {
           }
           if (!mounted) return;
           const a = list.map((l) => {
-            const ag = l.agent as AgentRecord;
+            const ag = l.agent as AgentRecord & {
+              attributes?: Record<string, unknown>;
+              skills?: Record<string, unknown>;
+            };
             const name =
               typeof ag.codename === "string"
                 ? ag.codename
@@ -210,11 +212,8 @@ export default function PersonnelTab() {
               name,
               intelligenceLevel,
               agentType,
-              attributes: (ag as unknown as Record<string, unknown>)
-                ?.attributes as Record<string, unknown> | undefined,
-              skills: (ag as unknown as Record<string, unknown>)?.skills as
-                | Record<string, unknown>
-                | undefined,
+              attributes: ag.attributes,
+              skills: ag.skills,
               ...ag,
             } as Agent;
           });
@@ -229,7 +228,9 @@ export default function PersonnelTab() {
     window.addEventListener("personnel:created", onCreated as EventListener);
     const onLocalCreated = (e: Event) => {
       try {
-        const ag = (e as CustomEvent<AgentRecord>).detail;
+        const ag = (e as CustomEvent<AgentRecord>).detail as AgentRecord & {
+          homeZoneId?: string;
+        };
         if (!ag || !ag.id) return;
         const newAgent = {
           id: ag.id,
@@ -243,9 +244,7 @@ export default function PersonnelTab() {
               : undefined,
           agentType:
             typeof ag.agentType === "string" ? ag.agentType : undefined,
-          homeZoneId: (ag as unknown as Record<string, unknown>)?.homeZoneId as
-            | string
-            | undefined,
+          homeZoneId: ag.homeZoneId as string | undefined,
           ...ag,
         } as Agent;
         setAgents((prev) => {

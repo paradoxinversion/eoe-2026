@@ -2,6 +2,12 @@ import React from "react";
 import personnelPersistence from "../../services/personnelPersistence";
 import { listGameStates, loadGameState } from "../../services/persistence";
 import { computeCapacity } from "../../services/personnelService";
+import type {
+  ArtifactLike,
+  AgentLike,
+  PersonLike,
+  GameState,
+} from "../../types/game";
 
 export default function CapacityWidgets() {
   const [loading, setLoading] = React.useState(true);
@@ -31,30 +37,28 @@ export default function CapacityWidgets() {
             );
             const state = await loadGameState(latest.name);
             const art =
-              (state as unknown as Record<string, unknown>)?.world?.artifact ||
-              (state as unknown as Record<string, unknown>);
-            const maybeAgents =
-              (art as unknown as Record<string, unknown>)?.agents || [];
+              (state as GameState as any)?.world?.artifact ??
+              (state as ArtifactLike | undefined);
+            const maybeAgents = Array.isArray(art?.agents)
+              ? (art!.agents as AgentLike[])
+              : [];
             if (Array.isArray(maybeAgents)) {
               // enrich agents with linked person attributes when available
-              const people =
-                (art as unknown as Record<string, unknown>)?.people || [];
-              agents = (maybeAgents as unknown[]).map((agUnknown) => {
-                const ag = agUnknown as AgentLike;
+              const people = Array.isArray(art?.people)
+                ? (art!.people as PersonLike[])
+                : [];
+              agents = maybeAgents.map((ag) => {
                 if (ag.leadership === undefined) {
-                  const person = (people as unknown[]).find((p) => {
-                    const pp = p as Record<string, unknown>;
-                    return pp && pp.id && pp.id === ag.personId;
-                  }) as Record<string, unknown> | undefined;
+                  const person = people.find(
+                    (p) => p.id && p.id === ag.personId,
+                  );
                   if (
                     person &&
                     person.attributes &&
-                    typeof (person.attributes as Record<string, unknown>)
-                      .leadership === "number"
+                    typeof person.attributes.leadership === "number"
                   ) {
                     return Object.assign({}, ag, {
-                      leadership: (person.attributes as Record<string, unknown>)
-                        .leadership as number,
+                      leadership: person.attributes.leadership as number,
                     });
                   }
                 }
@@ -82,8 +86,7 @@ export default function CapacityWidgets() {
           if (role === "Recruit") return acc; // recruits don't contribute leadership capacity
           const leadership =
             (a.leadership as number | undefined) ??
-            ((a.attributes as Record<string, unknown> | undefined)
-              ?.leadership as number | undefined) ??
+            (a.attributes?.leadership as number | undefined) ??
             0;
           return acc + (computeCapacity(leadership) || 0);
         }, 0);

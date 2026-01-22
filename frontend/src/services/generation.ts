@@ -471,8 +471,10 @@ export async function generateAndSaveWorld(
           : [];
         const selected = new Set<string>(
           (Array.isArray(artifact.agents) ? artifact.agents : []).map(
-            (a: unknown) =>
-              (a as Record<string, unknown>).personId as string | undefined,
+            (a: unknown) => {
+              const ag = a as { personId?: string };
+              return ag.personId as string | undefined;
+            },
           ),
         );
         // If a player agent was already added, reduce the number of

@@ -1,25 +1,9 @@
 import React from "react";
 import { intelligenceToConfidence } from "../../services/personnelService";
 import { listGameStates, loadGameState } from "../../services/persistence";
+import type { PersonLike, GameState, ArtifactLike } from "../../types/game";
 
-type Person = {
-  id: string;
-  name?: string;
-  firstName?: string;
-  lastName?: string;
-  homeZoneId?: string;
-  intelligenceLevel?: number;
-  agentType?: string;
-  role?: string;
-  leadership?: number;
-  pay?: number;
-  status?: string;
-  attributes?: Record<string, unknown>;
-  skills?: Record<string, unknown>;
-  [k: string]: unknown;
-};
-
-export default function Profile({ person }: { person: Person }) {
+export default function Profile({ person }: { person: PersonLike }) {
   const confidence =
     person.intelligenceLevel !== undefined
       ? intelligenceToConfidence(person.intelligenceLevel)
@@ -31,10 +15,7 @@ export default function Profile({ person }: { person: Person }) {
     person.id;
 
   const leadershipValue =
-    (person.attributes &&
-      ((person.attributes as Record<string, unknown>)?.leadership as
-        | number
-        | undefined)) ??
+    (person.attributes?.leadership as number | undefined) ??
     person.leadership ??
     "—";
 
@@ -51,12 +32,9 @@ export default function Profile({ person }: { person: Person }) {
         const latest = games[0];
         const gameState = await loadGameState(latest.name);
         const art =
-          (gameState as unknown as Record<string, unknown>)?.world?.artifact ??
-          (gameState as unknown as Record<string, unknown>);
-        const zone = (art?.zones || []).find(
-          (z: unknown) =>
-            (z as Record<string, unknown>).id === person.homeZoneId,
-        );
+          (gameState as GameState as any)?.world?.artifact ??
+          (gameState as ArtifactLike | undefined);
+        const zone = (art?.zones || []).find((z) => z.id === person.homeZoneId);
         if (mounted) setOriginName(zone?.name ?? null);
       } catch (e) {
         // ignore
