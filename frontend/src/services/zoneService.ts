@@ -1,26 +1,26 @@
 import type { Person as PersonModel } from "../models/person";
 import type { Agent as AgentModel } from "../models/agent";
 import { loadGameState } from "./persistence";
-import type { ZoneLike, PersonLike, AgentLike, GameState } from "../types/game";
+import type { ZoneLike, PersonLike, AgentLike } from "../types/game";
 
 export type OccupantWithAgent = {
   person: PersonModel | PersonLike;
   agent?: AgentModel | AgentLike;
 };
 
-const isObject = (v: unknown): v is Record<string, unknown> =>
-  typeof v === "object" && v !== null;
-
 export function getOccupants(
   zoneId: string,
   state?: unknown,
 ): Array<PersonModel | PersonLike> {
-  const s = (state as GameState) || {};
-  const people: PersonLike[] = Array.isArray((s as any).people)
-    ? ((s as any).people as PersonLike[])
+  const sRec =
+    state && typeof state === "object" && state !== null
+      ? (state as Record<string, unknown>)
+      : {};
+  const people: PersonLike[] = Array.isArray(sRec.people)
+    ? (sRec.people as PersonLike[])
     : [];
-  const zones: ZoneLike[] = Array.isArray((s as any).zones)
-    ? ((s as any).zones as ZoneLike[])
+  const zones: ZoneLike[] = Array.isArray(sRec.zones)
+    ? (sRec.zones as ZoneLike[])
     : [];
 
   // If zone has currentOccupants as ids, use that, else infer from homeZoneId
@@ -52,11 +52,14 @@ export function getOccupantsWithAgents(
   zoneId: string,
   state?: unknown,
 ): Array<OccupantWithAgent> {
-  const s = (state as GameState) || {};
-  const agents: AgentLike[] = Array.isArray((s as any).agents)
-    ? ((s as any).agents as AgentLike[])
+  const sRec =
+    state && typeof state === "object" && state !== null
+      ? (state as Record<string, unknown>)
+      : {};
+  const agents: AgentLike[] = Array.isArray(sRec.agents)
+    ? (sRec.agents as AgentLike[])
     : [];
-  const occupants = getOccupants(zoneId, s);
+  const occupants = getOccupants(zoneId, state);
   const out: OccupantWithAgent[] = occupants.map((p) => {
     const a = agents.find((ag) =>
       Boolean(
@@ -64,7 +67,7 @@ export function getOccupantsWithAgents(
         p &&
         (ag.personId === (p as PersonLike).id ||
           ag.person_id === (p as PersonLike).id ||
-          String(ag.id) === String((p as any).agentId)),
+          String(ag.id) === String((p as Record<string, unknown>).agentId)),
       ),
     );
     return {

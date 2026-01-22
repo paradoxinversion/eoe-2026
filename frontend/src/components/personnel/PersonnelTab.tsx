@@ -7,12 +7,8 @@ import personnelPersistence, {
   AgentRecord,
 } from "../../services/personnelPersistence";
 import { listGameStates, loadGameState } from "../../services/persistence";
-import type {
-  AgentLike,
-  PersonLike,
-  ArtifactLike,
-  GameState,
-} from "../../types/game";
+import type { AgentLike, PersonLike } from "../../types/game";
+import { artifactFromState } from "../../types/game";
 
 type Agent = {
   id: string;
@@ -44,9 +40,7 @@ export default function PersonnelTab() {
           const gameState = await loadGameState(latest.name);
           if (gameState) {
             // gameState may be the artifact directly or a wrapper with .world.artifact
-            const art =
-              (gameState as GameState as any)?.world?.artifact ??
-              (gameState as ArtifactLike | undefined);
+            const art = artifactFromState(gameState) || undefined;
             const agentsRaw = Array.isArray(art?.agents)
               ? (art!.agents as AgentLike[])
               : [];

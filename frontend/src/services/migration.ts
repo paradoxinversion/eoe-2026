@@ -102,23 +102,29 @@ export function migrateFixture(
     actions: [],
   };
   const fx = (isObject(fixture) ? fixture : {}) as ArtifactLike;
+  const fxRec = fx as ArtifactLike;
 
+  const fxRecRec = fxRec as Record<string, unknown>;
   const govIds = (
-    Array.isArray(fx.governingOrganizations)
-      ? (fx.governingOrganizations as unknown[])
+    Array.isArray(fxRecRec.governingOrganizations)
+      ? (fxRecRec.governingOrganizations as unknown[])
       : []
   )
-    .map((g) => (isObject(g) && g.id ? String(g.id) : ""))
+    .map((g) =>
+      isObject(g) && (g as Record<string, unknown>).id
+        ? String((g as Record<string, unknown>).id)
+        : "",
+    )
     .filter(Boolean);
 
   // Ensure arrays exist
-  if (!Array.isArray((fx as any).people)) (fx as any).people = [];
-  if (!Array.isArray((fx as any).agents)) (fx as any).agents = [];
-  if (!Array.isArray((fx as any).zones)) (fx as any).zones = [];
-  if (!Array.isArray((fx as any).buildings)) (fx as any).buildings = [];
+  if (!Array.isArray(fxRec.people)) fxRec.people = [];
+  if (!Array.isArray(fxRec.agents)) fxRec.agents = [];
+  if (!Array.isArray(fxRec.zones)) fxRec.zones = [];
+  if (!Array.isArray(fxRec.buildings)) fxRec.buildings = [];
 
   // Migrate people
-  for (const p0 of (fx as any).people as unknown[]) {
+  for (const p0 of fxRec.people as unknown[]) {
     const p = p0 as PersonLike & Record<string, unknown>;
     report.summary.processed++;
     if (isObject(p)) {
@@ -134,10 +140,11 @@ export function migrateFixture(
           lastName: p.lastName,
         });
       }
-      if (!(p as any).governingOrganizationSentiments) {
+      if (!(p as Record<string, unknown>).governingOrganizationSentiments) {
         const mapped = mapLegacySentiment(p, govIds);
         if (Object.keys(mapped).length) {
-          (p as any).governingOrganizationSentiments = mapped as unknown;
+          (p as Record<string, unknown>).governingOrganizationSentiments =
+            mapped as unknown;
           report.summary.migrated++;
         }
       }
@@ -145,46 +152,52 @@ export function migrateFixture(
   }
 
   // Migrate agents
-  for (const a0 of (fx as any).agents as unknown[]) {
+  for (const a0 of fxRec.agents as unknown[]) {
     const a = a0 as AgentLike;
     if (!isObject(a)) continue;
     // If the legacy `name` exists prefer it but store deterministically as `codeName`
-    if ((a as any).name && !(a as any).codeName) {
-      (a as any).codeName = String((a as any).name);
+    if (
+      (a as Record<string, unknown>).name &&
+      !(a as Record<string, unknown>).codeName
+    ) {
+      (a as Record<string, unknown>).codeName = String(
+        (a as Record<string, unknown>).name,
+      );
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore - deleting legacy prop
-      delete (a as any).name;
+      delete (a as Record<string, unknown>).name;
       report.summary.migrated++;
       report.examples.push({
         type: "renameAgentName",
         id: a.id,
-        codeName: (a as any).codeName,
+        codeName: (a as Record<string, unknown>).codeName,
       });
     }
     // If still missing, generate a stable codeName derived from personId or id
-    if (!(a as any).codeName) {
+    if (!(a as Record<string, unknown>).codeName) {
       const seed = (a.personId as string) || (a.id as string) || "unknown";
-      (a as any).codeName = generateCodeNameFromSeed(seed);
+      (a as Record<string, unknown>).codeName = generateCodeNameFromSeed(seed);
       report.summary.migrated++;
       report.examples.push({
         type: "generateCodeName",
         id: a.id,
-        codeName: (a as any).codeName,
+        codeName: (a as Record<string, unknown>).codeName,
         seed,
       });
     }
   }
 
   // Generate buildings for zones that lack them
-  for (const z0 of (fx as any).zones as unknown[]) {
+  for (const z0 of fxRec.zones as unknown[]) {
     const z = z0 as ZoneLike & Record<string, unknown>;
     const zid = isObject(z) && (z.id ? String(z.id) : undefined);
-    const has = ((fx as any).buildings as unknown[]).some(
-      (b) => isObject(b) && String((b as any).zoneId) === zid,
+    const has = (fxRec.buildings as unknown[]).some(
+      (b) =>
+        isObject(b) && String((b as Record<string, unknown>).zoneId) === zid,
     );
     if (!has) {
       const gen = generateBuildingsForZone(z);
-      ((fx as any).buildings as unknown[]).push(...gen);
+      (fxRec.buildings as unknown[]).push(...gen);
       report.summary.migrated += gen.length;
       report.examples.push({
         type: "generateBuildings",
@@ -195,7 +208,7 @@ export function migrateFixture(
   }
 
   // Normalize legacy `zone.currentOccupants` formats and reconcile with people
-  for (const z0 of (fx as any).zones as unknown[]) {
+  for (const z0 of fxRec.zones as unknown[]) {
     const z = z0 as ZoneLike & Record<string, unknown>;
     let occupantIds: string[] = [];
     if (isObject(z) && Array.isArray(z.currentOccupants)) {
@@ -212,12 +225,14 @@ export function migrateFixture(
     if (occupantIds.length) {
       // ensure person.homeZoneId is set for referenced people
       for (const pid of occupantIds) {
-        const person = ((fx as any).people as unknown[]).find(
-          (p) => isObject(p) && String((p as any).id) === String(pid),
+        const person = (fxRec.people as unknown[]).find(
+          (p) =>
+            isObject(p) &&
+            String((p as Record<string, unknown>).id) === String(pid),
         );
         if (person && isObject(person)) {
-          if (!(person as any).homeZoneId) {
-            (person as any).homeZoneId = z.id;
+          if (!(person as Record<string, unknown>).homeZoneId) {
+            (person as Record<string, unknown>).homeZoneId = z.id as unknown;
             report.summary.migrated++;
             report.examples.push({
               type: "setHomeZone",
@@ -248,14 +263,16 @@ export function migrateFixture(
   }
 
   // Basic integrity: quarantine agents with missing person references
-  for (const a of (fx as any).agents as unknown[]) {
-    const exists = ((fx as any).people as unknown[]).some(
+  for (const a of fxRec.agents as unknown[]) {
+    const exists = (fxRec.people as unknown[]).some(
       (p) =>
-        isObject(p) && String((p as any).id) === String((a as any).personId),
+        isObject(p) &&
+        String((p as Record<string, unknown>).id) ===
+          String((a as Record<string, unknown>).personId),
     );
     if (!exists) {
       report.quarantine.push({
-        id: (a as any).id,
+        id: (a as Record<string, unknown>).id,
         reason: "missing person reference",
         payload: a,
       });

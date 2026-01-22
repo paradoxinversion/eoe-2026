@@ -2,12 +2,8 @@ import React from "react";
 import personnelPersistence from "../../services/personnelPersistence";
 import { listGameStates, loadGameState } from "../../services/persistence";
 import { computeCapacity } from "../../services/personnelService";
-import type {
-  ArtifactLike,
-  AgentLike,
-  PersonLike,
-  GameState,
-} from "../../types/game";
+import type { AgentLike, PersonLike } from "../../types/game";
+import { artifactFromState } from "../../types/game";
 
 export default function CapacityWidgets() {
   const [loading, setLoading] = React.useState(true);
@@ -28,9 +24,7 @@ export default function CapacityWidgets() {
               a.updatedAt >= b.updatedAt ? a : b,
             );
             const state = await loadGameState(latest.name);
-            const art =
-              (state as GameState as any)?.world?.artifact ??
-              (state as ArtifactLike | undefined);
+            const art = artifactFromState(state) || undefined;
             const maybeAgents = Array.isArray(art?.agents)
               ? (art!.agents as AgentLike[])
               : [];

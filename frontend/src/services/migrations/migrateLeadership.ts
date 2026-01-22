@@ -26,7 +26,7 @@ export async function migrateLeadershipInAgents(): Promise<{
         leadership: topLeadership,
       });
       // remove legacy top-level leadership to avoid duplication
-      delete (updated as any).leadership;
+      delete (updated as unknown as Record<string, unknown>).leadership;
       await personnelPersistence.saveAgent(updated);
       migrated++;
     } else {

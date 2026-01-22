@@ -52,9 +52,20 @@ export type GameState =
   | ArtifactLike
   | Record<string, unknown>;
 
-export function artifactFromState(s: GameState): ArtifactLike | undefined {
-  if (!s) return undefined;
-  if ((s as any).world && (s as any).world.artifact)
-    return (s as any).world.artifact as ArtifactLike;
-  return s as ArtifactLike;
+export function artifactFromState(s: unknown): ArtifactLike | undefined {
+  if (!s || typeof s !== "object" || s === null) return undefined;
+  const ss = s as Record<string, unknown>;
+  if (ss.world && typeof ss.world === "object" && ss.world !== null) {
+    const world = ss.world as Record<string, unknown>;
+    if (
+      world.artifact &&
+      typeof world.artifact === "object" &&
+      world.artifact !== null
+    ) {
+      return world.artifact as ArtifactLike;
+    }
+  }
+  // If shape looks like an artifact, return it
+  if (ss.agents || ss.people || ss.zones) return ss as ArtifactLike;
+  return undefined;
 }

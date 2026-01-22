@@ -1,6 +1,6 @@
 import { openDB, IDBPDatabase } from "idb";
 import type { Config } from "../config/schema";
-import type { GameState, ArtifactLike, ZoneLike } from "../types/game";
+import type { ArtifactLike, ZoneLike } from "../types/game";
 import indexeddbSchema from "../../../specs/001-empire-game-spec/contracts/indexeddb-schema.json";
 
 interface IndexedDBStoreSchema {

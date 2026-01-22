@@ -1,7 +1,8 @@
 import React from "react";
 import { intelligenceToConfidence } from "../../services/personnelService";
 import { listGameStates, loadGameState } from "../../services/persistence";
-import type { PersonLike, GameState, ArtifactLike } from "../../types/game";
+import type { PersonLike } from "../../types/game";
+import { artifactFromState } from "../../types/game";
 
 export default function Profile({ person }: { person: PersonLike }) {
   const confidence =
@@ -31,9 +32,7 @@ export default function Profile({ person }: { person: PersonLike }) {
         games.sort((x, y) => (y.updatedAt || 0) - (x.updatedAt || 0));
         const latest = games[0];
         const gameState = await loadGameState(latest.name);
-        const art =
-          (gameState as GameState as any)?.world?.artifact ??
-          (gameState as ArtifactLike | undefined);
+        const art = artifactFromState(gameState) || undefined;
         const zone = (art?.zones || []).find((z) => z.id === person.homeZoneId);
         if (mounted) setOriginName(zone?.name ?? null);
       } catch (e) {
