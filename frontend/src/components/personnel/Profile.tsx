@@ -41,7 +41,10 @@ export default function Profile({ person }: { person: Person }) {
     { label: "Leadership", value: leadershipValue },
     { label: "Pay", value: person.pay ?? "—" },
     { label: "Status", value: person.status || "—" },
-    { label: "Origin", value: person.homeZoneId || "—" },
+    {
+      label: "Origin",
+      value: (person as any).originName || person.homeZoneId || "—",
+    },
   ];
 
   return (

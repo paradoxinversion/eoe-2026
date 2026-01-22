@@ -15,6 +15,7 @@ type Agent = {
   name?: string;
   intelligenceLevel?: number;
   agentType?: string;
+  originName?: string;
 };
 
 export default function PersonnelTab() {
@@ -46,6 +47,10 @@ export default function PersonnelTab() {
                 const name =
                   ag.codeName ||
                   `${person?.firstName || ""} ${person?.lastName || ""}`.trim();
+                const zone = (art.zones || []).find(
+                  (z: any) => z.id === person?.homeZoneId,
+                );
+                const originName = zone?.name || undefined;
                 return {
                   id: ag.id,
                   name,
@@ -53,6 +58,7 @@ export default function PersonnelTab() {
                   lastName: person?.lastName,
                   intelligenceLevel: person?.intelligenceLevel,
                   agentType: ag.agentType || person?.occupation,
+                  originName,
                   attributes: person?.attributes || ag.attributes,
                   skills: person?.skills || ag.skills,
                   ...ag,
