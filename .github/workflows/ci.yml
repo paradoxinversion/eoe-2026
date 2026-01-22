@@ -26,7 +26,7 @@ jobs:
             - name: Setup pnpm
               uses: pnpm/action-setup@v2
               with:
-                  version: 8
+                  version: 10
 
             - name: Ensure pnpm available (fallback)
               run: |
@@ -39,7 +39,7 @@ jobs:
 
             - name: Install frontend dependencies
               working-directory: frontend
-              run: pnpm install --no-frozen-lockfile
+              run: pnpm install --frozen-lockfile
 
             - name: Run lint
               working-directory: frontend
