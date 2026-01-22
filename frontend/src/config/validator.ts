@@ -22,7 +22,15 @@ export function validateConfig(data: unknown): ValidationResult {
   // Additional rule: organizationCount must be less than total map cells (mapWidth * mapHeight)
   try {
     if (data && typeof data === "object") {
-      const d = data as Record<string, unknown>;
+      type ConfigLike = {
+        mapWidth?: number;
+        mapHeight?: number;
+        organizationCount?: number;
+        zoneSizeMin?: number;
+        zoneSizeMax?: number;
+        [k: string]: unknown;
+      };
+      const d = data as ConfigLike;
       const mapW =
         typeof d.mapWidth === "number" ? Math.floor(d.mapWidth) : undefined;
       const mapH =

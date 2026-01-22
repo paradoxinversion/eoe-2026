@@ -1,12 +1,46 @@
 import createRng from "../lib/rng";
+import NameGenerator from "./nameGenerator";
 import { createZone } from "../models/zone";
+/**
+ * RNG / Seed notes
+ *
+ * This module produces deterministic world artifacts when given the same
+ * `seed` value. Callers may supply either a numeric/string `seed` (most
+ * consumer entrypoints do) or an injected RNG via the `NameGenerator` and
+ * other helpers. Internally we derive a local RNG using `createRng(seed)` so
+ * all random choices (zones, people, buildings, agent sampling, name
+ * generation) are reproducible for a given seed.
+ *
+ * Determinism guarantees:
+ * - `generateDebugWorld(seed, opts)` is pure and returns identical artifacts
+ *   for the same `seed` + `opts` inputs (ordering differences are only from
+ *   callers that mutate the returned object).
+ * - `generateAndSaveWorld(seed, opts)` uses the same generator logic but may
+ *   perform side-effectful persistence (writing `generation-{seed}`). To keep
+ *   persistence deterministic and avoid shape/ordering races, callers should
+ *   treat the returned `DebugArtifact` as authoritative rather than relying on
+ *   any intermediate persisted keys.
+ *
+ * Implementation notes:
+ * - For deterministic behavior in tests, pass an explicit seed (number|string)
+ *   to the public APIs in this module.
+ * - `NameGenerator` accepts an injected RNG; when provided the same RNG
+ *   instance across runs it will also be deterministic.
+ */
+
 import type { Zone } from "../models/zone";
 import { createPerson } from "../models/person";
 import type { Person } from "../models/person";
 import type Building from "../models/building";
 import { BUILDING_TYPES } from "../models/building";
 import type GoverningOrganization from "../models/governingOrganization";
-import { saveGameState, loadConfig, loadPreferences } from "./persistence";
+import {
+  saveGameState,
+  loadConfig,
+  loadPreferences,
+  listConfigs,
+  deleteConfig,
+} from "./persistence";
 import { defaultConfig } from "../config/schema";
 
 export type DebugArtifact = {
@@ -14,6 +48,7 @@ export type DebugArtifact = {
   people: Person[];
   buildings: Building[];
   organizations: GoverningOrganization[];
+  agents?: import("../models/agent").Agent[];
   placementErrors: Array<{
     zoneId?: string;
     buildingType?: string;
@@ -50,6 +85,7 @@ export function generateDebugWorld(
   },
 ): DebugArtifact {
   const rng = createRng(seed);
+  const nameGen = new NameGenerator({ rng });
   const mapWidth = Math.max(1, Math.floor(opts?.mapWidth ?? 100));
   const mapHeight = Math.max(1, Math.floor(opts?.mapHeight ?? 100));
   const peoplePerZone = opts?.peoplePerZone ?? 2;
@@ -146,8 +182,10 @@ export function generateDebugWorld(
     );
     for (let i = 0; i < peopleCount; i++) {
       const id = makeId(rng, "p");
-      const firstName = `P${rng.int(10, 99)}`;
-      const lastName = `Z${z.id.split("-").slice(-2).join("")}`;
+      const nm = nameGen.generate();
+      // fallback for any generation issues
+      const firstName = nm?.firstName ?? `P${rng.int(10, 99)}`;
+      const lastName = nm?.lastName ?? `Z${z.id.split("-").slice(-2).join("")}`;
       const p = createPerson(id, firstName, lastName, {
         homeZoneId: z.id,
         intelligenceLevel: rng.int(0, 100),
@@ -199,7 +237,6 @@ export async function generateAndSaveWorld(
     peoplePerZone?: number;
     orgCount?: number;
   },
-  saveName?: string,
 ): Promise<DebugArtifact> {
   const finalOpts: {
     mapWidth?: number;
@@ -281,6 +318,30 @@ export async function generateAndSaveWorld(
     // ignore and fall back to generator defaults
   }
 
+  // Clear persisted world data (game states and agents) when starting a new game
+  try {
+    const isNode =
+      typeof process !== "undefined" &&
+      !!(process.versions && process.versions.node);
+    if (!isNode) {
+      const configs = await listConfigs();
+      for (const c of configs) {
+        if (
+          typeof c.name === "string" &&
+          (c.name.startsWith("game:") || c.name.startsWith("agent:"))
+        ) {
+          try {
+            await deleteConfig(c.name);
+          } catch (err) {
+            // ignore individual deletion failures
+          }
+        }
+      }
+    }
+  } catch (e) {
+    // ignore clearing failures
+  }
+
   const artifact = generateDebugWorld(seed, finalOpts);
 
   try {
@@ -310,6 +371,7 @@ export async function generateAndSaveWorld(
 
   try {
     const rng = createRng(seed);
+    const nameGen = new NameGenerator({ rng });
     let playerName = defaultConfig.playerName || "Player";
     try {
       const prefs = (await loadConfig("preferences")) as
@@ -328,12 +390,26 @@ export async function generateAndSaveWorld(
       // ignore
     }
 
-    const [firstName, ...rest] = String(playerName).split(/\s+/);
-    const lastName = rest.length > 0 ? rest.join(" ") : "Player";
+    let firstName: string;
+    let lastName: string;
+    if (playerName && String(playerName).trim().length > 0) {
+      const parts = String(playerName).split(/\s+/);
+      firstName = parts[0] || "Player";
+      lastName = parts.slice(1).join(" ") || "Player";
+    } else {
+      const nm = nameGen.generate();
+      firstName = nm.firstName;
+      lastName = nm.lastName;
+    }
     const playerId = makeId(rng, "player");
-    const player = createPerson(playerId, firstName || "Player", lastName, {
-      intelligenceLevel: rng.int(30, 90),
-    });
+    const player = createPerson(
+      playerId,
+      firstName || "Player",
+      lastName || "Player",
+      {
+        intelligenceLevel: rng.int(30, 90),
+      },
+    );
     artifact.people.push(player);
 
     const orgId = makeId(rng, "org-player");
@@ -359,6 +435,117 @@ export async function generateAndSaveWorld(
 
     artifact.playerCharacterId = player.id;
     artifact.playerOrgId = playerOrg.id;
+
+    // Initialize agents array in artifact
+    artifact.agents = artifact.agents || [];
+
+    // Create an Agent entry for the player's character with role Overlord
+    try {
+      const agentModule = await import("../models/agent");
+      const playerAgentId = makeId(rng, "ag");
+      const playerCodeName =
+        `${player.firstName || "Player"} ${player.lastName || "Player"}`.trim();
+      const playerAgent = agentModule.createAgent(
+        playerAgentId,
+        player.id,
+        playerCodeName,
+        0,
+        {
+          role: "Overlord",
+          hired_at: new Date().toISOString(),
+        },
+      );
+      playerAgent.affiliationId = playerOrg.id;
+      // ensure player agent is first so UI can select it predictably
+      artifact.agents.unshift(playerAgent as import("../models/agent").Agent);
+    } catch (e) {
+      // ignore if dynamic import fails
+      // eslint-disable-next-line no-console
+      console.warn("generateAndSaveWorld: failed to create player agent", e);
+    }
+
+    // When running in the browser, clear any previously persisted agents
+    // so a fresh game starts with a clean personnel store.
+    try {
+      const isNode =
+        typeof process !== "undefined" &&
+        !!(process.versions && process.versions.node);
+      if (!isNode) {
+        const pers = await import("./personnelPersistence");
+        const existing = await pers.listAgents();
+        if (Array.isArray(existing) && existing.length > 0) {
+          await Promise.all(
+            existing.map((e) => pers.deleteAgent(e.id).catch(() => {})),
+          );
+        }
+      }
+    } catch (e) {
+      // ignore persistence cleanup failures
+    }
+
+    // Initial Agent selection: up to 10 unique Agents sampled from the
+    // player's starting zone population. Use bounded retries per slot.
+    try {
+      const RETRY_LIMIT = 50;
+      const TARGET_SLOTS = 10;
+      if (player.homeZoneId) {
+        const zone = (artifact.zones || []).find(
+          (z) => z.id === player.homeZoneId,
+        ) as ZoneWithExtras | undefined;
+        const zonePeople = Array.isArray(zone?.people)
+          ? zone!.people.slice()
+          : [];
+        const selected = new Set<string>(
+          (Array.isArray(artifact.agents) ? artifact.agents : []).map(
+            (a: unknown) => {
+              const ag = a as { personId?: string };
+              return ag.personId as string | undefined;
+            },
+          ),
+        );
+        // If a player agent was already added, reduce the number of
+        // additional sampled agents so total does not exceed TARGET_SLOTS.
+        const existing = Array.isArray(artifact.agents)
+          ? artifact.agents.length
+          : 0;
+        const slotsToFill = Math.max(0, TARGET_SLOTS - existing);
+        for (let slot = 0; slot < slotsToFill; slot++) {
+          let attempts = 0;
+          let picked: string | null = null;
+          while (attempts < RETRY_LIMIT && zonePeople.length > 0) {
+            const candidate = rng.choice(zonePeople);
+            if (!selected.has(candidate)) {
+              picked = candidate;
+              break;
+            }
+            attempts++;
+          }
+          if (picked) {
+            selected.add(picked);
+            const agId = makeId(rng, "ag");
+            const codeName = `Agent ${agId.slice(-4)}`;
+            const agentModule = await import("../models/agent");
+            const ag = agentModule.createAgent(agId, picked, codeName, 0, {
+              role: "Recruit",
+            });
+            ag.affiliationId = playerOrg.id;
+            artifact.agents.push(ag as import("../models/agent").Agent);
+            // do not persist agents as top-level configs; agents belong
+            // inside the generated artifact (saved via `saveGameState`).
+          } else {
+            // leave slot empty
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("generateAndSaveWorld: agent assignment failed", e);
+    }
+    // Await any pending persistence so callers (UI) can read agents after generation returns
+    try {
+      if (persistPromises.length > 0) await Promise.all(persistPromises);
+    } catch (e) {
+      // ignore
+    }
   } catch (e) {
     console.warn("generateAndSaveWorld: failed to create player/org", e);
   }
@@ -366,20 +553,12 @@ export async function generateAndSaveWorld(
   const artifactSaveName = `generation-${String(seed)}`;
   await saveGameState(artifactSaveName, artifact);
 
-  // If a specific save name was provided, also persist the generated
-  // artifact under that save key so callers (and tests) can load it via
-  // `loadGameState(saveName)` without having to know the generation key.
-  if (saveName) {
-    try {
-      await saveGameState(saveName, artifact);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        "generateAndSaveWorld: failed to save artifact under saveName",
-        e,
-      );
-    }
-  }
+  // Note: do not save the raw artifact under the caller-provided saveName.
+  // The UI flow (CharacterGeneration) writes a wrapper save that includes
+  // `playerName` and other metadata; persisting the raw artifact under the
+  // same key can cause shape/ordering races where callers observe the
+  // artifact without the wrapper fields. Keep only the generation-{seed}
+  // save above as the authoritative artifact persistence.
 
   // write a simple counts JSON file reporting the number of each entity created
   const counts = {

@@ -1,45 +1,77 @@
 import React from "react";
 import { intelligenceToConfidence } from "../../services/personnelService";
+import { listGameStates, loadGameState } from "../../services/persistence";
+import type { PersonLike } from "../../types/game";
+import { artifactFromState } from "../../types/game";
 
-type Person = {
-  id: string;
-  name?: string;
-  firstName?: string;
-  lastName?: string;
-  intelligenceLevel?: number;
-  agentType?: string;
-  role?: string;
-  leadership?: number;
-  pay?: number;
-  status?: string;
-  attributes?: Record<string, unknown>;
-  skills?: Record<string, unknown>;
-  [k: string]: unknown;
-};
-
-export default function Profile({ person }: { person: Person }) {
+export default function Profile({ person }: { person: PersonLike }) {
   const confidence =
     person.intelligenceLevel !== undefined
       ? intelligenceToConfidence(person.intelligenceLevel)
       : 100;
 
+  const displayName =
+    `${person.firstName || ""} ${person.lastName || ""}`.trim() ||
+    person.name ||
+    person.id;
+
+  const leadershipValue =
+    (person.attributes?.leadership as number | undefined) ??
+    person.leadership ??
+    "—";
+
+  const [originName, setOriginName] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    let mounted = true;
+    async function resolveZone() {
+      try {
+        if (!person?.homeZoneId) return;
+        const games = await listGameStates();
+        if (!Array.isArray(games) || games.length === 0) return;
+        games.sort((x, y) => (y.updatedAt || 0) - (x.updatedAt || 0));
+        const latest = games[0];
+        const gameState = await loadGameState(latest.name);
+        const art = artifactFromState(gameState) || undefined;
+        const zone = (art?.zones || []).find((z) => z.id === person.homeZoneId);
+        if (mounted) setOriginName(zone?.name ?? null);
+      } catch (e) {
+        // ignore
+      }
+    }
+    void resolveZone();
+    return () => {
+      mounted = false;
+    };
+  }, [person?.homeZoneId]);
+
   const rows: Array<{ label: string; value: React.ReactNode }> = [
-    { label: "ID", value: person.id },
-    { label: "Type", value: person.agentType || "—" },
+    // ID and Type removed per UI update
     { label: "Role", value: person.role || "—" },
-    { label: "Leadership", value: person.leadership ?? "—" },
+    { label: "Leadership", value: leadershipValue },
     { label: "Pay", value: person.pay ?? "—" },
     { label: "Status", value: person.status || "—" },
+    { label: "Origin", value: originName ?? person.homeZoneId ?? "—" },
   ];
 
   return (
-    <div style={{ padding: 12, border: "1px solid #ddd", borderRadius: 6 }}>
-      <div style={{ fontSize: 18, fontWeight: 700 }}>
-        {person.name || person.id}
-      </div>
+    <div
+      style={{ padding: 12, border: "1px solid #ddd", borderRadius: 6 }}
+      aria-labelledby={`person-${person.id}-name`}
+    >
+      <h2
+        id={`person-${person.id}-name`}
+        data-testid="person-name"
+        style={{ fontSize: 18, fontWeight: 700, margin: 0 }}
+      >
+        {displayName}
+      </h2>
       <div style={{ marginTop: 8 }}>
         <div style={{ marginBottom: 8 }}>Confidence: {confidence}%</div>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <table
+          style={{ width: "100%", borderCollapse: "collapse" }}
+          aria-labelledby={`person-${person.id}-name`}
+        >
           <tbody>
             {rows.map((r) => (
               <tr key={r.label}>
@@ -53,7 +85,13 @@ export default function Profile({ person }: { person: Person }) {
                 >
                   {r.label}
                 </td>
-                <td style={{ padding: "4px 8px" }}>{r.value}</td>
+                <td style={{ padding: "4px 8px" }}>
+                  {typeof r.value === "string" && r.value === "—" ? (
+                    <span aria-label="missing">—</span>
+                  ) : (
+                    r.value
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

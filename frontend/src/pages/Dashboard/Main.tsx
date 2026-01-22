@@ -97,8 +97,8 @@ export default function Main({ openSettings }: { openSettings?: () => void }) {
 
   function handleHireScientist() {
     const id = `ag-${Date.now()}`;
-    const ag = createAgent(id, `Scientist ${id.slice(-4)}`, 50, {
-      role: "scientist",
+    const ag = createAgent(id, id, `Scientist ${id.slice(-4)}`, 50, {
+      role: "Scientist",
     });
     setState((s) => {
       const next = { ...s, agents: [...(s.agents || []), ag] } as GameState;

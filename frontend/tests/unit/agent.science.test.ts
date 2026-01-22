@@ -8,7 +8,7 @@ import {
 
 describe("Agent and ScienceProject integration", () => {
   it("assignAgentToProject adds project id and sets agent active", () => {
-    const ag = createAgent("a1", "Alice", 100);
+    const ag = createAgent("a1", "person-a1", "Alice", 100);
     expect(ag.assigned_project_ids).toHaveLength(0);
 
     assignAgentToProject(ag, "p1");

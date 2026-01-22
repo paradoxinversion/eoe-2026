@@ -33,7 +33,7 @@ export default function CharacterGeneration() {
       // choose or derive a seed; use timestamp-based number for determinism
       const seed = Date.now();
       // generate and persist the debug artifact as game state
-      const artifact = await generateAndSaveWorld(seed, undefined, name);
+      const artifact = await generateAndSaveWorld(seed);
 
       // remove any autosave left behind by dev helpers
       try {
@@ -49,7 +49,14 @@ export default function CharacterGeneration() {
           world: { seed, artifact },
         });
       } catch (e) {
-        // ignore save wrapper failures
+        // Surface wrapper save failures so CI shows the root cause instead
+        // of silently continuing and causing confusing test assertions.
+        // eslint-disable-next-line no-console
+        console.error(
+          "CharacterGeneration: failed to save wrapper game state",
+          e,
+        );
+        throw e;
       }
 
       // persist the generated world as a game state

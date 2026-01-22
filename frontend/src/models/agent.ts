@@ -7,6 +7,11 @@ export type AgentRole =
   | "Doctor"
   | "Soldier";
 
+// The player's avatar agent role
+export type PlayerAgentRole = "Overlord";
+
+export type ExtendedAgentRole = AgentRole | PlayerAgentRole;
+
 export interface AgentInventoryItem {
   itemId: string;
   qty: number;
@@ -16,7 +21,7 @@ export interface Agent {
   id: UUID;
   personId: UUID;
   codeName: string;
-  role: AgentRole;
+  role: ExtendedAgentRole;
   affiliationId?: UUID;
   inventory?: AgentInventoryItem[];
   health: number;
@@ -30,19 +35,21 @@ export type AgentStatus = "active" | "idle" | "unavailable" | "dead";
 
 export function createAgent(
   id: string,
-  name: string,
+  personId: string,
+  codeName = "",
   pay = 0,
   opts?: Partial<Pick<Agent, "role" | "hired_at">>,
 ): Agent {
   return {
     id,
-    name,
+    personId,
+    codeName,
     pay: Math.max(0, Math.floor(pay)),
     status: "idle",
-    role: opts?.role,
+    role: (opts?.role as AgentRole) || ("Recruit" as AgentRole),
     assigned_project_ids: [],
     hired_at: opts?.hired_at,
-  };
+  } as Agent;
 }
 
 export function assignAgentToProject(agent: Agent, projectId: string) {
