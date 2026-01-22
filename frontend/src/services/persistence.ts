@@ -187,6 +187,12 @@ export async function saveGameState(name: string, state: unknown) {
     schemaVersion: SCHEMA_VERSION,
     updatedAt: Date.now(),
   });
+  if (process.env.VITEST || process.env.NODE_ENV === "test") {
+    // eslint-disable-next-line no-console
+    console.debug(
+      `saveGameState: saved key=${key} stateKeys=${Object.keys((state as any) || {})}`,
+    );
+  }
 }
 
 export async function loadGameState(name: string): Promise<unknown | null> {
@@ -219,6 +225,13 @@ export async function loadGameState(name: string): Promise<unknown | null> {
     }
   } catch (e) {
     console.warn("loadGameState: zone normalization failed", e);
+  }
+
+  if (process.env.VITEST || process.env.NODE_ENV === "test") {
+    // eslint-disable-next-line no-console
+    console.debug(
+      `loadGameState: loaded key=${key} present=${r.state !== undefined}`,
+    );
   }
 
   return r.state === undefined ? null : r.state;
