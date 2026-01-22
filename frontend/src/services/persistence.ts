@@ -187,16 +187,7 @@ export async function saveGameState(name: string, state: unknown) {
     schemaVersion: SCHEMA_VERSION,
     updatedAt: Date.now(),
   });
-  if (process.env.VITEST || process.env.NODE_ENV === "test") {
-    // eslint-disable-next-line no-console
-    const keys =
-      state && typeof state === "object"
-        ? Object.keys(state as Record<string, unknown>)
-        : [];
-    console.debug(
-      `saveGameState: saved key=${key} stateKeys=${keys.join(",")}`,
-    );
-  }
+  // Removed test-only debug instrumentation to keep persistence logging clean.
 }
 
 export async function loadGameState(name: string): Promise<unknown | null> {
@@ -231,23 +222,7 @@ export async function loadGameState(name: string): Promise<unknown | null> {
     console.warn("loadGameState: zone normalization failed", e);
   }
 
-  if (process.env.VITEST || process.env.NODE_ENV === "test") {
-    // eslint-disable-next-line no-console
-    console.debug(
-      `loadGameState: loaded key=${key} present=${r.state !== undefined}`,
-    );
-    try {
-      // attempt safe serialization of state for CI debugging
-      const serialized = JSON.stringify(r.state, (_k, v) =>
-        typeof v === "bigint" ? String(v) : v,
-      );
-      // eslint-disable-next-line no-console
-      console.debug(`loadGameState: state=${serialized}`);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.debug("loadGameState: state un-serializable", e);
-    }
-  }
+  // Removed test-only debug instrumentation to keep persistence logging clean.
 
   return r.state === undefined ? null : r.state;
 }
