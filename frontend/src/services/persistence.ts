@@ -189,8 +189,12 @@ export async function saveGameState(name: string, state: unknown) {
   });
   if (process.env.VITEST || process.env.NODE_ENV === "test") {
     // eslint-disable-next-line no-console
+    const keys =
+      state && typeof state === "object"
+        ? Object.keys(state as Record<string, unknown>)
+        : [];
     console.debug(
-      `saveGameState: saved key=${key} stateKeys=${Object.keys((state as any) || {})}`,
+      `saveGameState: saved key=${key} stateKeys=${keys.join(",")}`,
     );
   }
 }
