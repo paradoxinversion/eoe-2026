@@ -63,8 +63,7 @@ export default function Profile({ person }: { person: Person }) {
   }, [person?.homeZoneId]);
 
   const rows: Array<{ label: string; value: React.ReactNode }> = [
-    { label: "ID", value: person.id },
-    { label: "Type", value: person.agentType || "—" },
+    // ID and Type removed per UI update
     { label: "Role", value: person.role || "—" },
     { label: "Leadership", value: leadershipValue },
     { label: "Pay", value: person.pay ?? "—" },
