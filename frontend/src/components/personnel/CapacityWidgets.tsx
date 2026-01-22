@@ -39,9 +39,24 @@ export default function CapacityWidgets() {
   if (loading) return <div>Loading capacity...</div>;
 
   return (
-    <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        gap: 12,
+        alignItems: "stretch",
+        height: "100%",
+      }}
+    >
       <div
-        style={{ padding: 8, border: "1px solid #ddd", borderRadius: 6 }}
+        style={{
+          flex: 1,
+          padding: 8,
+          border: "1px solid #ddd",
+          borderRadius: 6,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
         aria-live="polite"
       >
         <div style={{ fontSize: 12, color: "#666" }}>Agents</div>
@@ -49,7 +64,15 @@ export default function CapacityWidgets() {
       </div>
 
       <div
-        style={{ padding: 8, border: "1px solid #ddd", borderRadius: 6 }}
+        style={{
+          flex: 1,
+          padding: 8,
+          border: "1px solid #ddd",
+          borderRadius: 6,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
         aria-live="polite"
       >
         <div style={{ fontSize: 12, color: "#666" }}>Capacity</div>
@@ -59,7 +82,15 @@ export default function CapacityWidgets() {
         </div>
       </div>
 
-      <div style={{ padding: 8 }}>
+      <div
+        style={{
+          flex: 1,
+          padding: 8,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         {atCapacity ? (
           <div style={{ color: "#c62828", fontWeight: 700 }}>At capacity</div>
         ) : warning ? (

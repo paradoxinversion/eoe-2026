@@ -243,18 +243,46 @@ export default function PersonnelTab() {
     <div style={{ display: "flex", gap: 24 }}>
       <div style={{ flex: 1 }}>
         <h2>Personnel</h2>
-        <div style={{ marginBottom: 16 }}>
-          <CapacityWidgets />
-        </div>
-        <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-          <AgentTypeChart agents={agents} size={140} />
-          <div style={{ flex: 1 }}>
-            <PersonnelList
-              agents={agents}
-              onActivate={(a) => setSelected(a as Agent)}
-              onFocus={(a) => setSelected(a as Agent)}
-            />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gap: 12,
+            alignItems: "center",
+            marginBottom: 16,
+            padding: "0 12px",
+          }}
+        >
+          <div
+            style={{
+              minHeight: 120,
+              boxSizing: "border-box",
+              display: "flex",
+              alignItems: "stretch",
+              justifyContent: "center",
+            }}
+          >
+            <CapacityWidgets />
           </div>
+          <div
+            style={{
+              minHeight: 120,
+              boxSizing: "border-box",
+              display: "flex",
+              alignItems: "stretch",
+              justifyContent: "center",
+            }}
+          >
+            <AgentTypeChart agents={agents} size={100} />
+          </div>
+        </div>
+
+        <div>
+          <PersonnelList
+            agents={agents}
+            onActivate={(a) => setSelected(a as Agent)}
+            onFocus={(a) => setSelected(a as Agent)}
+          />
         </div>
       </div>
       <div style={{ width: 360 }}>
