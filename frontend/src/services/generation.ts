@@ -527,20 +527,12 @@ export async function generateAndSaveWorld(
   const artifactSaveName = `generation-${String(seed)}`;
   await saveGameState(artifactSaveName, artifact);
 
-  // If a specific save name was provided, also persist the generated
-  // artifact under that save key so callers (and tests) can load it via
-  // `loadGameState(saveName)` without having to know the generation key.
-  if (saveName) {
-    try {
-      await saveGameState(saveName, artifact);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        "generateAndSaveWorld: failed to save artifact under saveName",
-        e,
-      );
-    }
-  }
+  // Note: do not save the raw artifact under the caller-provided saveName.
+  // The UI flow (CharacterGeneration) writes a wrapper save that includes
+  // `playerName` and other metadata; persisting the raw artifact under the
+  // same key can cause shape/ordering races where callers observe the
+  // artifact without the wrapper fields. Keep only the generation-{seed}
+  // save above as the authoritative artifact persistence.
 
   // write a simple counts JSON file reporting the number of each entity created
   const counts = {

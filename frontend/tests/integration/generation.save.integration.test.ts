@@ -12,7 +12,11 @@ describe("generation.save", () => {
       saveName,
     );
 
-    const saved = await loadGameState(saveName);
+    // The generator persists the artifact under a generation-{seed}
+    // key; tests should load that authoritative artifact rather than
+    // relying on caller-provided saveName.
+    const artifactSaveName = `generation-${String(seed)}`;
+    const saved = await loadGameState(artifactSaveName);
     expect(saved).not.toBeNull();
     // deep equality via JSON to avoid prototype issues
     expect(JSON.stringify(saved)).toBe(JSON.stringify(artifact));
