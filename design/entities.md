@@ -159,11 +159,17 @@ ProjectName
 
 ## Activity
 
-name (string): The name of the activity
+name (string): A snake-cased representation of the activity's naame
+
+displayName (string): The name of the activity
 
 cost (number): The daily cost per participant engaging in the activity
 
 participants (uuid[]): An array of ids of the agents participating in the activity
+
+### Notes
+
+- Activities have no IDs (their name is functionally their id)
 
 ## Plot
 
